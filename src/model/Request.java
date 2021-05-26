@@ -4,7 +4,6 @@ public class Request {
 
 	private Product product;
 	private RequestType requestType;
-	private Request next;
 	
 	public Request(Product product, RequestType requestType) {
 		super();
@@ -28,12 +27,4 @@ public class Request {
 		this.requestType = requestType;
 	}
 
-	public Request getNext() {
-		return next;
-	}
-
-	public void setNext(Request next) {
-		this.next = next;
-	}
-	
 }

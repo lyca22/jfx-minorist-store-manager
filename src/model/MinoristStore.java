@@ -9,10 +9,10 @@ public class MinoristStore {
 	private List<Order> orderList;
 	private Category categoryList;
 	private PaymentMethod paymentMethod;
-	private Request requestList;
+	private List<Request> requestList;
 	
 	public MinoristStore(List<Product> generalProductList, List<Account> accountList, List<Order> orderList,
-			Category categoryList, PaymentMethod paymentMethod, Request requestList) {
+			Category categoryList, PaymentMethod paymentMethod, List<Request> requestList) {
 		super();
 		this.generalProductList = generalProductList;
 		this.accountList = accountList;
@@ -62,12 +62,12 @@ public class MinoristStore {
 		this.paymentMethod = paymentMethod;
 	}
 
-	public Request getRequestList() {
+	public List<Request> getRequestList() {
 		return requestList;
 	}
 
-	public void setRequestList(Request requestList) {
+	public void setRequestList(List<Request> requestList) {
 		this.requestList = requestList;
 	}
-	
+
 }
