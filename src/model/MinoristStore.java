@@ -5,13 +5,13 @@ import java.util.List;
 public class MinoristStore {
 
 	private List<Product> generalProductList;
-	private List<Account> accountList;
+	private Account accountList;
 	private List<Order> orderList;
 	private Category categoryList;
 	private PaymentMethod paymentMethod;
 	private List<Request> requestList;
 	
-	public MinoristStore(List<Product> generalProductList, List<Account> accountList, List<Order> orderList,
+	public MinoristStore(List<Product> generalProductList, Account accountList, List<Order> orderList,
 			Category categoryList, PaymentMethod paymentMethod, List<Request> requestList) {
 		super();
 		this.generalProductList = generalProductList;
@@ -30,11 +30,11 @@ public class MinoristStore {
 		this.generalProductList = generalProductList;
 	}
 
-	public List<Account> getAccountList() {
+	public Account getAccountList() {
 		return accountList;
 	}
 
-	public void setAccountList(List<Account> accountList) {
+	public void setAccountList(Account accountList) {
 		this.accountList = accountList;
 	}
 

@@ -4,6 +4,7 @@ public class Account {
 
 	private String username;
 	private String password;
+	private Account next;
 	
 	public Account(String username, String password) {
 		super();
@@ -25,6 +26,14 @@ public class Account {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Account getNext() {
+		return next;
+	}
+
+	public void setNext(Account next) {
+		this.next = next;
 	}
 	
 }

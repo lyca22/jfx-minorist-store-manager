@@ -4,6 +4,7 @@ public class Product {
 
 	private long ID;
 	private String name;
+	private Category category;
 	private String brand;
 	private int price;
 	private int stock;
@@ -35,6 +36,14 @@ public class Product {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public String getBrand() {
