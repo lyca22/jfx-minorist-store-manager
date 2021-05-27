@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
@@ -38,6 +37,9 @@
                <HBox.margin>
                   <Insets right="35.0" />
                </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Label>
             <TextField />
          </children>
@@ -48,6 +50,9 @@
                <HBox.margin>
                   <Insets right="37.0" />
                </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Label>
             <PasswordField />
          </children>
@@ -58,6 +63,9 @@
                <HBox.margin>
                   <Insets right="28.0" />
                </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="11.99" />
+               </font>
             </Label>
             <TextField />
          </children>
@@ -68,41 +76,64 @@
                <HBox.margin>
                   <Insets right="29.0" />
                </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="11.999" />
+               </font>
             </Label>
             <TextField />
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Label text="Phone number:">
+            <Label text="Phone:">
                <HBox.margin>
-                  <Insets right="10.0" />
+                  <Insets left="178.0" top="5.0" />
                </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Label>
-            <TextField />
+            <TextField>
+               <HBox.margin>
+                  <Insets left="58.0" top="5.0" />
+               </HBox.margin>
+            </TextField>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
             <Label text="Address:">
                <HBox.margin>
-                  <Insets right="45.0" />
+                  <Insets left="178.0" top="5.0" />
                </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.01" />
+               </font>
             </Label>
-            <TextField />
+            <TextField>
+               <HBox.margin>
+                  <Insets left="48.0" top="5.0" />
+               </HBox.margin>
+            </TextField>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" text="Sign In">
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" text="Sign In">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="12.01" />
+               </font>
             </Button>
-            <Button mnemonicParsing="false" text="Create Account">
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="Create Account">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
+               <font>
+                  <Font size="11.999" />
+               </font>
             </Button>
          </children>
          <VBox.margin>
