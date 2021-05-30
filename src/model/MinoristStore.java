@@ -1,5 +1,7 @@
 package model;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public class MinoristStore {
@@ -10,7 +12,7 @@ public class MinoristStore {
 	private Category categoryList;
 	private PaymentMethod paymentMethod;
 	private List<Request> requestList;
-	
+
 	public MinoristStore(List<Product> generalProductList, Account accountList, List<Order> orderList,
 			Category categoryList, PaymentMethod paymentMethod, List<Request> requestList) {
 		super();
@@ -70,4 +72,43 @@ public class MinoristStore {
 		this.requestList = requestList;
 	}
 
+	
+	//Add methods
+	
+	private void addAccount(Account current, Account newAccount) {
+		if(current.getNext() == null) {
+			current.setNext(newAccount);
+		}else {
+			addAccount(current.getNext(), newAccount);
+		}
+	}
+	
+	
+	public void addAdministratorAccount(String username, String password, String names, String surnames) throws FileNotFoundException, IOException {
+		Administrator administrator = new Administrator(username, password, names, surnames);
+		if(accountList == null) {
+			accountList = administrator;
+		}else {
+			addAccount(accountList, administrator);
+		}
+	}
+
+	public void addConsumerAccount(String username, String password, String names, String surnames, long phoneNumber, String address,
+			List<Order> personalOrderList) throws FileNotFoundException, IOException {
+		Consumer consumer = new Consumer(username, password, names, surnames, phoneNumber, address, personalOrderList);
+		if(accountList == null) {
+			accountList = consumer;
+		}else {
+			addAccount(accountList, consumer);
+		}
+	}
+
+	public void addSellerAccount(String username, String password, String tradeName, List<Product> productList) throws FileNotFoundException, IOException {
+		Seller seller = new Seller(username, password, tradeName, productList);
+		if(accountList == null) {
+			accountList = seller;
+		}else {
+			addAccount(accountList, seller);
+		}
+	}
 }
