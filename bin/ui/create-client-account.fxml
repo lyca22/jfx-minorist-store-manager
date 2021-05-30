@@ -11,7 +11,7 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER_LEFT">
          <children>
             <Button mnemonicParsing="false" onAction="#signUp" text="&lt;-">
                <HBox.margin>
@@ -23,140 +23,144 @@
             <Insets top="25.0" />
          </VBox.margin>
       </HBox>
-      <Label text="CREATE CLIENT ACCOUNT">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="30.0" />
-         </VBox.margin>
-      </Label>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label text="Username:">
-               <HBox.margin>
-                  <Insets right="35.0" />
-               </HBox.margin>
+            <Label text="CREATE CLIENT ACCOUNT">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="28.0" />
                </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </Label>
-            <TextField />
+            <HBox alignment="CENTER">
+               <children>
+                  <Label text="Username:">
+                     <HBox.margin>
+                        <Insets right="35.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtClientUsername" />
+               </children>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefWidth="200.0">
+               <children>
+                  <Label text="Password:">
+                     <HBox.margin>
+                        <Insets right="40.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <PasswordField fx:id="txtClientPassword" />
+               </children>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefWidth="200.0">
+               <children>
+                  <Label text="First names:">
+                     <HBox.margin>
+                        <Insets right="27.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtClientFirstNames" />
+               </children>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefWidth="200.0">
+               <children>
+                  <Label text="Last names:">
+                     <HBox.margin>
+                        <Insets right="29.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtClientLastNames" />
+               </children>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefWidth="200.0">
+               <children>
+                  <Label text="Phone:">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtClientPhone">
+                     <HBox.margin>
+                        <Insets left="59.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefWidth="200.0">
+               <children>
+                  <Label text="Address:">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtClientAddress">
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#loginScreen" text="Sign In">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#createClientAccount" text="Create Account">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets top="80.0" />
+               </VBox.margin>
+            </HBox>
          </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label text="Password:">
-               <HBox.margin>
-                  <Insets right="37.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <PasswordField />
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label text="First names:">
-               <HBox.margin>
-                  <Insets right="27.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="11.99" />
-               </font>
-            </Label>
-            <TextField />
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label text="Last names:">
-               <HBox.margin>
-                  <Insets right="29.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="11.999" />
-               </font>
-            </Label>
-            <TextField />
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label text="Phone:">
-               <HBox.margin>
-                  <Insets top="5.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <TextField>
-               <HBox.margin>
-                  <Insets left="55.0" top="5.0" />
-               </HBox.margin>
-            </TextField>
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label text="Address:">
-               <HBox.margin>
-                  <Insets top="5.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.01" />
-               </font>
-            </Label>
-            <TextField>
-               <HBox.margin>
-                  <Insets left="45.0" top="5.0" />
-               </HBox.margin>
-            </TextField>
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#loginScreen" prefHeight="25.0" prefWidth="83.0" text="Sign In">
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.01" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#createClientAccount" prefHeight="25.0" prefWidth="108.0" text="Create Account">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-               <font>
-                  <Font size="11.999" />
-               </font>
-            </Button>
-         </children>
-         <VBox.margin>
-            <Insets bottom="30.0" top="30.0" />
-         </VBox.margin>
-      </HBox>
+      </VBox>
    </children>
 </VBox>

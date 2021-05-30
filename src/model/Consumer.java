@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Consumer extends Account {
@@ -10,14 +11,13 @@ public class Consumer extends Account {
 	private String address;
 	private List<Order> personalOrderList;
 	
-	public Consumer(String username, String password, String names, String surnames, long phoneNumber, String address,
-			List<Order> personalOrderList) {
+	public Consumer(String username, String password, String names, String surnames, long phoneNumber, String address) {
 		super(username, password);
 		this.names = names;
 		this.surnames = surnames;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
-		this.personalOrderList = personalOrderList;
+		personalOrderList = new ArrayList<Order>();
 	}
 
 	public String getNames() {

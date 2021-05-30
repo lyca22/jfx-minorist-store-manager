@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Seller extends Account {
@@ -9,10 +10,10 @@ public class Seller extends Account {
 	private Seller left;
 	private Seller right;
 	
-	public Seller(String username, String password, String tradeName, List<Product> productList) {
+	public Seller(String username, String password, String tradeName) {
 		super(username, password);
 		this.tradeName = tradeName;
-		this.productList = productList;
+		productList = new ArrayList<Product>();
 	}
 
 	public String getTradeName() {

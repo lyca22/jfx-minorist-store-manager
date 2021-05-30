@@ -15,33 +15,33 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1280.0">
          <children>
-            <HBox prefHeight="70.0" prefWidth="600.0">
+            <HBox>
                <children>
                   <Button mnemonicParsing="false" onAction="#cart" text="&lt;-">
                      <HBox.margin>
-                        <Insets left="25.0" top="25.0" />
+                        <Insets left="25.0" />
                      </HBox.margin>
                   </Button>
-                  <Label text="Select payment method:">
-                     <HBox.margin>
-                        <Insets left="400.0" top="50.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font name="System Bold" size="30.0" />
-                     </font>
-                  </Label>
                </children>
+               <VBox.margin>
+                  <Insets top="25.0" />
+               </VBox.margin>
             </HBox>
+            <Label text="SELECT PAYMENT METHOD">
+               <font>
+                  <Font name="System Bold" size="28.0" />
+               </font>
+            </Label>
             <GridPane alignment="CENTER" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="121.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="10.0" prefWidth="108.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="298.0" minWidth="10.0" prefWidth="230.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="298.0" minWidth="10.0" prefWidth="142.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" />
+                  <ColumnConstraints hgrow="SOMETIMES" />
+                  <ColumnConstraints hgrow="SOMETIMES" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -56,7 +56,7 @@
                <children>
                   <RadioButton mnemonicParsing="false" text="Card">
                      <font>
-                        <Font name="System Bold" size="15.01" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                      <GridPane.margin>
                         <Insets left="30.0" />
@@ -67,12 +67,12 @@
                         <Insets left="30.0" />
                      </GridPane.margin>
                      <font>
-                        <Font name="System Bold" size="15.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </RadioButton>
                   <Label text="Type:" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Italic" size="14.0" />
                      </font>
                      <GridPane.margin>
                         <Insets left="10.0" />
@@ -83,12 +83,12 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Italic" size="14.0" />
                      </font>
                   </Label>
                   <Label text="Expire date:" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Italic" size="14.0" />
                      </font>
                      <GridPane.margin>
                         <Insets left="10.0" />
@@ -96,7 +96,7 @@
                   </Label>
                   <Label text="Select:" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Italic" size="14.0" />
                      </font>
                      <GridPane.margin>
                         <Insets left="10.0" />
@@ -104,25 +104,25 @@
                   </Label>
                   <Label text="Account name:" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Italic" size="14.0" />
                      </font>
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#buyCart" prefHeight="38.0" prefWidth="74.0" text="BUY" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                  <Button mnemonicParsing="false" onAction="#buyCart" text="Buy Products" GridPane.columnIndex="3" GridPane.rowIndex="2">
                      <font>
-                        <Font size="17.0" />
+                        <Font size="18.0" />
                      </font>
                      <GridPane.margin>
-                        <Insets left="30.0" />
+                        <Insets />
                      </GridPane.margin>
                   </Button>
-                  <ChoiceBox prefHeight="25.0" prefWidth="232.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <ChoiceBox prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <TextField GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <DatePicker prefHeight="25.0" prefWidth="233.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <ChoiceBox prefHeight="25.0" prefWidth="229.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                  <TextField prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <DatePicker prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <ChoiceBox prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  <TextField GridPane.columnIndex="2" GridPane.rowIndex="6" />
                </children>
             </GridPane>
          </children>

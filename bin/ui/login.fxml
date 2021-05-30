@@ -13,59 +13,65 @@
    <children>
       <Label text="WELCOME!">
          <font>
-            <Font name="System Bold" size="24.0" />
+            <Font name="System Bold" size="28.0" />
          </font>
          <VBox.margin>
-            <Insets bottom="30.0" top="60.0" />
+            <Insets />
          </VBox.margin>
       </Label>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER">
          <children>
             <Label text="Username:">
                <HBox.margin>
                   <Insets right="35.0" />
                </HBox.margin>
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Italic" size="14.0" />
                </font>
             </Label>
-            <TextField />
+            <TextField fx:id="txtLoginUsername" />
          </children>
+         <VBox.margin>
+            <Insets top="40.0" />
+         </VBox.margin>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER">
          <children>
             <Label text="Password:">
                <HBox.margin>
-                  <Insets right="37.0" />
+                  <Insets right="38.0" />
                </HBox.margin>
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Italic" size="14.0" />
                </font>
             </Label>
-            <PasswordField />
+            <PasswordField fx:id="txtLoginPassword" />
          </children>
+         <VBox.margin>
+            <Insets top="40.0" />
+         </VBox.margin>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#signUp" prefHeight="25.0" prefWidth="83.0" text="Sign Up">
+            <Button mnemonicParsing="false" onAction="#signUp" text="Sign Up">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
                <font>
-                  <Font name="System Bold" size="12.01" />
+                  <Font size="14.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#logIn" prefHeight="25.0" prefWidth="100.0" text="Log In">
+            <Button mnemonicParsing="false" onAction="#logIn" text="Log In">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
                <font>
-                  <Font size="11.999" />
+                  <Font size="14.0" />
                </font>
             </Button>
          </children>
          <VBox.margin>
-            <Insets bottom="30.0" top="30.0" />
+            <Insets top="80.0" />
          </VBox.margin>
       </HBox>
    </children>

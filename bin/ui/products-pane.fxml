@@ -11,56 +11,58 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1280.0">
          <children>
-            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1193.0" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT">
+               <VBox.margin>
+                  <Insets top="25.0" />
+               </VBox.margin>
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                  <Button mnemonicParsing="false" onAction="#logIn" text="&lt;-">
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0">
-                           <VBox.margin>
-                              <Insets top="25.0" />
-                           </VBox.margin>
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#logIn" text="&lt;-">
-                                 <HBox.margin>
-                                    <Insets left="25.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets bottom="50.0" />
                            </VBox.margin>
                         </ImageView>
-                        <MenuButton mnemonicParsing="false" text="Select Seller" />
+                        <MenuButton mnemonicParsing="false" text="Select Seller">
+                           <VBox.margin>
+                              <Insets bottom="100.0" />
+                           </VBox.margin></MenuButton>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label text="Product_Name">
+                        <Label text="product_name">
                            <VBox.margin>
                               <Insets bottom="20.0" left="10.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="Brand">
+                        <Label text="brand">
                            <VBox.margin>
                               <Insets bottom="20.0" left="10.0" />
                            </VBox.margin>
                         </Label>
                         <Separator prefWidth="200.0" />
-                        <Label text="Product Description">
+                        <Label text="product_description">
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin>
                         </Label>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                      <children>
                         <Hyperlink onAction="#editProduct" text="Edit" />
                         <Button mnemonicParsing="false" onAction="#addToCart" prefHeight="50.0" prefWidth="100.0" text="Add to Cart">
@@ -70,14 +72,14 @@
                         </Button>
                         <Button mnemonicParsing="false" onAction="#sellThisProduct" prefHeight="50.0" text="Sell this product">
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets bottom="100.0" top="10.0" />
                            </VBox.margin>
                         </Button>
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="BASELINE_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+            <HBox alignment="BASELINE_RIGHT">
                <children>
                   <Label text="General stock:">
                      <HBox.margin>
@@ -96,10 +98,13 @@
                   </Label>
                   <Label text="0">
                      <HBox.margin>
-                        <Insets right="50.0" />
+                        <Insets right="200.0" />
                      </HBox.margin>
                   </Label>
                </children>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
             </HBox>
          </children>
       </VBox>

@@ -11,7 +11,7 @@ public class MinoristStore {
 	private Category categoryList;
 	private PaymentMethod paymentMethod;
 	private List<Request> requestList;
-	
+
 	public MinoristStore() {
 		super();
 		generalProductList = new ArrayList<Product>();
@@ -68,33 +68,50 @@ public class MinoristStore {
 	}
 
 	//Adding methods
-	
-	public void addAdministratorAccount(String username, String password, String names, String surnames) {
-		Administrator administrator = new Administrator(username, password, names, surnames);
-		if(accountList == null) {
-			accountList = administrator;
-		}else {
-			addAccount(accountList, administrator);
+
+	public boolean addAdministratorAccount(String username, String password, String names, String surnames) {
+		boolean added = false;
+		Account account = searchAccount(username);
+		if(account == null) {
+			added = true;
+			Administrator administrator = new Administrator(username, password, names, surnames);
+			if(accountList == null) {
+				accountList = administrator;
+			}else {
+				addAccount(accountList, administrator);
+			}
 		}
+		return added;
 	}
 
-	public void addConsumerAccount(String username, String password, String names, String surnames, long phoneNumber, String address,
-			List<Order> personalOrderList) {
-		Consumer consumer = new Consumer(username, password, names, surnames, phoneNumber, address, personalOrderList);
-		if(accountList == null) {
-			accountList = consumer;
-		}else {
-			addAccount(accountList, consumer);
+	public boolean addConsumerAccount(String username, String password, String names, String surnames, long phoneNumber, String address) {
+		boolean added = false;
+		Account account = searchAccount(username);
+		if(account == null) {
+			added = true;
+			Consumer consumer = new Consumer(username, password, names, surnames, phoneNumber, address);
+			if(accountList == null) {
+				accountList = consumer;
+			}else {
+				addAccount(accountList, consumer);
+			}
 		}
+		return added;
 	}
 
-	public void addSellerAccount(String username, String password, String tradeName, List<Product> productList) {
-		Seller seller = new Seller(username, password, tradeName, productList);
-		if(accountList == null) {
-			accountList = seller;
-		}else {
-			addAccount(accountList, seller);
+	public boolean addSellerAccount(String username, String password, String tradeName) {
+		boolean added = false;
+		Account account = searchAccount(username);
+		if(account == null) {
+			added = true;
+			Seller seller = new Seller(username, password, tradeName);
+			if(accountList == null) {
+				accountList = seller;
+			}else {
+				addAccount(accountList, seller);
+			}
 		}
+		return added;
 	}
 
 	private void addAccount(Account current, Account newAccount) {
@@ -104,4 +121,20 @@ public class MinoristStore {
 			addAccount(current.getNext(), newAccount);
 		}
 	}
+
+	//Searching methods
+
+	public Account searchAccount(String username) {
+		boolean found = false;
+		Account actualAccount = accountList;
+		while (actualAccount != null && !found) {
+			if(actualAccount.getUsername().equals(username)) {
+				found = true;
+			}else {	
+				actualAccount = actualAccount.getNext();
+			}
+		}
+		return actualAccount;
+	}
+
 }
