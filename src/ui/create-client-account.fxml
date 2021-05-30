@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" text="&lt;-">
+            <Button mnemonicParsing="false" onAction="#signUp" text="&lt;-">
                <HBox.margin>
                   <Insets left="25.0" />
                </HBox.margin>
@@ -43,6 +43,9 @@
             </Label>
             <TextField />
          </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -56,12 +59,15 @@
             </Label>
             <PasswordField />
          </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <Label text="First names:">
                <HBox.margin>
-                  <Insets right="28.0" />
+                  <Insets right="27.0" />
                </HBox.margin>
                <font>
                   <Font name="System Bold" size="11.99" />
@@ -69,6 +75,9 @@
             </Label>
             <TextField />
          </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -82,12 +91,15 @@
             </Label>
             <TextField />
          </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <Label text="Phone:">
                <HBox.margin>
-                  <Insets left="178.0" top="5.0" />
+                  <Insets top="5.0" />
                </HBox.margin>
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -95,16 +107,19 @@
             </Label>
             <TextField>
                <HBox.margin>
-                  <Insets left="58.0" top="5.0" />
+                  <Insets left="55.0" top="5.0" />
                </HBox.margin>
             </TextField>
          </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <Label text="Address:">
                <HBox.margin>
-                  <Insets left="178.0" top="5.0" />
+                  <Insets top="5.0" />
                </HBox.margin>
                <font>
                   <Font name="System Bold" size="12.01" />
@@ -112,14 +127,17 @@
             </Label>
             <TextField>
                <HBox.margin>
-                  <Insets left="48.0" top="5.0" />
+                  <Insets left="45.0" top="5.0" />
                </HBox.margin>
             </TextField>
          </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" text="Sign In">
+            <Button mnemonicParsing="false" onAction="#loginScreen" prefHeight="25.0" prefWidth="83.0" text="Sign In">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
@@ -127,7 +145,7 @@
                   <Font name="System Bold" size="12.01" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="Create Account">
+            <Button mnemonicParsing="false" onAction="#createClientAccount" prefHeight="25.0" prefWidth="108.0" text="Create Account">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
