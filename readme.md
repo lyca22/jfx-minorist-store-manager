@@ -9,6 +9,7 @@ You can download this software from [this link](https://github.com/lyca22/jfx-mi
 
 You can access the project's documentation from [this link](https://drive.google.com/file/d/1X6oYLRqMg6nAhgguK0LBNk8JxUHKVyk6/view?usp=sharing)
 
+You can access the project's analysis and design documentation from [this link](https://drive.google.com/file/d/1HvwrbWdl-Rxy03NRbyC0aiC5aNi0_g6U/view?usp=sharing)
 
 What is this software?
 ------------
