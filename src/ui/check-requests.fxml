@@ -31,12 +31,12 @@
                   <Insets bottom="10.0" top="20.0" />
                </VBox.margin>
             </HBox>
-            <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tvRequests" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <columns>
-                  <TableColumn prefWidth="140.0" text="ID" />
-                  <TableColumn prefWidth="140.0" text="Product" />
-                  <TableColumn prefWidth="140.0" text="Category" />
-                  <TableColumn prefWidth="140.0" text="Brand" />
+                  <TableColumn fx:id="tcRequestID" prefWidth="140.0" text="ID" />
+                  <TableColumn fx:id="tcRequestProduct" prefWidth="140.0" text="Product" />
+                  <TableColumn fx:id="tcRequestCategory" prefWidth="140.0" text="Category" />
+                  <TableColumn fx:id="tcRequestBrand" prefWidth="140.0" text="Brand" />
                </columns>
             </TableView>
          </children>

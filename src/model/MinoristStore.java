@@ -69,6 +69,27 @@ public class MinoristStore {
 
 	//Adding methods.
 
+	public void addProduct(Product product) {
+		generalProductList.add(product);
+		product.getSellerList().getProductList().add(product);
+//		TODO. Sort this list.
+	}
+	
+	public void addRequest(String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {
+		long ID = randomNumberWithRange(1, Integer.MAX_VALUE);
+		Product product = new Product(ID, name, category, brand, price, stock, description, seller);
+		Request request = new Request(product, requestType);
+		requestList.add(request);
+//		TODO. Sort this list. Check ID.
+	}
+	
+	public void addRequest(int ID, String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {
+		Product product = new Product(ID, name, category, brand, price, stock, description, seller);
+		Request request = new Request(product, requestType);
+		requestList.add(request);
+//		TODO. Sort this list. Check ID.
+	}
+	
 	public boolean addAdministratorAccount(String username, String password, String names, String surnames) {
 		boolean added = false;
 		Account account = searchAccount(username);
@@ -181,6 +202,11 @@ public class MinoristStore {
 			category.setName(newName);
 		}
 		return edited;
+	}
+	
+	private long randomNumberWithRange(long min, long max) {
+		long range = (max - min) + 1;
+		return (long)(Math.random() * range) + min;
 	}
 	
 }

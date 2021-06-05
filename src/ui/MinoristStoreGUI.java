@@ -3,9 +3,12 @@ package ui;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,9 +21,13 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
@@ -29,6 +36,8 @@ import model.Administrator;
 import model.Category;
 import model.Consumer;
 import model.MinoristStore;
+import model.Request;
+import model.RequestType;
 import model.Seller;
 
 public class MinoristStoreGUI {
@@ -171,12 +180,35 @@ public class MinoristStoreGUI {
 	private TextField txtRequestName;
 
 	@FXML
-	private ChoiceBox<Category> requestCategory;
+	private ChoiceBox<String> requestCategory;
 
 	@FXML
 	private GridPane categoryPane;
 
+	@FXML
+	private Hyperlink editProductButton;
 
+	@FXML
+	private Button addToCartButton;
+
+	@FXML
+	private Button sellThisProductButton;
+
+    @FXML
+    private TableView<Request> tvRequests;
+
+    @FXML
+    private TableColumn<Request, String> tcRequestID;
+
+    @FXML
+    private TableColumn<Request, String> tcRequestProduct;
+
+    @FXML
+    private TableColumn<Request, String> tcRequestCategory;
+
+    @FXML
+    private TableColumn<Request, String> tcRequestBrand;
+	
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
 		this.setMinoristStore(minoristStore);
@@ -246,6 +278,16 @@ public class MinoristStoreGUI {
 		this.enableButtonType = enableButtonType;
 	}
 
+	private void initializeRequestTableView() {
+		ObservableList<Request> observableList;
+		observableList = FXCollections.observableArrayList(minoristStore.getRequestList());
+		tvRequests.setItems(observableList);
+		tcRequestID.setCellValueFactory(new PropertyValueFactory<Request, String>("productID"));
+		tcRequestProduct.setCellValueFactory(new PropertyValueFactory<Request, String>("productName"));
+		tcRequestCategory.setCellValueFactory(new PropertyValueFactory<Request, String>("productCategoryAsString"));
+		tcRequestBrand.setCellValueFactory(new PropertyValueFactory<Request, String>("productBrand"));
+	}
+	
 	public void loadScreen(String resource) {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
 		fxmlLoader.setController(this);
@@ -411,10 +453,62 @@ public class MinoristStoreGUI {
 
 	public void showProduct() {
 		loadMainMenuScreen("products-pane.fxml");
+		if(actualAccount instanceof Seller) {
+			editProductButton.setVisible(true);
+			addToCartButton.setVisible(false);
+			sellThisProductButton.setVisible(true);
+		}else if(actualAccount instanceof Consumer) {
+			editProductButton.setVisible(false);
+			addToCartButton.setVisible(true);
+			sellThisProductButton.setVisible(false);
+		}else if(actualAccount instanceof Administrator) {
+			editProductButton.setVisible(false);
+			addToCartButton.setVisible(false);
+			sellThisProductButton.setVisible(false);
+		}
 	}
 
 	public void editProduct(ActionEvent event) {
 		openWindow("add-products.fxml");
+		Category actualCategory = minoristStore.getCategoryList();
+		ArrayList<String> categoryList = new ArrayList<String>();
+		while(actualCategory != null) {
+			categoryList.add(actualCategory.getName());
+			actualCategory = actualCategory.getNext();
+		}
+		requestCategory.setItems(FXCollections.observableArrayList(categoryList));
+		
+//		TODO. Get current product.
+		
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				try {
+					boolean wroteProductName = !txtRequestName.getText().isEmpty();
+					boolean wroteProductBrand = !txtRequestBrand.getText().isEmpty();
+					boolean wroteProductPrice = !txtRequestPrice.getText().isEmpty();
+					boolean wroteProductDescription = !txtRequestDescription.getText().isEmpty();
+					boolean wroteProductPhoto = !txtRequestPhoto.getText().isEmpty();
+					boolean selectedProductCategory = !requestCategory.getSelectionModel().getSelectedItem().equals(null); //NullPointerException, I have to fix this.
+					if(wroteProductName && wroteProductBrand && wroteProductPrice && wroteProductDescription && wroteProductPhoto && selectedProductCategory) {
+						String productName = txtRequestName.getText();
+						String stringProductCategory = requestCategory.getSelectionModel().getSelectedItem();
+						Category productCategory = minoristStore.searchCategory(stringProductCategory);
+						String productBrand = txtRequestBrand.getText();
+						int productPrice = Integer.valueOf(txtRequestPrice.getText());
+						String productDescription = txtRequestDescription.getText();
+						String productPhoto = txtRequestPhoto.getText();
+						Image image = new Image(productPhoto);
+						if(actualAccount instanceof Seller) {
+							minoristStore.addRequest(0, productName, productCategory, productBrand, productPrice, 0, productDescription, (Seller)actualAccount, RequestType.EDIT);
+						}
+						savePicture(image, PRODUCT_PICTURE_DIRECTORY, productName);
+					}
+				}catch(NullPointerException npe) {
+
+				}
+			}
+			return null;
+		});
 		dialog.showAndWait();
 	}
 
@@ -423,7 +517,7 @@ public class MinoristStoreGUI {
 	}
 
 	public void sellThisProduct(ActionEvent event) {
-		openWindow("add-products.fxml");
+		openWindow("edit-profile-info.fxml");
 		dialog.showAndWait();
 	}
 
@@ -526,6 +620,7 @@ public class MinoristStoreGUI {
 
 	public void manageRequests(ActionEvent event) {
 		loadMainMenuScreen("check-requests.fxml");
+		initializeRequestTableView();
 	}
 
 	public void manageOrders(ActionEvent event) {
@@ -541,29 +636,40 @@ public class MinoristStoreGUI {
 		dialog.showAndWait();
 	}
 
-	@SuppressWarnings("unused")
 	public void addProducts(ActionEvent event) {
 		openWindow("add-products.fxml");
+		Category actualCategory = minoristStore.getCategoryList();
+		ArrayList<String> categoryList = new ArrayList<String>();
+		while(actualCategory != null) {
+			categoryList.add(actualCategory.getName());
+			actualCategory = actualCategory.getNext();
+		}
+		requestCategory.setItems(FXCollections.observableArrayList(categoryList));
 		dialog.setResultConverter(dialogButton ->{
 			if(dialogButton == acceptButtonType) {
-				boolean wroteProductName = !txtRequestName.getText().isEmpty();
-				boolean wroteProductBrand = !txtRequestBrand.getText().isEmpty();
-				boolean wroteProductPrice = !txtRequestPrice.getText().isEmpty();
-				boolean wroteProductDescription = !txtRequestDescription.getText().isEmpty();
-				boolean wroteProductPhoto = !txtRequestPhoto.getText().isEmpty();
-				boolean selectedProductCategory = !requestCategory.getSelectionModel().getSelectedItem().equals(null); //NullPointerException, I have to fix this.
-				if(wroteProductName && wroteProductBrand && wroteProductPrice && wroteProductDescription && wroteProductPhoto && selectedProductCategory) {
-					String productName = txtRequestName.getText();
-					Category productCategory = requestCategory.getSelectionModel().getSelectedItem();
-					String productBrand = txtRequestBrand.getText();
-					String productPrice = txtRequestPrice.getText();
-					String productDescription = txtRequestDescription.getText();
-					String productPhoto = txtRequestPhoto.getText();
-					Image image = new Image(productPhoto);
+				try {
+					boolean wroteProductName = !txtRequestName.getText().isEmpty();
+					boolean wroteProductBrand = !txtRequestBrand.getText().isEmpty();
+					boolean wroteProductPrice = !txtRequestPrice.getText().isEmpty();
+					boolean wroteProductDescription = !txtRequestDescription.getText().isEmpty();
+					boolean wroteProductPhoto = !txtRequestPhoto.getText().isEmpty();
+					boolean selectedProductCategory = !requestCategory.getSelectionModel().getSelectedItem().equals(null); //NullPointerException, I have to fix this.
+					if(wroteProductName && wroteProductBrand && wroteProductPrice && wroteProductDescription && wroteProductPhoto && selectedProductCategory) {
+						String productName = txtRequestName.getText();
+						String stringProductCategory = requestCategory.getSelectionModel().getSelectedItem();
+						Category productCategory = minoristStore.searchCategory(stringProductCategory);
+						String productBrand = txtRequestBrand.getText();
+						int productPrice = Integer.valueOf(txtRequestPrice.getText());
+						String productDescription = txtRequestDescription.getText();
+						String productPhoto = txtRequestPhoto.getText();
+						Image image = new Image(productPhoto);
+						if(actualAccount instanceof Seller) {
+							minoristStore.addRequest(productName, productCategory, productBrand, productPrice, 0, productDescription, (Seller)actualAccount, RequestType.ADD);
+						}
+						savePicture(image, PRODUCT_PICTURE_DIRECTORY, productName);
+					}
+				}catch(NullPointerException npe) {
 
-//					ADD REQUEST METHOD. TODO.
-
-					savePicture(image, PRODUCT_PICTURE_DIRECTORY, productName);
 				}
 			}
 			return null;

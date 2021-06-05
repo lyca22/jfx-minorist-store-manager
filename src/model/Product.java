@@ -11,10 +11,11 @@ public class Product {
 	private String description;
 	private Seller sellerList;
 	
-	public Product(long iD, String name, String brand, int price, int stock, String description, Seller sellerList) {
+	public Product(long iD, String name, Category category, String brand, int price, int stock, String description, Seller sellerList) {
 		super();
 		ID = iD;
 		this.name = name;
+		this.category = category;
 		this.brand = brand;
 		this.price = price;
 		this.stock = stock;

@@ -64,13 +64,13 @@
                   </VBox>
                   <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                      <children>
-                        <Hyperlink onAction="#editProduct" text="Edit" />
-                        <Button mnemonicParsing="false" onAction="#addToCart" prefHeight="50.0" prefWidth="100.0" text="Add to Cart">
+                        <Hyperlink fx:id="editProductButton" onAction="#editProduct" text="Edit" />
+                        <Button fx:id="addToCartButton" mnemonicParsing="false" onAction="#addToCart" prefHeight="50.0" prefWidth="100.0" text="Add to Cart">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#sellThisProduct" prefHeight="50.0" text="Sell this product">
+                        <Button fx:id="sellThisProductButton" mnemonicParsing="false" onAction="#sellThisProduct" prefHeight="50.0" text="Sell this product">
                            <VBox.margin>
                               <Insets bottom="100.0" top="10.0" />
                            </VBox.margin>

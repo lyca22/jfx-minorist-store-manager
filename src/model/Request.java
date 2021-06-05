@@ -27,4 +27,20 @@ public class Request {
 		this.requestType = requestType;
 	}
 
+	public long getProductID() {
+		return product.getID();
+	}
+	
+	public String getProductName() {
+		return product.getName();
+	}
+	
+	public String getProductCategoryAsString() {
+		return product.getCategory().getName();
+	}
+	
+	public String getProductBrand() {
+		return product.getBrand();
+	}
+	
 }

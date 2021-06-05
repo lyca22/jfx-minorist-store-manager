@@ -14,7 +14,7 @@ You can access the project's analysis and design documentation from [this link](
 What is this software?
 ------------
 
-We intend to develop a software system that allows sellers to manage and display their products through the program, in addition to offering consumers the possibility to search and buy in a comfortable way through a retail company's platform. Why? Because retail companies have been booming in our current context, to the point that they are extremely common in our daily lives. These companies serve as intermediaries between the final consumer and the sellers, which greatly favors the latter since they do not have to worry about implementing their own systems for their customers to buy their products. For this reason, these types of companies have a great value within the current market, which makes many entrepreneurs wish to enter and compete within the retail trade.
+We intend to develop a software system that allows sellers to display their products through the program, in addition to offering consumers the possibility to search and buy in a comfortable way through a retail company's platform. Why? Because retail companies have been booming in our current context, to the point that they are extremely common in our daily lives. These companies serve as intermediaries between the final consumer and the sellers, which greatly favors the latter since they do not have to worry about implementing their own systems for their customers to buy their products. For this reason, these types of companies have a great value within the current market, which makes many entrepreneurs wish to enter and compete within the retail trade.
 
 
 Requirements
