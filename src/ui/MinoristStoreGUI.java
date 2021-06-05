@@ -8,12 +8,14 @@ import javax.imageio.ImageIO;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -170,6 +172,10 @@ public class MinoristStoreGUI {
 
 	@FXML
 	private ChoiceBox<Category> requestCategory;
+
+	@FXML
+	private GridPane categoryPane;
+
 
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
@@ -465,6 +471,57 @@ public class MinoristStoreGUI {
 
 	public void manageCategories(ActionEvent event) {
 		loadMainMenuScreen("manage-categories.fxml");
+		Category actualCategory = minoristStore.getCategoryList();
+		int count = 0;
+		while (actualCategory != null) {
+			Label label = new Label(actualCategory.getName());
+			categoryPane.add(label, 0, count);
+			Hyperlink edit = new Hyperlink("Edit");
+			edit.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					openWindow("edit-profile-info.fxml");
+					dialog.setResultConverter(dialogButton ->{
+						if(dialogButton == acceptButtonType) {
+							boolean wroteCategoryName = !txtEditProfileInfo.getText().isEmpty();
+							if(wroteCategoryName) {
+								Category editedCategory = minoristStore.searchCategory(label.getText());
+								if(editedCategory != null) {
+									String categoryName = txtEditProfileInfo.getText();
+									minoristStore.editCategory(editedCategory, categoryName);
+									manageCategories(event);
+								}
+							}
+						}
+						return null;
+					});
+					dialog.showAndWait();
+				}
+			});
+			categoryPane.add(edit, 1, count);
+			actualCategory = actualCategory.getNext();
+			count += 1;
+		}
+		Hyperlink add = new Hyperlink("Add");
+		add.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openWindow("edit-profile-info.fxml");
+				dialog.setResultConverter(dialogButton ->{
+					if(dialogButton == acceptButtonType) {
+						boolean wroteCategoryName = !txtEditProfileInfo.getText().isEmpty();
+						if(wroteCategoryName) {
+							String categoryName = txtEditProfileInfo.getText();
+							minoristStore.addCategory(categoryName);
+							manageCategories(event);
+						}
+					}
+					return null;
+				});
+				dialog.showAndWait();
+			}
+		});
+		categoryPane.add(add, 1, count);
 	}
 
 	public void manageRequests(ActionEvent event) {
@@ -504,7 +561,7 @@ public class MinoristStoreGUI {
 					String productPhoto = txtRequestPhoto.getText();
 					Image image = new Image(productPhoto);
 
-					//					ADD REQUEST METHOD. TODO.
+//					ADD REQUEST METHOD. TODO.
 
 					savePicture(image, PRODUCT_PICTURE_DIRECTORY, productName);
 				}

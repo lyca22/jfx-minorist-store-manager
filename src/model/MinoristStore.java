@@ -67,7 +67,7 @@ public class MinoristStore {
 		this.requestList = requestList;
 	}
 
-	//Adding methods
+	//Adding methods.
 
 	public boolean addAdministratorAccount(String username, String password, String names, String surnames) {
 		boolean added = false;
@@ -122,7 +122,30 @@ public class MinoristStore {
 		}
 	}
 
-	//Searching methods
+	public boolean addCategory(String name) {
+		boolean added = false;
+		Category category = searchCategory(name);
+		if(category == null) {
+			added = true;
+			Category newCategory = new Category(name);
+			if(categoryList == null) {
+				categoryList = newCategory;
+			}else {
+				addCategory(categoryList, newCategory);
+			}
+		}
+		return added;
+	}
+	
+	private void addCategory(Category currentCategory, Category newCategory) {
+		if(currentCategory.getNext() == null) {
+			currentCategory.setNext(newCategory);
+		}else {
+			addCategory(currentCategory.getNext(), newCategory);
+		}
+	}
+	
+	//Searching methods.
 
 	public Account searchAccount(String username) {
 		boolean found = false;
@@ -130,11 +153,34 @@ public class MinoristStore {
 		while (actualAccount != null && !found) {
 			if(actualAccount.getUsername().equals(username)) {
 				found = true;
-			}else {	
+			}else {
 				actualAccount = actualAccount.getNext();
 			}
 		}
 		return actualAccount;
 	}
 
+	public Category searchCategory(String name) {
+		boolean found = false;
+		Category actualCategory = categoryList;
+		while(actualCategory != null && !found) {
+			if(actualCategory.getName().equals(name)) {
+				found = true;
+			}else {
+				actualCategory = actualCategory.getNext();
+			}
+		}
+		return actualCategory;
+	}
+	
+	public boolean editCategory(Category category, String newName) {
+		boolean edited = false;
+		Category current = searchCategory(newName);
+		if(current == null) {
+			edited = true;
+			category.setName(newName);
+		}
+		return edited;
+	}
+	
 }
