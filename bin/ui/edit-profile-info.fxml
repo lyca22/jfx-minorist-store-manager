@@ -36,7 +36,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Name:">
+            <Label fx:id="labelEditProfileInfo" text="Name:">
                <font>
                   <Font size="14.0" />
                </font>
@@ -44,7 +44,7 @@
                   <Insets />
                </GridPane.margin>
             </Label>
-            <TextField prefHeight="25.0" prefWidth="145.0" GridPane.columnIndex="1">
+            <TextField fx:id="txtEditProfileInfo" prefHeight="25.0" prefWidth="145.0" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets right="35.0" />
                </GridPane.margin></TextField>

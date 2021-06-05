@@ -26,13 +26,19 @@
                   <Insets right="100.0" />
                </HBox.margin>
             </TextField>
-            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin></ImageView>
             <Button mnemonicParsing="false" onAction="#cart" text="Cart">
                <HBox.margin>
                   <Insets right="100.0" />
                </HBox.margin>
             </Button>
-            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="profilePicture" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin></ImageView>
             <Button mnemonicParsing="false" onAction="#myAccount" text="My Account">
                <HBox.margin>
                   <Insets right="20.0" />

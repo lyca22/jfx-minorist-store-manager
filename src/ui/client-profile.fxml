@@ -110,7 +110,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <Hyperlink onAction="#editProfileInfo" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                              <Hyperlink onAction="#editPassword" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -118,7 +118,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Hyperlink>
-                              <Hyperlink onAction="#editProfileInfo" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                              <Hyperlink onAction="#editFirstNames" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -126,7 +126,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Hyperlink>
-                              <Hyperlink onAction="#editProfileInfo" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                              <Hyperlink onAction="#editLastNames" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -150,7 +150,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Label>
-                              <Hyperlink onAction="#editProfileInfo" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                              <Hyperlink onAction="#editPhone" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -158,7 +158,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Hyperlink>
-                              <Hyperlink onAction="#editProfileInfo" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                              <Hyperlink onAction="#editAddress" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="5">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -200,7 +200,10 @@
                               </Label>
                               <HBox alignment="CENTER" GridPane.columnIndex="2">
                                  <children>
-                                    <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="clientPicture" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin></ImageView>
                                     <Hyperlink onAction="#editProfilePicture" text="Edit">
                                        <font>
                                           <Font size="14.0" />

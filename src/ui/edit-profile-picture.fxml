@@ -46,7 +46,7 @@
                   <Insets />
                </GridPane.margin>
             </Label>
-            <Button mnemonicParsing="false" text="Browse" GridPane.columnIndex="2">
+            <Button mnemonicParsing="false" onAction="#browsePicture" text="Browse" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
@@ -54,7 +54,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <TextField GridPane.columnIndex="1" />
+            <TextField fx:id="txtPictureDirectory" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

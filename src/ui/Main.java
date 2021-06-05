@@ -27,7 +27,7 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("MinSMa");
 		primaryStage.show();
-		minoristStoreGUI.loginScreen();
+		minoristStoreGUI.loginScreen(null);
 	}
 
 	public static void main(String[] args) {

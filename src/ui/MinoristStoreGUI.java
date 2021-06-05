@@ -1,24 +1,38 @@
 package ui;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 import model.Account;
 import model.Administrator;
+import model.Category;
 import model.Consumer;
 import model.MinoristStore;
 import model.Seller;
 
 public class MinoristStoreGUI {
+
+	private final static String PROFILE_PICTURE_DIRECTORY = "/data/profile_pictures/";
+	private final static String PRODUCT_PICTURE_DIRECTORY = "/data/product_pictures/";
 
 	private MinoristStore minoristStore;
 	private Account actualAccount;
@@ -27,97 +41,136 @@ public class MinoristStoreGUI {
 	private ButtonType deleteButtonType;
 	private ButtonType disableButtonType;
 	private ButtonType enableButtonType;
-	
+
 	@FXML
 	private GridPane mainPane;
-	
+
 	@FXML
 	private GridPane mainMenuPane;
-	
+
 	@FXML
 	Dialog<String> dialog;
-	
+
 	@FXML
 	Dialog<String> alertDialog;
 
 	@FXML
 	ButtonType okayButton;
-	
+
 	@FXML
 	private TextField txtClientUsername;
-	
+
 	@FXML
 	private PasswordField txtClientPassword;
-	
+
 	@FXML
 	private TextField txtClientFirstNames;
-	
+
 	@FXML
 	private TextField txtClientLastNames;
-	
+
 	@FXML
 	private TextField txtClientPhone;
-	
+
 	@FXML
 	private TextField txtClientAddress;
-	
+
 	@FXML
 	private TextField txtAdminUsername;
-	
+
 	@FXML
 	private PasswordField txtAdminPassword;
-	
+
 	@FXML
 	private TextField txtAdminFirstNames;
-	
+
 	@FXML
 	private TextField txtAdminLastNames;
-	
+
 	@FXML
 	private TextField txtSellerUsername;
-	
+
 	@FXML
 	private PasswordField txtSellerPassword;
-	
+
 	@FXML
 	private TextField txtSellerTradeName;
-	
+
 	@FXML
 	private TextField txtLoginUsername;
-	
+
 	@FXML
 	private PasswordField txtLoginPassword;
-	
+
 	@FXML
 	private Label txtClientUsernameProfile;
-	
+
 	@FXML
 	private Label txtClientFirstNameProfile;
-	
+
 	@FXML
 	private Label txtClientLastNameProfile;
-	
+
 	@FXML
 	private Label txtClientPhoneProfile;
-	
+
 	@FXML
 	private Label txtClientAddressProfile;
-	
+
 	@FXML
 	private Label txtAdminUsernameProfile;
-	
+
 	@FXML
 	private Label txtAdminFirstNameProfile;
-	
+
 	@FXML
 	private Label txtAdminLastNameProfile;
-	
+
 	@FXML
 	private Label txtSellerUsernameProfile;
-	
+
 	@FXML
 	private Label txtSellerTradename;
-	
+
+	@FXML
+	private TextField txtPictureDirectory;
+
+	@FXML
+	private ImageView profilePicture;
+
+	@FXML
+	private ImageView adminPicture;
+
+	@FXML
+	private ImageView clientPicture;
+
+	@FXML
+	private ImageView sellerPicture;
+
+	@FXML
+	private TextField txtEditProfileInfo;
+
+	@FXML
+	private Label labelEditProfileInfo;
+
+	@FXML
+	private TextField txtRequestPhoto;
+
+	@FXML
+	private TextField txtRequestDescription;
+
+	@FXML
+	private TextField txtRequestPrice;
+
+	@FXML
+	private TextField txtRequestBrand;
+
+	@FXML
+	private TextField txtRequestName;
+
+	@FXML
+	private ChoiceBox<Category> requestCategory;
+
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
 		this.setMinoristStore(minoristStore);
@@ -138,7 +191,7 @@ public class MinoristStoreGUI {
 	public void setMinoristStore(MinoristStore minoristStore) {
 		this.minoristStore = minoristStore;
 	}
-	
+
 	public Account getActualAccount() {
 		return actualAccount;
 	}
@@ -231,28 +284,28 @@ public class MinoristStoreGUI {
 		alertDialog.getDialogPane().setHeaderText(text);
 		alertDialog.showAndWait();
 	}
-	
-	public void loginScreen() {
+
+	public void loginScreen(ActionEvent event) {
 		loadScreen("login.fxml");
 	}
-	
-	public void signUp() {
+
+	public void signUp(ActionEvent event) {
 		loadScreen("choose-user-type.fxml");
 	}
 
 	public void useAsClient() {
 		loadScreen("create-client-account.fxml");
 	}
-	
+
 	public void useAsSeller() {
 		loadScreen("create-seller-account.fxml");
 	}
-	
+
 	public void useAsAdministrator() {
 		loadScreen("create-admin-account.fxml");
 	}
-	
-	public void createClientAccount() {
+
+	public void createClientAccount(ActionEvent event) {
 		boolean wroteUsername = !txtClientUsername.getText().isEmpty();
 		boolean wrotePassword = !txtClientPassword.getText().isEmpty();
 		boolean wroteFirstNames = !txtClientFirstNames.getText().isEmpty();
@@ -281,47 +334,47 @@ public class MinoristStoreGUI {
 		}
 	}
 
-	public void createSellerAccount() {
+	public void createSellerAccount(ActionEvent event) {
 		boolean wroteUsername = !txtSellerUsername.getText().isEmpty();
 		boolean wrotePassword = !txtSellerPassword.getText().isEmpty();
 		boolean wroteTradeName = !txtSellerTradeName.getText().isEmpty();
 		if(wroteUsername & wrotePassword & wroteTradeName) {
-				String username = txtSellerUsername.getText();
-				String password = txtSellerPassword.getText();
-				String tradeName = txtSellerTradeName.getText();
-				boolean created = minoristStore.addSellerAccount(username, password, tradeName);
-				if(created) {
-					showAlert("Account Created!");
-				}else {
-					showAlert("This account already exists!");
-				}
+			String username = txtSellerUsername.getText();
+			String password = txtSellerPassword.getText();
+			String tradeName = txtSellerTradeName.getText();
+			boolean created = minoristStore.addSellerAccount(username, password, tradeName);
+			if(created) {
+				showAlert("Account Created!");
+			}else {
+				showAlert("This account already exists!");
+			}
 		}else {
 			showAlert("Please fill all the fields.");
 		}
 	}
 
-	public void createAdministratorAccount() {
+	public void createAdministratorAccount(ActionEvent event) {
 		boolean wroteUsername = !txtAdminUsername.getText().isEmpty();
 		boolean wrotePassword = !txtAdminPassword.getText().isEmpty();
 		boolean wroteFirstNames = !txtAdminFirstNames.getText().isEmpty();
 		boolean wroteLastNames = !txtAdminLastNames.getText().isEmpty();
 		if(wroteUsername & wrotePassword & wroteFirstNames & wroteLastNames) {
-				String username = txtAdminUsername.getText();
-				String password = txtAdminPassword.getText();
-				String firstNames = txtAdminFirstNames.getText();
-				String lastNames = txtAdminLastNames.getText();
-				boolean created = minoristStore.addAdministratorAccount(username, password, firstNames, lastNames);
-				if(created) {
-					showAlert("Account Created!");
-				}else {
-					showAlert("This account already exists!");
-				}
+			String username = txtAdminUsername.getText();
+			String password = txtAdminPassword.getText();
+			String firstNames = txtAdminFirstNames.getText();
+			String lastNames = txtAdminLastNames.getText();
+			boolean created = minoristStore.addAdministratorAccount(username, password, firstNames, lastNames);
+			if(created) {
+				showAlert("Account Created!");
+			}else {
+				showAlert("This account already exists!");
+			}
 		}else {
 			showAlert("Please fill all the fields.");
 		}
 	}
 
-	public void logIn() {
+	public void logIn(ActionEvent event) {
 		boolean wroteUsername = !txtLoginUsername.getText().isEmpty();
 		boolean wrotePassword = !txtLoginPassword.getText().isEmpty();
 		if(wroteUsername & wrotePassword) {
@@ -332,6 +385,9 @@ public class MinoristStoreGUI {
 				if(actualAccount.getPassword().equals(password)) {
 					loadScreen("main-menu.fxml");
 					loadMainMenuScreen("show-products-pane.fxml");
+					File file = new File(System.getProperty("user.dir") + PROFILE_PICTURE_DIRECTORY + username + ".png");
+					Image image = new Image(file.toURI().toString());
+					profilePicture.setImage(image);
 				}else {
 					showAlert("Wrong password.");
 				}
@@ -343,52 +399,54 @@ public class MinoristStoreGUI {
 		}
 	}
 
-	public void searchProduct() {
-		
+	public void searchProduct(ActionEvent event) {
+
 	}
 
 	public void showProduct() {
 		loadMainMenuScreen("products-pane.fxml");
 	}
 
-	public void editProduct() {
+	public void editProduct(ActionEvent event) {
 		openWindow("add-products.fxml");
 		dialog.showAndWait();
 	}
 
-	public void addToCart() {
+	public void addToCart(ActionEvent event) {
 		showAlert("Added to the cart!");
 	}
 
-	public void sellThisProduct() {
+	public void sellThisProduct(ActionEvent event) {
 		openWindow("add-products.fxml");
 		dialog.showAndWait();
 	}
 
-	public void cart() {
+	public void cart(ActionEvent event) {
 		loadMainMenuScreen("cart.fxml");
 	}
 
-	public void selectPayment() {
+	public void selectPayment(ActionEvent event) {
 		loadMainMenuScreen("payment-method.fxml");
 	}
 
-	public void buyCart() {
+	public void buyCart(ActionEvent event) {
 		showAlert("An order was created!");
 		loadScreen("main-menu.fxml");
 		loadMainMenuScreen("show-products-pane.fxml");
 	}
 
-	public void myAccount() {
+	public void myAccount(ActionEvent event) {
 		if(actualAccount instanceof Administrator) {
 			loadMainMenuScreen("admin-profile.fxml");
 			txtAdminUsernameProfile.setText(actualAccount.getUsername());
 			txtAdminFirstNameProfile.setText(((Administrator) actualAccount).getNames());
 			txtAdminLastNameProfile.setText(((Administrator) actualAccount).getSurnames());
+			adminPicture.setImage(loadProfilePicture());
 		}else if(actualAccount instanceof Seller) {
 			loadMainMenuScreen("seller-profile.fxml");
 			txtSellerUsernameProfile.setText(actualAccount.getUsername());
 			txtSellerTradename.setText(((Seller) actualAccount).getTradeName());
+			sellerPicture.setImage(loadProfilePicture());
 		}else if(actualAccount instanceof Consumer){
 			loadMainMenuScreen("client-profile.fxml");
 			txtClientUsernameProfile.setText(actualAccount.getUsername());
@@ -396,48 +454,238 @@ public class MinoristStoreGUI {
 			txtClientLastNameProfile.setText(((Consumer) actualAccount).getSurnames());
 			txtClientPhoneProfile.setText(Long.toString(((Consumer) actualAccount).getPhoneNumber()));
 			txtClientAddressProfile.setText(((Consumer) actualAccount).getAddress());
+			clientPicture.setImage(loadProfilePicture());
 		}
 	}
 
-	public void seeProducts() {
+	public void seeProducts(ActionEvent event) {
 		loadScreen("main-menu.fxml");
 		loadMainMenuScreen("show-products-pane.fxml");
 	}
-	
-	public void manageCategories() {
+
+	public void manageCategories(ActionEvent event) {
 		loadMainMenuScreen("manage-categories.fxml");
 	}
-	
-	public void manageRequests() {
+
+	public void manageRequests(ActionEvent event) {
 		loadMainMenuScreen("check-requests.fxml");
 	}
-	
-	public void manageOrders() {
+
+	public void manageOrders(ActionEvent event) {
 		loadMainMenuScreen("order-list.fxml");
 	}
-	
-	public void exportData() {
+
+	public void exportData(ActionEvent event) {
 		loadMainMenuScreen("export.fxml");
 	}
-	
-	public void importData() {
+
+	public void importData(ActionEvent event) {
 		openWindow("import.fxml");
 		dialog.showAndWait();
 	}
-	
-	public void addProducts() {
+
+	@SuppressWarnings("unused")
+	public void addProducts(ActionEvent event) {
 		openWindow("add-products.fxml");
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				boolean wroteProductName = !txtRequestName.getText().isEmpty();
+				boolean wroteProductBrand = !txtRequestBrand.getText().isEmpty();
+				boolean wroteProductPrice = !txtRequestPrice.getText().isEmpty();
+				boolean wroteProductDescription = !txtRequestDescription.getText().isEmpty();
+				boolean wroteProductPhoto = !txtRequestPhoto.getText().isEmpty();
+				boolean selectedProductCategory = !requestCategory.getSelectionModel().getSelectedItem().equals(null); //NullPointerException, I have to fix this.
+				if(wroteProductName && wroteProductBrand && wroteProductPrice && wroteProductDescription && wroteProductPhoto && selectedProductCategory) {
+					String productName = txtRequestName.getText();
+					Category productCategory = requestCategory.getSelectionModel().getSelectedItem();
+					String productBrand = txtRequestBrand.getText();
+					String productPrice = txtRequestPrice.getText();
+					String productDescription = txtRequestDescription.getText();
+					String productPhoto = txtRequestPhoto.getText();
+					Image image = new Image(productPhoto);
+
+					//					ADD REQUEST METHOD. TODO.
+
+					savePicture(image, PRODUCT_PICTURE_DIRECTORY, productName);
+				}
+			}
+			return null;
+		});
 		dialog.showAndWait();
 	}
-	
-	public void editProfileInfo() {
+
+	public void editPassword(ActionEvent event) {
 		openWindow("edit-profile-info.fxml");
+		labelEditProfileInfo.setText("New password:");
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				boolean wrotePassword = !txtEditProfileInfo.getText().isEmpty();
+				if(wrotePassword) {
+					actualAccount.setPassword(txtEditProfileInfo.getText());
+				}
+			}
+			return null;
+		});
 		dialog.showAndWait();
 	}
-	
-	public void editProfilePicture() {
+
+	public void editFirstNames(ActionEvent event) {
+		openWindow("edit-profile-info.fxml");
+		labelEditProfileInfo.setText("First Names:");
+		if(actualAccount instanceof Administrator) {
+			txtEditProfileInfo.setText(((Administrator) actualAccount).getNames());
+		}else if(actualAccount instanceof Consumer) {
+			txtEditProfileInfo.setText(((Consumer) actualAccount).getNames());
+		}
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				boolean wroteFirstNames = !txtEditProfileInfo.getText().isEmpty();
+				if(wroteFirstNames) {
+					if(actualAccount instanceof Administrator) {
+						((Administrator) actualAccount).setNames(txtEditProfileInfo.getText());
+					}else if(actualAccount instanceof Consumer) {
+						((Consumer) actualAccount).setNames(txtEditProfileInfo.getText());
+					}
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+
+	public void editLastNames(ActionEvent event) {
+		openWindow("edit-profile-info.fxml");
+		if(actualAccount instanceof Administrator) {
+			txtEditProfileInfo.setText(((Administrator) actualAccount).getSurnames());
+		}else if(actualAccount instanceof Consumer) {
+			txtEditProfileInfo.setText(((Consumer) actualAccount).getSurnames());
+		}
+		labelEditProfileInfo.setText("Last Names:");
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				boolean wroteLastNames = !txtEditProfileInfo.getText().isEmpty();
+				if(wroteLastNames) {
+					if(actualAccount instanceof Administrator) {
+						((Administrator) actualAccount).setSurnames(txtEditProfileInfo.getText());
+					}else if(actualAccount instanceof Consumer) {
+						((Consumer) actualAccount).setSurnames(txtEditProfileInfo.getText());
+					}
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+
+	public void editPhone(ActionEvent event) {
+		openWindow("edit-profile-info.fxml");
+		labelEditProfileInfo.setText("Phone:");
+		txtEditProfileInfo.setText(String.valueOf(((Consumer) actualAccount).getPhoneNumber()));
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				boolean wrotePhone = !txtEditProfileInfo.getText().isEmpty();
+				if(wrotePhone) {
+					((Consumer) actualAccount).setPhoneNumber(Long.valueOf(txtEditProfileInfo.getText()));
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+
+	public void editAddress(ActionEvent event) {
+		openWindow("edit-profile-info.fxml");
+		labelEditProfileInfo.setText("Address:");
+		txtEditProfileInfo.setText(((Consumer) actualAccount).getAddress());
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				boolean wroteAddress = !txtEditProfileInfo.getText().isEmpty();
+				if(wroteAddress) {
+					((Consumer) actualAccount).setAddress(txtEditProfileInfo.getText());
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+
+	public void editTradename(ActionEvent event) {
+		openWindow("edit-profile-info.fxml");
+		labelEditProfileInfo.setText("Tradename:");
+		txtEditProfileInfo.setText(((Seller) actualAccount).getTradeName());
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				boolean wroteTradeName = !txtEditProfileInfo.getText().isEmpty();
+				if(wroteTradeName) {
+					((Seller) actualAccount).setTradeName(txtEditProfileInfo.getText());
+				}
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+
+	public void editProfilePicture(ActionEvent event) {
 		openWindow("edit-profile-picture.fxml");
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				try {
+					String pictureDirectory = txtPictureDirectory.getText();
+					Image image = new Image(pictureDirectory);
+					savePicture(image, PROFILE_PICTURE_DIRECTORY, actualAccount.getUsername());
+					profilePicture.setImage(image);
+					if(actualAccount instanceof Administrator) {
+						adminPicture.setImage(image);
+					}else if(actualAccount instanceof Consumer) {
+						clientPicture.setImage(image);
+					}else if(actualAccount instanceof Seller) {
+						sellerPicture.setImage(image);
+					}
+				}catch(IllegalArgumentException iae) {
+
+				}
+			}
+			return null;
+		});
 		dialog.showAndWait();
 	}
-	
+
+	public void browsePicture(ActionEvent event) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select File");
+		File file = fileChooser.showOpenDialog(null);
+		try {
+			txtPictureDirectory.setText(file.toURI().toString());
+		}catch(NullPointerException npe) {
+
+		}
+	}
+
+	public void browseProductPicture(ActionEvent event) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select File");
+		File file = fileChooser.showOpenDialog(null);
+		try {
+			txtRequestPhoto.setText(file.toURI().toString());
+		}catch(NullPointerException npe) {
+
+		}
+	}
+
+	public void savePicture(Image image, String directory, String fileName) {
+		File file = new File(System.getProperty("user.dir") + directory + fileName + ".png");
+		BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+		try {
+			ImageIO.write(bImage, "png", file);
+		}catch(IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public Image loadProfilePicture() {
+		File file = new File(System.getProperty("user.dir") + PROFILE_PICTURE_DIRECTORY + actualAccount.getUsername() + ".png");
+		Image image = new Image(file.toURI().toString());
+		return image;
+	}
+
 }
