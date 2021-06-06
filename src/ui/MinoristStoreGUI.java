@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -208,6 +209,15 @@ public class MinoristStoreGUI {
 
     @FXML
     private TableColumn<Request, String> tcRequestBrand;
+    
+    @FXML
+    private Label txtCheckRequestName;
+
+    @FXML
+    private Label txtCheckRequestBrand;
+
+    @FXML
+    private TextArea checkRequestDescription;
 	
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
@@ -286,6 +296,11 @@ public class MinoristStoreGUI {
 		tcRequestProduct.setCellValueFactory(new PropertyValueFactory<Request, String>("productName"));
 		tcRequestCategory.setCellValueFactory(new PropertyValueFactory<Request, String>("productCategoryAsString"));
 		tcRequestBrand.setCellValueFactory(new PropertyValueFactory<Request, String>("productBrand"));
+		
+		tcRequestID.setOnEditStart(t -> checkRequest(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcRequestProduct.setOnEditStart(t -> checkRequest(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcRequestCategory.setOnEditStart(t -> checkRequest(t.getTableView().getItems().get(t.getTablePosition().getRow())));
+		tcRequestBrand.setOnEditStart(t -> checkRequest(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 	}
 	
 	public void loadScreen(String resource) {
@@ -813,6 +828,20 @@ public class MinoristStoreGUI {
 		dialog.showAndWait();
 	}
 
+	public void checkRequest(Request request) {
+		openWindow("request-prompt.fxml");
+		txtCheckRequestName.setText(request.getProduct().getName());
+		txtCheckRequestBrand.setText(request.getProduct().getBrand());
+		checkRequestDescription.setText(request.getProduct().getDescription());
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				minoristStore.addProduct(request.getProduct());
+			}
+			return null;
+		});
+		dialog.showAndWait();
+	}
+	
 	public void browsePicture(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select File");
