@@ -53,6 +53,7 @@ public class MinoristStoreGUI {
 	private ButtonType deleteButtonType;
 	private ButtonType disableButtonType;
 	private ButtonType enableButtonType;
+	private ButtonType rejectButtonType;
 
 	@FXML
 	private GridPane mainPane;
@@ -230,6 +231,7 @@ public class MinoristStoreGUI {
 		setDeleteButtonType(new ButtonType("Delete", ButtonData.NO));
 		setDisableButtonType(new ButtonType("Disable", ButtonData.OTHER));
 		setEnableButtonType(new ButtonType("Enable", ButtonData.OK_DONE));
+		setRejectButtonType(new ButtonType("Reject", ButtonData.BACK_PREVIOUS));
 	}
 
 	public MinoristStore getMinoristStore() {
@@ -288,6 +290,14 @@ public class MinoristStoreGUI {
 		this.enableButtonType = enableButtonType;
 	}
 
+	public ButtonType getRejectButtonType() {
+		return rejectButtonType;
+	}
+
+	public void setRejectButtonType(ButtonType rejectButtonType) {
+		this.rejectButtonType = rejectButtonType;
+	}
+
 	private void initializeRequestTableView() {
 		ObservableList<Request> observableList;
 		observableList = FXCollections.observableArrayList(minoristStore.getRequestList());
@@ -334,6 +344,20 @@ public class MinoristStoreGUI {
 		fxmlLoader.setController(this);
 		dialog = new Dialog<String>();
 		dialog.getDialogPane().getButtonTypes().addAll(acceptButtonType, cancelButtonType);
+		Parent root;
+		try {
+			root = fxmlLoader.load();
+			dialog.getDialogPane().setContent(root);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void openRequestWindow(String resource) {
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
+		fxmlLoader.setController(this);
+		dialog = new Dialog<String>();
+		dialog.getDialogPane().getButtonTypes().addAll(acceptButtonType, cancelButtonType, rejectButtonType);
 		Parent root;
 		try {
 			root = fxmlLoader.load();
@@ -829,14 +853,19 @@ public class MinoristStoreGUI {
 	}
 
 	public void checkRequest(Request request) {
-		openWindow("request-prompt.fxml");
+		openRequestWindow("request-prompt.fxml");
 		txtCheckRequestName.setText(request.getProduct().getName());
 		txtCheckRequestBrand.setText(request.getProduct().getBrand());
 		checkRequestDescription.setText(request.getProduct().getDescription());
 		dialog.setResultConverter(dialogButton ->{
 			if(dialogButton == acceptButtonType) {
-				minoristStore.addProduct(request.getProduct());
+				if(request.getRequestType().equals(RequestType.ADD)) {
+					minoristStore.addProduct(request.getProduct());
+				}else {
+//					TODO. First you have to implemented the edit function. Then you can modify the current product.
+				}
 			}
+			minoristStore.deleteRequest(request);
 			return null;
 		});
 		dialog.showAndWait();

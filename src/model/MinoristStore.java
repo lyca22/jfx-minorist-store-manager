@@ -166,6 +166,12 @@ public class MinoristStore {
 		}
 	}
 	
+	//Deleting methods.
+	
+	public void deleteRequest(Request request) {
+		requestList.remove(request);
+	}
+	
 	//Searching methods.
 
 	public Account searchAccount(String username) {
@@ -193,6 +199,8 @@ public class MinoristStore {
 		}
 		return actualCategory;
 	}
+	
+	//Editing methods.
 	
 	public boolean editCategory(Category category, String newName) {
 		boolean edited = false;
