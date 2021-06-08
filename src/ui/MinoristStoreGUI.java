@@ -25,6 +25,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -34,6 +35,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -227,8 +229,8 @@ public class MinoristStoreGUI {
 	@FXML
 	private TextArea checkRequestDescription;
 
-	@FXML
-	private GridPane showProductPane;
+    @FXML
+    private ScrollPane productScrollPane;
 
 	@FXML
 	private Label productsPaneProductName;
@@ -535,6 +537,11 @@ public class MinoristStoreGUI {
 	public void showProductsPane() {
 		loadMainMenuScreen("show-products-pane.fxml");
 		List<Product> list = minoristStore.getGeneralProductList();
+		GridPane showProductPane = new GridPane();
+		showProductPane.setPrefWidth(1280);
+		ColumnConstraints cc = new ColumnConstraints();
+		cc.setPercentWidth(33);
+		showProductPane.getColumnConstraints().addAll(cc, cc, cc);
 		for(int i = 0; i <= list.size()-1; i++) {
 			int row = ((i-i%3)/3);
 			int column = i-(row*3);
@@ -562,6 +569,7 @@ public class MinoristStoreGUI {
 			});
 			showProductPane.add(vbox, column, row);
 		}
+		productScrollPane.setContent(showProductPane);
 	}
 
 	public void searchProduct(ActionEvent event) {
@@ -670,8 +678,8 @@ public class MinoristStoreGUI {
 							savePicture(image, PRODUCT_PICTURE_DIRECTORY, Long.toString(ID));
 						}
 					}
-				}catch(NullPointerException npe) {
-					npe.printStackTrace();
+				}catch(Exception e) {
+					
 				}
 			}
 			return null;
@@ -836,7 +844,7 @@ public class MinoristStoreGUI {
 							savePicture(image, PRODUCT_PICTURE_DIRECTORY, Long.toString(ID));
 						}
 					}
-				}catch(NullPointerException npe) {
+				}catch(Exception e) {
 
 				}
 			}
