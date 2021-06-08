@@ -4,9 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -14,6 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
@@ -31,12 +35,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import model.Account;
 import model.Administrator;
 import model.Category;
 import model.Consumer;
 import model.MinoristStore;
+import model.Product;
 import model.Request;
 import model.RequestType;
 import model.Seller;
@@ -48,6 +54,7 @@ public class MinoristStoreGUI {
 
 	private MinoristStore minoristStore;
 	private Account actualAccount;
+	private Product actualProduct;
 	private ButtonType acceptButtonType;
 	private ButtonType cancelButtonType;
 	private ButtonType deleteButtonType;
@@ -196,30 +203,61 @@ public class MinoristStoreGUI {
 	@FXML
 	private Button sellThisProductButton;
 
-    @FXML
-    private TableView<Request> tvRequests;
+	@FXML
+	private TableView<Request> tvRequests;
 
-    @FXML
-    private TableColumn<Request, String> tcRequestID;
+	@FXML
+	private TableColumn<Request, String> tcRequestID;
 
-    @FXML
-    private TableColumn<Request, String> tcRequestProduct;
+	@FXML
+	private TableColumn<Request, String> tcRequestProduct;
 
-    @FXML
-    private TableColumn<Request, String> tcRequestCategory;
+	@FXML
+	private TableColumn<Request, String> tcRequestCategory;
 
-    @FXML
-    private TableColumn<Request, String> tcRequestBrand;
-    
-    @FXML
-    private Label txtCheckRequestName;
+	@FXML
+	private TableColumn<Request, String> tcRequestBrand;
 
-    @FXML
-    private Label txtCheckRequestBrand;
+	@FXML
+	private Label txtCheckRequestName;
 
-    @FXML
-    private TextArea checkRequestDescription;
-	
+	@FXML
+	private Label txtCheckRequestBrand;
+
+	@FXML
+	private TextArea checkRequestDescription;
+
+	@FXML
+	private GridPane showProductPane;
+
+	@FXML
+	private Label productsPaneProductName;
+
+	@FXML
+	private Label productsPaneProductBrand;
+
+	@FXML
+	private TextArea productsPaneProductDescription;
+
+	@FXML
+	private Label productsPaneGeneralStock;
+
+	@FXML
+	private Label productsPaneSellerStock;
+
+	@FXML
+	private ChoiceBox<String> productsPaneSelectSeller;
+
+	@FXML
+	private TextField txtRequestStock;
+
+	@FXML
+	private Label labelStock;
+
+	@FXML
+	private ImageView productsPaneImageView;
+
+
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
 		this.setMinoristStore(minoristStore);
@@ -248,6 +286,14 @@ public class MinoristStoreGUI {
 
 	public void setActualAccount(Account actualAccount) {
 		this.actualAccount = actualAccount;
+	}
+
+	public Product getActualProduct() {
+		return actualProduct;
+	}
+
+	public void setActualProduct(Product actualProduct) {
+		this.actualProduct = actualProduct;
 	}
 
 	public ButtonType getAcceptButtonType() {
@@ -306,13 +352,13 @@ public class MinoristStoreGUI {
 		tcRequestProduct.setCellValueFactory(new PropertyValueFactory<Request, String>("productName"));
 		tcRequestCategory.setCellValueFactory(new PropertyValueFactory<Request, String>("productCategoryAsString"));
 		tcRequestBrand.setCellValueFactory(new PropertyValueFactory<Request, String>("productBrand"));
-		
+
 		tcRequestID.setOnEditStart(t -> checkRequest(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcRequestProduct.setOnEditStart(t -> checkRequest(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcRequestCategory.setOnEditStart(t -> checkRequest(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 		tcRequestBrand.setOnEditStart(t -> checkRequest(t.getTableView().getItems().get(t.getTablePosition().getRow())));
 	}
-	
+
 	public void loadScreen(String resource) {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
 		fxmlLoader.setController(this);
@@ -352,7 +398,7 @@ public class MinoristStoreGUI {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void openRequestWindow(String resource) {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
 		fxmlLoader.setController(this);
@@ -471,7 +517,7 @@ public class MinoristStoreGUI {
 			if(actualAccount != null) {
 				if(actualAccount.getPassword().equals(password)) {
 					loadScreen("main-menu.fxml");
-					loadMainMenuScreen("show-products-pane.fxml");
+					showProductsPane();
 					File file = new File(System.getProperty("user.dir") + PROFILE_PICTURE_DIRECTORY + username + ".png");
 					Image image = new Image(file.toURI().toString());
 					profilePicture.setImage(image);
@@ -486,12 +532,65 @@ public class MinoristStoreGUI {
 		}
 	}
 
+	public void showProductsPane() {
+		loadMainMenuScreen("show-products-pane.fxml");
+		List<Product> list = minoristStore.getGeneralProductList();
+		for(int i = 0; i <= list.size()-1; i++) {
+			int row = ((i-i%3)/3);
+			int column = i-(row*3);
+			File file = new File(System.getProperty("user.dir") + PRODUCT_PICTURE_DIRECTORY + list.get(i).getID() + ".png");
+			Image image = new Image(file.toURI().toString());
+			ImageView imageView = new ImageView(image);
+			imageView.setFitHeight(200);
+			imageView.setFitWidth(200);
+			Label labelName = new Label(list.get(i).getName());
+			labelName.setPadding(new Insets(25, 0, 0, 0));
+			Label labelBrand = new Label(list.get(i).getBrand());
+			labelBrand.setPadding(new Insets(25, 0, 0, 0));
+			Label labelID = new Label(Long.toString(list.get(i).getID()));
+			labelID.setPadding(new Insets(25, 0, 0, 0));
+			VBox vbox = new VBox();
+			vbox.setAlignment(Pos.CENTER);
+			vbox.getChildren().add(imageView);
+			vbox.getChildren().add(labelName);
+			vbox.getChildren().add(labelBrand);
+			vbox.getChildren().add(labelID);
+			vbox.setOnMouseClicked(event ->{
+				Label label = (Label)vbox.getChildren().get(3);
+				Product product = minoristStore.searchProduct(Long.valueOf(label.getText()));
+				showProduct(product, image);
+			});
+			showProductPane.add(vbox, column, row);
+		}
+	}
+
 	public void searchProduct(ActionEvent event) {
 
 	}
 
-	public void showProduct() {
+	public void selectSeller(String sellerAsString) {
+		Seller seller = (Seller)minoristStore.searchAccount(sellerAsString);
+		Product product = minoristStore.searchProduct(actualProduct.getID(), seller);
+		productsPaneSellerStock.setText(String.valueOf(product.getStock()));
+	}
+
+	public void showProduct(Product product, Image image) {
 		loadMainMenuScreen("products-pane.fxml");
+		actualProduct = product;
+		productsPaneImageView.setImage(image);
+		String[] array = new String[actualProduct.getSellerList().size()];
+		for(int i = 0; i <= array.length-1; i++) {
+			array[i] = product.getSellerList().get(i).getUsername();
+		}
+		productsPaneSelectSeller.setItems(FXCollections.observableArrayList(array));
+		productsPaneSelectSeller.getSelectionModel().selectedIndexProperty().addListener(
+				(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+					selectSeller(array[newValue.intValue()]);
+				});
+		productsPaneProductName.setText(actualProduct.getName());
+		productsPaneProductBrand.setText(actualProduct.getBrand());
+		productsPaneGeneralStock.setText(Integer.toString(actualProduct.getStock()));
+		productsPaneProductDescription.setText(actualProduct.getDescription());
 		if(actualAccount instanceof Seller) {
 			editProductButton.setVisible(true);
 			addToCartButton.setVisible(false);
@@ -506,7 +605,7 @@ public class MinoristStoreGUI {
 			sellThisProductButton.setVisible(false);
 		}
 	}
-
+	//TODO. You have to check the photo as well.
 	public void editProduct(ActionEvent event) {
 		openWindow("add-products.fxml");
 		Category actualCategory = minoristStore.getCategoryList();
@@ -516,9 +615,8 @@ public class MinoristStoreGUI {
 			actualCategory = actualCategory.getNext();
 		}
 		requestCategory.setItems(FXCollections.observableArrayList(categoryList));
-		
-//		TODO. Get current product.
-		
+		labelStock.setVisible(false);
+		txtRequestStock.setVisible(false);
 		dialog.setResultConverter(dialogButton ->{
 			if(dialogButton == acceptButtonType) {
 				try {
@@ -527,23 +625,53 @@ public class MinoristStoreGUI {
 					boolean wroteProductPrice = !txtRequestPrice.getText().isEmpty();
 					boolean wroteProductDescription = !txtRequestDescription.getText().isEmpty();
 					boolean wroteProductPhoto = !txtRequestPhoto.getText().isEmpty();
-					boolean selectedProductCategory = !requestCategory.getSelectionModel().getSelectedItem().equals(null); //NullPointerException, I have to fix this.
-					if(wroteProductName && wroteProductBrand && wroteProductPrice && wroteProductDescription && wroteProductPhoto && selectedProductCategory) {
-						String productName = txtRequestName.getText();
+					String text = requestCategory.getSelectionModel().getSelectedItem();
+					boolean selectedProductCategory = false;
+					if(text != null) {
+						selectedProductCategory = true;
+					}
+					String productName;
+					String productBrand;
+					int productPrice;
+					String productDescription;
+					String productPhoto;
+					Category productCategory;
+					if(wroteProductName) {
+						productName = txtRequestName.getText();
+					}else {
+						productName = actualProduct.getName();
+					}
+					if(wroteProductBrand) {
+						productBrand = txtRequestBrand.getText();
+					}else {
+						productBrand = actualProduct.getBrand();
+					}
+					if(wroteProductPrice) {
+						productPrice = Integer.valueOf(txtRequestPrice.getText());
+					}else {
+						productPrice = actualProduct.getPrice();
+					}
+					if(wroteProductDescription) {
+						productDescription = txtRequestDescription.getText();
+					}else {
+						productDescription = actualProduct.getDescription();
+					}
+					if(selectedProductCategory) {
 						String stringProductCategory = requestCategory.getSelectionModel().getSelectedItem();
-						Category productCategory = minoristStore.searchCategory(stringProductCategory);
-						String productBrand = txtRequestBrand.getText();
-						int productPrice = Integer.valueOf(txtRequestPrice.getText());
-						String productDescription = txtRequestDescription.getText();
-						String productPhoto = txtRequestPhoto.getText();
-						Image image = new Image(productPhoto);
-						if(actualAccount instanceof Seller) {
-							minoristStore.addRequest(0, productName, productCategory, productBrand, productPrice, 0, productDescription, (Seller)actualAccount, RequestType.EDIT);
+						productCategory = minoristStore.searchCategory(stringProductCategory);
+					}else {
+						productCategory = actualProduct.getCategory();
+					}
+					if(actualAccount instanceof Seller) {
+						long ID = minoristStore.addRequest(actualProduct.getID(), productName, productCategory, productBrand, productPrice, 0, productDescription, (Seller)actualAccount, RequestType.EDIT);
+						if(wroteProductPhoto) {
+							productPhoto = txtRequestPhoto.getText();
+							Image image = new Image(productPhoto);
+							savePicture(image, PRODUCT_PICTURE_DIRECTORY, Long.toString(ID));
 						}
-						savePicture(image, PRODUCT_PICTURE_DIRECTORY, productName);
 					}
 				}catch(NullPointerException npe) {
-
+					npe.printStackTrace();
 				}
 			}
 			return null;
@@ -598,7 +726,6 @@ public class MinoristStoreGUI {
 	}
 
 	public void seeProducts(ActionEvent event) {
-		loadScreen("main-menu.fxml");
 		loadMainMenuScreen("show-products-pane.fxml");
 	}
 
@@ -657,7 +784,7 @@ public class MinoristStoreGUI {
 		categoryPane.add(add, 1, count);
 	}
 
-	public void manageRequests(ActionEvent event) {
+	public void manageRequests() {
 		loadMainMenuScreen("check-requests.fxml");
 		initializeRequestTableView();
 	}
@@ -690,22 +817,24 @@ public class MinoristStoreGUI {
 					boolean wroteProductName = !txtRequestName.getText().isEmpty();
 					boolean wroteProductBrand = !txtRequestBrand.getText().isEmpty();
 					boolean wroteProductPrice = !txtRequestPrice.getText().isEmpty();
+					boolean wroteProductStock = !txtRequestStock.getText().isEmpty();
 					boolean wroteProductDescription = !txtRequestDescription.getText().isEmpty();
 					boolean wroteProductPhoto = !txtRequestPhoto.getText().isEmpty();
-					boolean selectedProductCategory = !requestCategory.getSelectionModel().getSelectedItem().equals(null); //NullPointerException, I have to fix this.
-					if(wroteProductName && wroteProductBrand && wroteProductPrice && wroteProductDescription && wroteProductPhoto && selectedProductCategory) {
+					boolean selectedProductCategory = !requestCategory.getSelectionModel().getSelectedItem().equals(null);
+					if(wroteProductName && wroteProductBrand && wroteProductPrice && wroteProductStock && wroteProductDescription && wroteProductPhoto && selectedProductCategory) {
 						String productName = txtRequestName.getText();
 						String stringProductCategory = requestCategory.getSelectionModel().getSelectedItem();
 						Category productCategory = minoristStore.searchCategory(stringProductCategory);
 						String productBrand = txtRequestBrand.getText();
 						int productPrice = Integer.valueOf(txtRequestPrice.getText());
+						int productStock = Integer.valueOf(txtRequestStock.getText());
 						String productDescription = txtRequestDescription.getText();
 						String productPhoto = txtRequestPhoto.getText();
 						Image image = new Image(productPhoto);
 						if(actualAccount instanceof Seller) {
-							minoristStore.addRequest(productName, productCategory, productBrand, productPrice, 0, productDescription, (Seller)actualAccount, RequestType.ADD);
+							long ID = minoristStore.addRequest(productName, productCategory, productBrand, productPrice, productStock, productDescription, (Seller)actualAccount, RequestType.ADD);
+							savePicture(image, PRODUCT_PICTURE_DIRECTORY, Long.toString(ID));
 						}
-						savePicture(image, PRODUCT_PICTURE_DIRECTORY, productName);
 					}
 				}catch(NullPointerException npe) {
 
@@ -862,15 +991,25 @@ public class MinoristStoreGUI {
 				if(request.getRequestType().equals(RequestType.ADD)) {
 					minoristStore.addProduct(request.getProduct());
 				}else {
-//					TODO. First you have to implemented the edit function. Then you can modify the current product.
+					Product product = minoristStore.searchProduct(request.getProduct().getID());
+					product.setName(request.getProduct().getName());
+					product.setCategory(request.getProduct().getCategory());
+					product.setBrand(request.getProduct().getBrand());
+					product.setPrice(request.getProduct().getPrice());
+					product.setDescription(request.getProduct().getDescription());
+					//TODO. Check photo.
 				}
+				minoristStore.deleteRequest(request);
 			}
-			minoristStore.deleteRequest(request);
+			if(dialogButton == rejectButtonType) {
+				minoristStore.deleteRequest(request);
+			}
+			manageRequests();
 			return null;
 		});
 		dialog.showAndWait();
 	}
-	
+
 	public void browsePicture(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select File");

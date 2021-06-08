@@ -4,11 +4,13 @@ public class Request {
 
 	private Product product;
 	private RequestType requestType;
+	private Seller seller;
 	
-	public Request(Product product, RequestType requestType) {
+	public Request(Product product, RequestType requestType, Seller seller) {
 		super();
 		this.product = product;
 		this.requestType = requestType;
+		this.seller = seller;
 	}
 
 	public Product getProduct() {
@@ -25,6 +27,14 @@ public class Request {
 
 	public void setRequestType(RequestType requestType) {
 		this.requestType = requestType;
+	}
+
+	public Seller getSeller() {
+		return seller;
+	}
+
+	public void setSeller(Seller seller) {
+		this.seller = seller;
 	}
 
 	public long getProductID() {

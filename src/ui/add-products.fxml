@@ -37,6 +37,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
@@ -73,7 +74,7 @@
                   <Insets left="30.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Description:" GridPane.rowIndex="4">
+            <Label text="Description:" GridPane.rowIndex="5">
                <font>
                   <Font size="14.0" />
                </font>
@@ -81,7 +82,7 @@
                   <Insets left="30.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Photo:" GridPane.rowIndex="5">
+            <Label text="Photo:" GridPane.rowIndex="6">
                <font>
                   <Font size="14.0" />
                </font>
@@ -89,17 +90,26 @@
                   <Insets left="30.0" />
                </GridPane.margin>
             </Label>
-            <Button mnemonicParsing="false" onAction="#browseProductPicture" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <Button mnemonicParsing="false" onAction="#browseProductPicture" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="6">
                <GridPane.margin>
-                  <Insets left="8.0" />
+                  <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <TextField fx:id="txtRequestPhoto" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField fx:id="txtRequestDescription" prefWidth="134.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="txtRequestPhoto" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="txtRequestDescription" prefWidth="134.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="txtRequestPrice" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="txtRequestBrand" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="txtRequestName" prefHeight="25.0" prefWidth="145.0" GridPane.columnIndex="1" />
             <ChoiceBox fx:id="requestCategory" prefHeight="25.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="labelStock" text="Stock:" GridPane.rowIndex="4">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="30.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="txtRequestStock" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
    </children>

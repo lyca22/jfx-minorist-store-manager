@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Product {
 
 	private long ID;
@@ -9,9 +11,9 @@ public class Product {
 	private int price;
 	private int stock;
 	private String description;
-	private Seller sellerList;
+	private ArrayList<Seller> sellerList;
 	
-	public Product(long iD, String name, Category category, String brand, int price, int stock, String description, Seller sellerList) {
+	public Product(long iD, String name, Category category, String brand, int price, int stock, String description) {
 		super();
 		ID = iD;
 		this.name = name;
@@ -20,7 +22,7 @@ public class Product {
 		this.price = price;
 		this.stock = stock;
 		this.description = description;
-		this.sellerList = sellerList;
+		sellerList = new ArrayList<Seller>();
 	}
 
 	public long getID() {
@@ -79,12 +81,12 @@ public class Product {
 		this.description = description;
 	}
 
-	public Seller getSellerList() {
+	public ArrayList<Seller> getSellerList() {
 		return sellerList;
 	}
 
-	public void setSellerList(Seller sellerList) {
+	public void setSellerList(ArrayList<Seller> sellerList) {
 		this.sellerList = sellerList;
 	}
-	
+
 }

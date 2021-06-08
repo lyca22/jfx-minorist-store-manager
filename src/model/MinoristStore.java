@@ -71,25 +71,28 @@ public class MinoristStore {
 
 	public void addProduct(Product product) {
 		generalProductList.add(product);
-		product.getSellerList().getProductList().add(product);
-//		TODO. Sort this list.
+		product.getSellerList().get(0).getProductList().add(product);
+		//		TODO. Sort this list.
 	}
-	
-	public void addRequest(String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {
+
+	public long addRequest(String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {
 		long ID = randomNumberWithRange(1, Integer.MAX_VALUE);
-		Product product = new Product(ID, name, category, brand, price, stock, description, seller);
-		Request request = new Request(product, requestType);
+		Product product = new Product(ID, name, category, brand, price, stock, description);
+		product.getSellerList().add(seller);
+		Request request = new Request(product, requestType, seller);
 		requestList.add(request);
-//		TODO. Sort this list. Check ID.
+		//		TODO. Sort this list. Check ID.
+		return ID;
 	}
-	
-	public void addRequest(int ID, String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {
-		Product product = new Product(ID, name, category, brand, price, stock, description, seller);
-		Request request = new Request(product, requestType);
+
+	public long addRequest(long ID, String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {
+		Product product = new Product(ID, name, category, brand, price, stock, description);
+		Request request = new Request(product, requestType, seller);
 		requestList.add(request);
-//		TODO. Sort this list. Check ID.
+		//		TODO. Sort this list. Check ID.
+		return ID;
 	}
-	
+
 	public boolean addAdministratorAccount(String username, String password, String names, String surnames) {
 		boolean added = false;
 		Account account = searchAccount(username);
@@ -157,7 +160,7 @@ public class MinoristStore {
 		}
 		return added;
 	}
-	
+
 	private void addCategory(Category currentCategory, Category newCategory) {
 		if(currentCategory.getNext() == null) {
 			currentCategory.setNext(newCategory);
@@ -165,13 +168,13 @@ public class MinoristStore {
 			addCategory(currentCategory.getNext(), newCategory);
 		}
 	}
-	
+
 	//Deleting methods.
-	
+
 	public void deleteRequest(Request request) {
 		requestList.remove(request);
 	}
-	
+
 	//Searching methods.
 
 	public Account searchAccount(String username) {
@@ -199,9 +202,31 @@ public class MinoristStore {
 		}
 		return actualCategory;
 	}
-	
+
+	public Product searchProduct(Long ID) {
+		Product product = null;
+		//TODO. Modify this method to add binary search.
+		for(int i = 0; i <= generalProductList.size()-1; i++) {
+			if(generalProductList.get(i).getID() == ID) {
+				product = generalProductList.get(i);
+			}
+		}
+		return product;
+	}
+
+	public Product searchProduct(Long ID, Seller seller) {
+		Product product = null;
+		//TODO. Modify this method to add binary search.
+		for(int i = 0; i <= seller.getProductList().size()-1; i++) {
+			if(seller.getProductList().get(i).getID() == ID) {
+				product = seller.getProductList().get(i);
+			}
+		}
+		return product;
+	}
+
 	//Editing methods.
-	
+
 	public boolean editCategory(Category category, String newName) {
 		boolean edited = false;
 		Category current = searchCategory(newName);
@@ -211,10 +236,10 @@ public class MinoristStore {
 		}
 		return edited;
 	}
-	
+
 	private long randomNumberWithRange(long min, long max) {
 		long range = (max - min) + 1;
 		return (long)(Math.random() * range) + min;
 	}
-	
+
 }

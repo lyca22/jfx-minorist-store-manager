@@ -10,9 +10,8 @@ class StoreTest {
 	public void setupScenary1() {
 		minoristStore = new MinoristStore();
 		
-		Seller testSeller = new Seller("apple", "12345", "Apple Inc.");
 		Category testCategory = new Category("Electronic devices");
-		Product testProduct = new Product(82498429, "iPhone 11", testCategory, "Apple", 2300000, 10, "This is a phone", testSeller);
+		Product testProduct = new Product(82498429, "iPhone 11", testCategory, "Apple", 2300000, 10, "This is a phone");
 		minoristStore.addProduct(testProduct);
 	}
 
