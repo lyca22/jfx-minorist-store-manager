@@ -27,7 +27,7 @@
                   <Insets bottom="20.0" top="20.0" />
                </VBox.margin>
             </HBox>
-            <Label text="CATEGORIES">
+            <Label fx:id="labelCategories" text="CATEGORIES">
                <font>
                   <Font name="System Bold" size="28.0" />
                </font>

@@ -9,7 +9,7 @@ public class MinoristStore {
 	private Account accountList;
 	private List<Order> orderList;
 	private Category categoryList;
-	private PaymentMethod paymentMethod;
+	private PaymentMethod paymentMethods;
 	private List<Request> requestList;
 
 	public MinoristStore() {
@@ -51,12 +51,12 @@ public class MinoristStore {
 		this.categoryList = categoryList;
 	}
 
-	public PaymentMethod getPaymentMethod() {
-		return paymentMethod;
+	public PaymentMethod getPaymentMethods() {
+		return paymentMethods;
 	}
 
-	public void setPaymentMethod(PaymentMethod paymentMethod) {
-		this.paymentMethod = paymentMethod;
+	public void setPaymentMethods(PaymentMethod paymentMethods) {
+		this.paymentMethods = paymentMethods;
 	}
 
 	public List<Request> getRequestList() {
@@ -195,6 +195,37 @@ public class MinoristStore {
 		}
 	}
 
+	public boolean addPaymentMethod(String name, PaymentType type) {
+		boolean added = false;
+		PaymentMethod paymentMethod = searchPaymentMethod(name);
+		if(paymentMethod == null) {
+			added = true;
+			paymentMethod = new PaymentMethod(name, type);
+			if(paymentMethods == null) {
+				paymentMethods = paymentMethod;
+			}else {
+				addPaymentMethod(paymentMethods, paymentMethod);
+			}
+		}
+		return added;
+	}
+
+	private void addPaymentMethod(PaymentMethod currentPayment, PaymentMethod newPayment) {
+		if(currentPayment.getName().compareTo(newPayment.getName()) > 0) {
+			if(currentPayment.getLeft() == null) {
+				currentPayment.setLeft(newPayment);
+			}else {
+				addPaymentMethod(currentPayment.getLeft(), newPayment);
+			}
+		}else if(currentPayment.getName().compareTo(newPayment.getName()) <= 0) {
+			if(currentPayment.getRight() == null) {
+				currentPayment.setRight(newPayment);
+			}else {
+				addPaymentMethod(currentPayment.getRight(), newPayment);
+			}
+		}
+	}
+
 	//Deleting methods.
 
 	public void deleteRequest(Request request) {
@@ -251,6 +282,40 @@ public class MinoristStore {
 		return product;
 	}
 
+	public PaymentMethod searchPaymentMethod(String name) {
+		PaymentMethod payment = null;
+		if(paymentMethods != null) {
+			if(paymentMethods.getName().equalsIgnoreCase(name)) {
+				payment = paymentMethods;
+			}else {
+				payment = searchPaymentMethod(name, paymentMethods);
+			}
+		}
+		return payment;
+	}
+
+	private PaymentMethod searchPaymentMethod(String name, PaymentMethod currentPayment) {
+		PaymentMethod payment = null;
+		if(currentPayment.getName().compareTo(name) <= 0) {
+			if(currentPayment.getLeft() != null) {
+				if(currentPayment.getLeft().getName().equalsIgnoreCase(name)) {
+					payment = currentPayment.getLeft();
+				}else {
+					payment = searchPaymentMethod(name, currentPayment.getLeft());
+				}
+			}
+		}else if(currentPayment.getName().compareTo(name) > 0) {
+			if(currentPayment.getRight() != null) {
+				if(currentPayment.getRight().getName().equalsIgnoreCase(name)) {
+					payment = currentPayment.getRight();
+				}else {
+					payment = searchPaymentMethod(name, currentPayment.getRight());
+				}
+			}
+		}
+		return payment;
+	}
+	
 	//Editing methods.
 
 	public boolean editCategory(Category category, String newName) {
@@ -263,6 +328,17 @@ public class MinoristStore {
 		return edited;
 	}
 
+	public boolean editPaymentMethod(PaymentMethod paymentMethod, String newName, PaymentType newPaymentType) {
+		boolean edited = false;
+		PaymentMethod current = searchPaymentMethod(newName);
+		if(current == null) {
+			edited = true;
+			paymentMethod.setName(newName);
+			paymentMethod.setType(newPaymentType);
+		}
+		return edited;
+	}
+	
 	private long randomNumberWithRange(long min, long max) {
 		long range = (max - min) + 1;
 		return (long)(Math.random() * range) + min;

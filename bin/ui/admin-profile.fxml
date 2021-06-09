@@ -149,7 +149,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#exportData" text="Export" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                              <Button mnemonicParsing="false" onAction="#exportData" text="Export" GridPane.columnIndex="2" GridPane.rowIndex="5">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
@@ -186,6 +186,11 @@
                                     </Hyperlink>
                                  </children>
                               </HBox>
+                              <Button mnemonicParsing="false" onAction="#managePaymentMethods" text="Manage payment methods" GridPane.rowIndex="5">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Button>
                            </children>
                         </GridPane>
                      </children>

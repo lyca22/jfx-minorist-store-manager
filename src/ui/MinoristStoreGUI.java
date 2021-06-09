@@ -37,13 +37,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.stage.FileChooser;
 import model.Account;
 import model.Administrator;
 import model.Category;
 import model.Consumer;
 import model.MinoristStore;
+import model.PaymentMethod;
+import model.PaymentType;
 import model.Product;
 import model.Request;
 import model.RequestType;
@@ -63,6 +68,8 @@ public class MinoristStoreGUI {
 	private ButtonType disableButtonType;
 	private ButtonType enableButtonType;
 	private ButtonType rejectButtonType;
+
+	private int count;
 
 	@FXML
 	private GridPane mainPane;
@@ -262,6 +269,18 @@ public class MinoristStoreGUI {
 	@FXML
 	private Label editProfileLabel;
 
+	@FXML
+	private Label paymentMethodLabel;
+
+	@FXML
+	private TextField txtEditPaymentMethod;
+
+	@FXML
+	private ChoiceBox<PaymentType> paymentMethodType;
+
+	@FXML
+	private Label labelCategories;
+
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
 		this.setMinoristStore(minoristStore);
@@ -346,6 +365,14 @@ public class MinoristStoreGUI {
 
 	public void setRejectButtonType(ButtonType rejectButtonType) {
 		this.rejectButtonType = rejectButtonType;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
 	}
 
 	private void initializeRequestTableView() {
@@ -764,6 +791,98 @@ public class MinoristStoreGUI {
 		loadMainMenuScreen("show-products-pane.fxml");
 	}
 
+	public void managePaymentMethods(ActionEvent event) {
+		loadMainMenuScreen("manage-categories.fxml");
+		labelCategories.setText("PAYMENT METHODS");
+		PaymentMethod paymentMethod = minoristStore.getPaymentMethods();
+		count = 0;
+		inorderTraversal(paymentMethod);
+		Hyperlink add = new Hyperlink("Add");
+		add.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openWindow("edit-payment-method.fxml");
+				paymentMethodType.getItems().setAll(PaymentType.values());
+				dialog.setResultConverter(dialogButton ->{
+					if(dialogButton == acceptButtonType) {
+						boolean wrotePaymentName = !txtEditPaymentMethod.getText().isEmpty();
+						boolean selectedPaymentType = !paymentMethodType.getSelectionModel().isEmpty();
+						if(wrotePaymentName && selectedPaymentType) {
+							String name = txtEditPaymentMethod.getText();
+							PaymentType type = paymentMethodType.getValue();
+							minoristStore.addPaymentMethod(name, type);
+							managePaymentMethods(event);
+						}
+					}
+					return null;
+				});
+				dialog.showAndWait();
+			}
+		});
+		categoryPane.add(add, 1, count);
+	}
+
+	public void inorderTraversal(PaymentMethod paymentMethod) {
+		if(paymentMethod != null) {
+			if(paymentMethod.getLeft() == null && paymentMethod.getRight() == null) {
+				addToInterface(paymentMethod);
+			}else if(paymentMethod.getLeft() == null) {
+				addToInterface(paymentMethod);
+				inorderTraversal(paymentMethod.getRight());
+			}else if(paymentMethod.getRight() == null) {
+				inorderTraversal(paymentMethod.getLeft());
+				addToInterface(paymentMethod);
+			}else {
+				inorderTraversal(paymentMethod.getLeft());
+				addToInterface(paymentMethod);
+				inorderTraversal(paymentMethod.getRight());
+			}
+		}
+	}
+
+	private void addToInterface(PaymentMethod paymentMethod) {
+		Label labelA = new Label("Name:");
+		labelA.setPadding(new Insets(0, 0, 0, 200));
+		labelA.setFont(Font.font("System", FontPosture.ITALIC, 12));
+		Label labelB = new Label("Type:");
+		labelB.setFont(Font.font("System", FontPosture.ITALIC, 12));
+		Label labelName = new Label(paymentMethod.getName());
+		labelName.setPadding(new Insets(0, 30, 0, 25));
+		Label labelType = new Label(paymentMethod.getType().name());
+		labelType.setPadding(new Insets(0, 30, 0, 25));
+		HBox hbox = new HBox();
+		hbox.getChildren().addAll(labelA, labelName, labelB, labelType);
+		categoryPane.add(hbox, 0, count);
+		Hyperlink edit = new Hyperlink("Edit");
+		edit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openWindow("edit-payment-method.fxml");
+				txtEditPaymentMethod.setText(labelName.getText());
+				paymentMethodType.getItems().setAll(PaymentType.values());
+				dialog.setResultConverter(dialogButton ->{
+					if(dialogButton == acceptButtonType) {
+						boolean wrotePaymentName = !txtEditPaymentMethod.getText().isEmpty();
+						boolean selectedPaymentType = !paymentMethodType.getSelectionModel().isEmpty();
+						if(wrotePaymentName && selectedPaymentType) {
+							PaymentMethod payment = minoristStore.searchPaymentMethod(labelName.getText());
+							if(payment != null) {
+								String name = txtEditPaymentMethod.getText();
+								PaymentType type = paymentMethodType.getValue();
+								minoristStore.editPaymentMethod(payment, name, type);
+								managePaymentMethods(event);
+							}
+						}
+					}
+					return null;
+				});
+				dialog.showAndWait();
+			}
+		});
+		categoryPane.add(edit, 1, count);
+		count++;
+	}
+
 	public void manageCategories(ActionEvent event) {
 		loadMainMenuScreen("manage-categories.fxml");
 		Category actualCategory = minoristStore.getCategoryList();
@@ -776,6 +895,7 @@ public class MinoristStoreGUI {
 				@Override
 				public void handle(ActionEvent event) {
 					openWindow("edit-profile-info.fxml");
+					txtEditProfileInfo.setText(label.getText());
 					dialog.setResultConverter(dialogButton ->{
 						if(dialogButton == acceptButtonType) {
 							boolean wroteCategoryName = !txtEditProfileInfo.getText().isEmpty();
