@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Product {
+public class Product implements Cloneable{
 
 	private long ID;
 	private String name;
@@ -89,4 +89,9 @@ public class Product {
 		this.sellerList = sellerList;
 	}
 
+	@Override
+	protected Object clone() throws CloneNotSupportedException{
+		return super.clone();
+	}
+	
 }

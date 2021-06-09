@@ -16,7 +16,7 @@
             <Insets />
          </HBox.margin>
       </Label>
-      <Spinner>
+      <Spinner fx:id="quantityStock" editable="true">
          <HBox.margin>
             <Insets left="20.0" />
          </HBox.margin>

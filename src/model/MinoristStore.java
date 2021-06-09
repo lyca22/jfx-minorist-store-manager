@@ -67,12 +67,16 @@ public class MinoristStore {
 		this.requestList = requestList;
 	}
 
+	public Product cloneProduct(Product product) throws CloneNotSupportedException {
+		Product copy = (Product) product.clone();
+		return copy;
+	}
+
 	//Sorting methods.
-	
+
 	public void sortProductBySelection(List<Product> list) {
 		for (int i = 0; i < list.size(); i++) {
 			String min = list.get(i).getName();
-
 			for(int j=i+1; j<list.size();j++) {
 				if(list.get(j).getName().compareTo(min)>0) {
 					String temp = list.get(j).getName();
@@ -83,14 +87,18 @@ public class MinoristStore {
 			list.get(i).setName(min);
 		}
 	}
-	
-	
+
 	//Adding methods.
 
 	public void addProduct(Product product) {
-		generalProductList.add(product);
-		product.getSellerList().get(0).getProductList().add(product);
-		sortProductBySelection(generalProductList);
+		try {
+			generalProductList.add(product);
+			Product copy = cloneProduct(product);
+			product.getSellerList().get(0).getProductList().add(copy);
+			sortProductBySelection(generalProductList);
+			//TODO. Sort seller list.
+		} catch (CloneNotSupportedException e) {
+		}
 	}
 
 	public long addRequest(String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {

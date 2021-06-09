@@ -14,7 +14,7 @@
    <children>
       <HBox alignment="CENTER">
          <children>
-            <Label text="CHANGE INFORMATION">
+            <Label fx:id="editProfileLabel" text="CHANGE INFORMATION">
                <HBox.margin>
                   <Insets />
                </HBox.margin>

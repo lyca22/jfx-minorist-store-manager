@@ -229,8 +229,8 @@ public class MinoristStoreGUI {
 	@FXML
 	private TextArea checkRequestDescription;
 
-    @FXML
-    private ScrollPane productScrollPane;
+	@FXML
+	private ScrollPane productScrollPane;
 
 	@FXML
 	private Label productsPaneProductName;
@@ -259,6 +259,8 @@ public class MinoristStoreGUI {
 	@FXML
 	private ImageView productsPaneImageView;
 
+	@FXML
+	private Label editProfileLabel;
 
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
@@ -565,7 +567,8 @@ public class MinoristStoreGUI {
 			vbox.setOnMouseClicked(event ->{
 				Label label = (Label)vbox.getChildren().get(3);
 				Product product = minoristStore.searchProduct(Long.valueOf(label.getText()));
-				showProduct(product, image);
+				actualProduct = product;
+				showProduct(image);
 			});
 			showProductPane.add(vbox, column, row);
 		}
@@ -582,13 +585,12 @@ public class MinoristStoreGUI {
 		productsPaneSellerStock.setText(String.valueOf(product.getStock()));
 	}
 
-	public void showProduct(Product product, Image image) {
+	public void showProduct(Image image) {
 		loadMainMenuScreen("products-pane.fxml");
-		actualProduct = product;
 		productsPaneImageView.setImage(image);
 		String[] array = new String[actualProduct.getSellerList().size()];
 		for(int i = 0; i <= array.length-1; i++) {
-			array[i] = product.getSellerList().get(i).getUsername();
+			array[i] = actualProduct.getSellerList().get(i).getUsername();
 		}
 		productsPaneSelectSeller.setItems(FXCollections.observableArrayList(array));
 		productsPaneSelectSeller.getSelectionModel().selectedIndexProperty().addListener(
@@ -679,7 +681,7 @@ public class MinoristStoreGUI {
 						}
 					}
 				}catch(Exception e) {
-					
+
 				}
 			}
 			return null;
@@ -693,6 +695,31 @@ public class MinoristStoreGUI {
 
 	public void sellThisProduct(ActionEvent event) {
 		openWindow("edit-profile-info.fxml");
+		editProfileLabel.setText("SELECT QUANTITY");
+		labelEditProfileInfo.setText("Quantity:");
+		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == acceptButtonType) {
+				try {
+					boolean wroteQuantity = !txtEditProfileInfo.getText().isEmpty();
+					if(wroteQuantity) {
+						actualProduct.setStock(actualProduct.getStock() + Integer.valueOf(txtEditProfileInfo.getText()));
+						Product sellerProduct = minoristStore.searchProduct(actualProduct.getID(), (Seller) actualAccount);
+						if(sellerProduct != null) {
+							sellerProduct.setStock(sellerProduct.getStock() + Integer.valueOf(txtEditProfileInfo.getText()));
+						}else {
+							actualProduct.getSellerList().add((Seller) actualAccount);
+							sellerProduct = minoristStore.cloneProduct(actualProduct);
+							sellerProduct.setStock(Integer.valueOf(txtEditProfileInfo.getText()));
+							((Seller) actualAccount).getProductList().add(sellerProduct);
+						}
+						showProduct(productsPaneImageView.getImage());
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		});
 		dialog.showAndWait();
 	}
 
@@ -832,7 +859,7 @@ public class MinoristStoreGUI {
 					if(wroteProductName && wroteProductBrand && wroteProductPrice && wroteProductStock && wroteProductDescription && wroteProductPhoto && selectedProductCategory) {
 						String productName = txtRequestName.getText();
 						String stringProductCategory = requestCategory.getSelectionModel().getSelectedItem();
-						Category productCategory = minoristStore.searchCategory(stringProductCategory);
+						Category productCategory = minoristStore.searchCategory(stringProductCategory); //Check this out. Not efficient. TODO.
 						String productBrand = txtRequestBrand.getText();
 						int productPrice = Integer.valueOf(txtRequestPrice.getText());
 						int productStock = Integer.valueOf(txtRequestStock.getText());
