@@ -67,12 +67,30 @@ public class MinoristStore {
 		this.requestList = requestList;
 	}
 
+	//Sorting methods.
+	
+	public void sortProductBySelection(List<Product> list) {
+		for (int i = 0; i < list.size(); i++) {
+			String min = list.get(i).getName();
+
+			for(int j=i+1; j<list.size();j++) {
+				if(list.get(j).getName().compareTo(min)>0) {
+					String temp = list.get(j).getName();
+					list.get(j).setName(min);
+					min = temp;
+				}
+			}
+			list.get(i).setName(min);
+		}
+	}
+	
+	
 	//Adding methods.
 
 	public void addProduct(Product product) {
 		generalProductList.add(product);
 		product.getSellerList().get(0).getProductList().add(product);
-		//		TODO. Sort this list.
+		sortProductBySelection(generalProductList);
 	}
 
 	public long addRequest(String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {
