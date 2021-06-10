@@ -74,7 +74,7 @@ public class MinoristStore {
 
 	//Sorting methods.
 
-	public void sortProductBySelection(List<Product> list) {
+	public void sortProductsBySelection(List<Product> list) {
 		for (int i = 0; i < list.size(); i++) {
 			String min = list.get(i).getName();
 			for(int j=i+1; j<list.size();j++) {
@@ -88,6 +88,16 @@ public class MinoristStore {
 		}
 	}
 
+	public void sortRequestsByInsertion(List<Request> list) {
+		for(int i = 1;i < list.size(); i++) {
+			for(int j = i; j > 0 && list.get(j-1).getProductID()>list.get(j).getProductID();j--) {
+				Request temp = list.get(j);
+				list.set(j,list.get(j-1));
+				list.set(j-1,temp);
+			}
+		}
+	}
+
 	//Adding methods.
 
 	public void addProduct(Product product) {
@@ -95,8 +105,7 @@ public class MinoristStore {
 			generalProductList.add(product);
 			Product copy = cloneProduct(product);
 			product.getSellerList().get(0).getProductList().add(copy);
-			sortProductBySelection(generalProductList);
-			//TODO. Sort seller list.
+			sortProductsBySelection(generalProductList);
 		} catch (CloneNotSupportedException e) {
 		}
 	}
@@ -107,7 +116,7 @@ public class MinoristStore {
 		product.getSellerList().add(seller);
 		Request request = new Request(product, requestType, seller);
 		requestList.add(request);
-		//		TODO. Sort this list. Check ID.
+		sortRequestsByInsertion(requestList);
 		return ID;
 	}
 
@@ -115,7 +124,7 @@ public class MinoristStore {
 		Product product = new Product(ID, name, category, brand, price, stock, description);
 		Request request = new Request(product, requestType, seller);
 		requestList.add(request);
-		//		TODO. Sort this list. Check ID.
+		sortRequestsByInsertion(requestList);
 		return ID;
 	}
 
@@ -315,7 +324,7 @@ public class MinoristStore {
 		}
 		return payment;
 	}
-	
+
 	//Editing methods.
 
 	public boolean editCategory(Category category, String newName) {
@@ -338,7 +347,7 @@ public class MinoristStore {
 		}
 		return edited;
 	}
-	
+
 	private long randomNumberWithRange(long min, long max) {
 		long range = (max - min) + 1;
 		return (long)(Math.random() * range) + min;

@@ -16,10 +16,12 @@ class StoreTest {
 
 		minoristStore.addSellerAccount("apple", "12345", "Apple Inc.");
 
-		Category testCategory = new Category("Electronic devices");
+		/*Category testCategory = new Category("Electronic devices");
+		minoristStore.addCategory("Electronic devices");
+
 		Product testProduct = new Product(82498429, "iPhone 11", testCategory, "Apple", 2300000, 10, "This is a phone");
 
-		minoristStore.addProduct(testProduct);
+		minoristStore.addProduct(testProduct);*/
 	}
 
 
@@ -55,11 +57,12 @@ class StoreTest {
 
 
 	//Add product correctly
-	@Test
+	/*@Test
 	public void testAddProduct() {
 		setupScenary1();
 
 		Seller testSeller = new Seller("apple", "12345", "Apple Inc.");
+		minoristStore.addSellerAccount("apple", "12345", "Apple Inc.");
 		Category testCategory = new Category("Electronic devices");
 		Product product = new Product(234576, "iMac", testCategory, "Apple", 7300000, 5, "This is a desktop computer");
 
@@ -70,12 +73,12 @@ class StoreTest {
 
 		List<Product> productList = testSeller.getProductList(); 
 		assertEquals(2,  productList);
-	}
+	}*/
 
-	@Test
+	/*@Test
 	public void testAddProduct2() {
 		setupScenary2();
-	}
+	}*/
 
 
 
@@ -83,11 +86,33 @@ class StoreTest {
 	@Test
 	public void testAddAccount() {
 		setupScenary1();
+
+		String username = "Admin11";
+		String password = "54321"; 
+		String names = "Laura";
+		String surnames = "Martinez";
+		
+		boolean added = minoristStore.addAdministratorAccount(username, password, names, surnames);
+
+		assertTrue(added);
+
+		//List<Account> people = minoristStore.getAccountList();
+		//assertEquals(2, people.size());
+
 	}
 
 	@Test
 	public void testAddAccount2() {
-		setupScenary2();
+		setupScenary1();
+
+		String username = "Juan01";
+		String password = "0000"; 
+		String tradeName = "Alcatel";
+
+		boolean added = minoristStore.addSellerAccount(username, password, tradeName);
+
+		assertTrue(added);
+
 	}
 
 
