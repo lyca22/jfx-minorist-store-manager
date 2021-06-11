@@ -6,11 +6,14 @@ public class PaymentMethod {
 	private PaymentType type;
 	private PaymentMethod left;
 	private PaymentMethod right;
+	private PaymentMethod parent;
+	private boolean disabled;
 	
 	public PaymentMethod(String name, PaymentType type) {
 		super();
 		this.name = name;
 		this.type = type;
+		disabled = false;
 	}
 
 	public String getName() {
@@ -43,6 +46,22 @@ public class PaymentMethod {
 
 	public void setRight(PaymentMethod right) {
 		this.right = right;
+	}
+
+	public PaymentMethod getParent() {
+		return parent;
+	}
+
+	public void setParent(PaymentMethod parent) {
+		this.parent = parent;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 	
 }

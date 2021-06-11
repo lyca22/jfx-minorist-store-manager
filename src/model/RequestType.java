@@ -3,6 +3,9 @@ package model;
 public enum RequestType {
 
 	ADD,
-	EDIT
+	EDIT,
+	DISABLE,
+	ENABLE,
+	DELETE
 	
 }

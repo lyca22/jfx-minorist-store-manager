@@ -133,6 +133,13 @@ public class MinoristStore {
 		return ID;
 	}
 
+	public long addRequest(Product product, Seller seller, RequestType requestType) {
+		Request request = new Request(product, requestType, seller);
+		requestList.add(request);
+		sortRequestsByInsertion(requestList);
+		return product.getID();
+	}
+
 	public boolean addAdministratorAccount(String username, String password, String names, String surnames) throws CantAddAccountException{
 		boolean added = false;
 		Account account = searchAccount(username);
@@ -225,6 +232,7 @@ public class MinoristStore {
 			paymentMethod = new PaymentMethod(name, type);
 			if(paymentMethods == null) {
 				paymentMethods = paymentMethod;
+				paymentMethods.setParent(paymentMethods);
 			}else {
 				addPaymentMethod(paymentMethods, paymentMethod);
 			}
@@ -238,12 +246,14 @@ public class MinoristStore {
 		if(currentPayment.getName().compareTo(newPayment.getName()) > 0) {
 			if(currentPayment.getLeft() == null) {
 				currentPayment.setLeft(newPayment);
+				newPayment.setParent(currentPayment);
 			}else {
 				addPaymentMethod(currentPayment.getLeft(), newPayment);
 			}
 		}else if(currentPayment.getName().compareTo(newPayment.getName()) <= 0) {
 			if(currentPayment.getRight() == null) {
 				currentPayment.setRight(newPayment);
+				newPayment.setParent(currentPayment);
 			}else {
 				addPaymentMethod(currentPayment.getRight(), newPayment);
 			}
@@ -266,7 +276,117 @@ public class MinoristStore {
 		//TODO. Sort orderList. Sort personalOrderList.
 	}
 
-	//Deleting methods.
+	//Deleting methods. ¿Concurrence?
+
+	public void deleteProduct(Product product) {
+		boolean canDelete = true;
+		for(int i = 0; i <= orderList.size()-1; i++) {
+			List<Product> products = orderList.get(i).getProductList();
+			for(int j = 0; j <= products.size()-1; j++) {
+				if(products.get(i).getID() == product.getID()) {
+					canDelete = false;
+				}
+			}
+		}
+		for(int i = 0; i <= requestList.size()-1; i++) {
+			if(requestList.get(i).getProduct().getID() == product.getID()) {
+				canDelete = false;
+			}
+		}
+		if(canDelete) {
+			for(int i = 0; i <= product.getSellerList().size()-1; i++) {
+				Product sellerProduct = searchProduct(product.getID(), product.getSellerList().get(i));
+				product.getSellerList().get(i).getProductList().remove(sellerProduct);
+			}
+			generalProductList.remove(product);
+		}
+	}
+
+	public void deleteOrder(Order order) {
+		order.getClient().getPersonalOrderList().remove(order);
+		orderList.remove(order);
+	}
+
+	public void deleteCategory(Category category) {
+		boolean canDelete = true;
+		for(int i = 0; i <= generalProductList.size()-1; i++) {
+			if(generalProductList.get(i).getCategory() == category) {
+				canDelete = false;
+			}
+		}
+		if(canDelete) {
+			if(categoryList.equals(category)) {
+				setCategoryList(category.getNext());
+			}else {
+				boolean found = false;
+				Category actualCategory = categoryList.getNext();
+				Category backCategory = categoryList;
+				while(actualCategory != null && !found) {
+					if(actualCategory.equals(category)) {
+						backCategory.setNext(actualCategory.getNext());
+						actualCategory.setNext(null);
+						found = true;
+					}else {
+						backCategory = actualCategory;
+						actualCategory = actualCategory.getNext();
+					}
+				}
+			}
+		}
+	}
+
+	public void deletePaymentMethod(PaymentMethod paymentMethod) {
+		boolean canDelete = true;
+		for(int i = 0; i <= orderList.size()-1; i++) {
+			if(orderList.get(i).getPaymentInformation().getPaymentMethod().equals(paymentMethod)) {
+				canDelete = false;
+			}
+		}
+		if(canDelete) {
+			delete(paymentMethod);
+		}
+	}
+
+	public void delete(PaymentMethod paymentMethod) {
+		if(paymentMethod.getLeft() == null && paymentMethod.getRight() == null) {
+			if(paymentMethod == paymentMethods) {
+				paymentMethods = null;
+			}else if(paymentMethod == paymentMethod.getParent().getLeft()) {
+				paymentMethod.getParent().setLeft(null);
+			}else {
+				paymentMethod.getParent().setRight(null);
+			}
+			paymentMethod.setParent(null);
+		}else if(paymentMethod.getLeft() == null || paymentMethod.getRight() == null) {
+			PaymentMethod onlyChild;
+			if(paymentMethod.getLeft() != null) {
+				onlyChild = paymentMethod.getLeft();
+			}else {
+				onlyChild = paymentMethod.getRight();
+			}
+			onlyChild.setParent(paymentMethod.getParent());
+			if(paymentMethod == paymentMethods) {
+				paymentMethods = onlyChild;
+			}else if(paymentMethod == paymentMethod.getParent().getLeft()) {
+				paymentMethod.getParent().setLeft(onlyChild);
+			}else {
+				paymentMethod.getParent().setRight(onlyChild);
+			}
+		}else{
+			PaymentMethod successor = getMin(paymentMethod.getLeft());
+			paymentMethod.setName(successor.getName());
+			paymentMethod.setType(successor.getType());
+			paymentMethod.setDisabled(successor.isDisabled());
+			deletePaymentMethod(successor);
+		}
+	}
+
+	public PaymentMethod getMin(PaymentMethod current) {
+		while(current.getRight() != null) {
+			current = current.getRight();
+		}
+		return current;
+	}
 
 	public void deleteRequest(Request request) {
 		requestList.remove(request);
@@ -299,7 +419,9 @@ public class MinoristStore {
 		}
 		return actualCategory;
 	}
-	
+
+	//Needs to be implemented in the program. TODO.
+
 	public Product searchProductByBinarySearch(Long ID) {
 		Product product = null;
 		int pos = -1;
@@ -320,7 +442,7 @@ public class MinoristStore {
 		}
 		return product;
 	}
-	
+
 	public Product searchProductByBinarySearch(Long ID, Seller seller) {
 		Product product = null;
 		int pos = -1;
@@ -341,7 +463,7 @@ public class MinoristStore {
 		}
 		return product;
 	}
-	
+
 	public Product searchProduct(Long ID) {
 		Product product = null;
 		for(int i = 0; i <= generalProductList.size()-1; i++) {

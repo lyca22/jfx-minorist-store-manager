@@ -12,6 +12,7 @@ public class Product implements Cloneable{
 	private int stock;
 	private String description;
 	private ArrayList<Seller> sellerList;
+	private boolean disabled;
 	
 	public Product(long iD, String name, Category category, String brand, int price, int stock, String description) {
 		super();
@@ -23,6 +24,7 @@ public class Product implements Cloneable{
 		this.stock = stock;
 		this.description = description;
 		sellerList = new ArrayList<Seller>();
+		disabled = false;
 	}
 
 	public long getID() {
@@ -87,6 +89,14 @@ public class Product implements Cloneable{
 
 	public void setSellerList(ArrayList<Seller> sellerList) {
 		this.sellerList = sellerList;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 
 	@Override

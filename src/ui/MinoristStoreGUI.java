@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import exceptions.CantAddAccountException;
+import exceptions.CantAddCategoryException;
+import exceptions.CantAddPaymentMethodException;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -73,11 +76,8 @@ public class MinoristStoreGUI {
 	private ArrayList<Integer> cartQuantity;
 	private ButtonType acceptButtonType;
 	private ButtonType cancelButtonType;
-	@SuppressWarnings("unused")//TODO
 	private ButtonType deleteButtonType;
-	@SuppressWarnings("unused")//TODO
 	private ButtonType disableButtonType;
-	@SuppressWarnings("unused")//TODO
 	private ButtonType enableButtonType;
 	private ButtonType rejectButtonType;
 
@@ -438,6 +438,20 @@ public class MinoristStoreGUI {
 			e.printStackTrace();
 		}
 	}
+	
+	public void openEditWindow(String resource) {
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
+		fxmlLoader.setController(this);
+		dialog = new Dialog<String>();
+		dialog.getDialogPane().getButtonTypes().addAll(acceptButtonType, cancelButtonType, deleteButtonType, disableButtonType, enableButtonType);
+		Parent root;
+		try {
+			root = fxmlLoader.load();
+			dialog.getDialogPane().setContent(root);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void openRequestWindow(String resource) {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
@@ -503,6 +517,8 @@ public class MinoristStoreGUI {
 				}
 			}catch(NumberFormatException nfe) {
 				showAlert("Please fill the fields with the correct information.");
+			} catch (CantAddAccountException e) {
+				e.printStackTrace();
 			}
 		}else {
 			showAlert("Please fill all the fields.");
@@ -510,42 +526,50 @@ public class MinoristStoreGUI {
 	}
 
 	public void createSellerAccount(ActionEvent event) {
-		boolean wroteUsername = !txtSellerUsername.getText().isEmpty();
-		boolean wrotePassword = !txtSellerPassword.getText().isEmpty();
-		boolean wroteTradeName = !txtSellerTradeName.getText().isEmpty();
-		if(wroteUsername & wrotePassword & wroteTradeName) {
-			String username = txtSellerUsername.getText();
-			String password = txtSellerPassword.getText();
-			String tradeName = txtSellerTradeName.getText();
-			boolean created = minoristStore.addSellerAccount(username, password, tradeName);
-			if(created) {
-				showAlert("Account Created!");
+		try {
+			boolean wroteUsername = !txtSellerUsername.getText().isEmpty();
+			boolean wrotePassword = !txtSellerPassword.getText().isEmpty();
+			boolean wroteTradeName = !txtSellerTradeName.getText().isEmpty();
+			if(wroteUsername & wrotePassword & wroteTradeName) {
+				String username = txtSellerUsername.getText();
+				String password = txtSellerPassword.getText();
+				String tradeName = txtSellerTradeName.getText();
+				boolean created = minoristStore.addSellerAccount(username, password, tradeName);
+				if(created) {
+					showAlert("Account Created!");
+				}else {
+					showAlert("This account already exists!");
+				}
 			}else {
-				showAlert("This account already exists!");
+				showAlert("Please fill all the fields.");
 			}
-		}else {
-			showAlert("Please fill all the fields.");
+		}catch(Exception e) {
+			
 		}
 	}
 
 	public void createAdministratorAccount(ActionEvent event) {
-		boolean wroteUsername = !txtAdminUsername.getText().isEmpty();
-		boolean wrotePassword = !txtAdminPassword.getText().isEmpty();
-		boolean wroteFirstNames = !txtAdminFirstNames.getText().isEmpty();
-		boolean wroteLastNames = !txtAdminLastNames.getText().isEmpty();
-		if(wroteUsername & wrotePassword & wroteFirstNames & wroteLastNames) {
-			String username = txtAdminUsername.getText();
-			String password = txtAdminPassword.getText();
-			String firstNames = txtAdminFirstNames.getText();
-			String lastNames = txtAdminLastNames.getText();
-			boolean created = minoristStore.addAdministratorAccount(username, password, firstNames, lastNames);
-			if(created) {
-				showAlert("Account Created!");
+		try {
+			boolean wroteUsername = !txtAdminUsername.getText().isEmpty();
+			boolean wrotePassword = !txtAdminPassword.getText().isEmpty();
+			boolean wroteFirstNames = !txtAdminFirstNames.getText().isEmpty();
+			boolean wroteLastNames = !txtAdminLastNames.getText().isEmpty();
+			if(wroteUsername & wrotePassword & wroteFirstNames & wroteLastNames) {
+				String username = txtAdminUsername.getText();
+				String password = txtAdminPassword.getText();
+				String firstNames = txtAdminFirstNames.getText();
+				String lastNames = txtAdminLastNames.getText();
+				boolean created = minoristStore.addAdministratorAccount(username, password, firstNames, lastNames);
+				if(created) {
+					showAlert("Account Created!");
+				}else {
+					showAlert("This account already exists!");
+				}
 			}else {
-				showAlert("This account already exists!");
+				showAlert("Please fill all the fields.");
 			}
-		}else {
-			showAlert("Please fill all the fields.");
+		}catch(Exception e) {
+			
 		}
 	}
 
@@ -583,32 +607,36 @@ public class MinoristStoreGUI {
 		cc.setPercentWidth(33);
 		showProductPane.getColumnConstraints().addAll(cc, cc, cc);
 		for(int i = 0; i <= list.size()-1; i++) {
-			int row = ((i-i%3)/3);
-			int column = i-(row*3);
-			File file = new File(System.getProperty("user.dir") + PRODUCT_PICTURE_DIRECTORY + list.get(i).getID() + ".png");
-			Image image = new Image(file.toURI().toString());
-			ImageView imageView = new ImageView(image);
-			imageView.setFitHeight(200);
-			imageView.setFitWidth(200);
-			Label labelName = new Label(list.get(i).getName());
-			labelName.setPadding(new Insets(25, 0, 0, 0));
-			Label labelBrand = new Label(list.get(i).getBrand());
-			labelBrand.setPadding(new Insets(25, 0, 0, 0));
-			Label labelID = new Label(Long.toString(list.get(i).getID()));
-			labelID.setPadding(new Insets(25, 0, 0, 0));
-			VBox vbox = new VBox();
-			vbox.setAlignment(Pos.CENTER);
-			vbox.getChildren().add(imageView);
-			vbox.getChildren().add(labelName);
-			vbox.getChildren().add(labelBrand);
-			vbox.getChildren().add(labelID);
-			vbox.setOnMouseClicked(event ->{
-				Label label = (Label)vbox.getChildren().get(3);
-				Product product = minoristStore.searchProduct(Long.valueOf(label.getText()));
-				actualProduct = product;
-				showProduct(image);
-			});
-			showProductPane.add(vbox, column, row);
+			int count = 0;
+			if(!list.get(i).isDisabled() || !(actualAccount instanceof Consumer)) {
+				int row = ((count-count%3)/3);
+				int column = count-(row*3);
+				File file = new File(System.getProperty("user.dir") + PRODUCT_PICTURE_DIRECTORY + list.get(i).getID() + ".png");
+				Image image = new Image(file.toURI().toString());
+				ImageView imageView = new ImageView(image);
+				imageView.setFitHeight(200);
+				imageView.setFitWidth(200);
+				Label labelName = new Label(list.get(i).getName());
+				labelName.setPadding(new Insets(25, 0, 0, 0));
+				Label labelBrand = new Label(list.get(i).getBrand());
+				labelBrand.setPadding(new Insets(25, 0, 0, 0));
+				Label labelID = new Label(Long.toString(list.get(i).getID()));
+				labelID.setPadding(new Insets(25, 0, 0, 0));
+				VBox vbox = new VBox();
+				vbox.setAlignment(Pos.CENTER);
+				vbox.getChildren().add(imageView);
+				vbox.getChildren().add(labelName);
+				vbox.getChildren().add(labelBrand);
+				vbox.getChildren().add(labelID);
+				vbox.setOnMouseClicked(event ->{
+					Label label = (Label)vbox.getChildren().get(3);
+					Product product = minoristStore.searchProduct(Long.valueOf(label.getText()));
+					actualProduct = product;
+					showProduct(image);
+				});
+				showProductPane.add(vbox, column, row);
+				count++;
+			}
 		}
 		productScrollPane.setContent(showProductPane);
 	}
@@ -655,17 +683,28 @@ public class MinoristStoreGUI {
 	}
 	//TODO. You have to check the photo as well.
 	public void editProduct(ActionEvent event) {
-		openWindow("add-products.fxml");
+		openEditWindow("add-products.fxml");
 		Category actualCategory = minoristStore.getCategoryList();
 		ArrayList<String> categoryList = new ArrayList<String>();
 		while(actualCategory != null) {
-			categoryList.add(actualCategory.getName());
+			if(!actualCategory.isDisabled()) {
+				categoryList.add(actualCategory.getName());
+			}
 			actualCategory = actualCategory.getNext();
 		}
 		requestCategory.setItems(FXCollections.observableArrayList(categoryList));
 		labelStock.setVisible(false);
 		txtRequestStock.setVisible(false);
 		dialog.setResultConverter(dialogButton ->{
+			if(dialogButton == disableButtonType) {
+				minoristStore.addRequest(actualProduct, (Seller) actualAccount, RequestType.DISABLE);
+			}
+			if(dialogButton == enableButtonType) {
+				minoristStore.addRequest(actualProduct, (Seller) actualAccount, RequestType.ENABLE);
+			}
+			if(dialogButton == deleteButtonType) {
+				minoristStore.addRequest(actualProduct, (Seller) actualAccount, RequestType.DELETE);
+			}
 			if(dialogButton == acceptButtonType) {
 				try {
 					boolean wroteProductName = !txtRequestName.getText().isEmpty();
@@ -814,7 +853,7 @@ public class MinoristStoreGUI {
 			cardExpireMonth.getItems().setAll(expirationMonth);
 			cardExpireYear.getItems().setAll(expirationYear);
 		}catch(Exception e) {
-			openWindow("Please enter valid information.");
+			showAlert("Please enter valid information.");
 		}
 	}
 
@@ -837,10 +876,12 @@ public class MinoristStoreGUI {
 	}
 
 	public void addToPaymentOptions(PaymentMethod paymentMethod) {
-		if(paymentMethod.getType().equals(PaymentType.CARD)) {
-			cardType.getItems().add(paymentMethod.getName());
-		}else {
-			otherPlatform.getItems().add(paymentMethod.getName());
+		if(!paymentMethod.isDisabled()) {
+			if(paymentMethod.getType().equals(PaymentType.CARD)) {
+				cardType.getItems().add(paymentMethod.getName());
+			}else {
+				otherPlatform.getItems().add(paymentMethod.getName());
+			}
 		}
 	}
 	
@@ -967,7 +1008,12 @@ public class MinoristStoreGUI {
 						if(wrotePaymentName && selectedPaymentType) {
 							String name = txtEditPaymentMethod.getText();
 							PaymentType type = paymentMethodType.getValue();
-							minoristStore.addPaymentMethod(name, type);
+							try {
+								minoristStore.addPaymentMethod(name, type);
+							} catch (CantAddPaymentMethodException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							managePaymentMethods(event);
 						}
 					}
@@ -1014,10 +1060,23 @@ public class MinoristStoreGUI {
 		edit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				openWindow("edit-payment-method.fxml");
+				openEditWindow("edit-payment-method.fxml");
 				txtEditPaymentMethod.setText(labelName.getText());
 				paymentMethodType.getItems().setAll(PaymentType.values());
 				dialog.setResultConverter(dialogButton ->{
+					if(dialogButton == disableButtonType) {
+						PaymentMethod payment = minoristStore.searchPaymentMethod(labelName.getText());
+						payment.setDisabled(true);
+					}
+					if(dialogButton == enableButtonType) {
+						PaymentMethod payment = minoristStore.searchPaymentMethod(labelName.getText());
+						payment.setDisabled(false);
+					}
+					if(dialogButton == deleteButtonType) {
+						PaymentMethod payment = minoristStore.searchPaymentMethod(labelName.getText());
+						minoristStore.deletePaymentMethod(payment);
+						managePaymentMethods(event);
+					}
 					if(dialogButton == acceptButtonType) {
 						boolean wrotePaymentName = !txtEditPaymentMethod.getText().isEmpty();
 						boolean selectedPaymentType = !paymentMethodType.getSelectionModel().isEmpty();
@@ -1051,9 +1110,22 @@ public class MinoristStoreGUI {
 			edit.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					openWindow("edit-profile-info.fxml");
+					openEditWindow("edit-profile-info.fxml");
 					txtEditProfileInfo.setText(label.getText());
 					dialog.setResultConverter(dialogButton ->{
+						if(dialogButton == disableButtonType) {
+							Category editedCategory = minoristStore.searchCategory(label.getText());
+							editedCategory.setDisabled(true);
+						}
+						if(dialogButton == enableButtonType) {
+							Category editedCategory = minoristStore.searchCategory(label.getText());
+							editedCategory.setDisabled(false);
+						}
+						if(dialogButton == deleteButtonType) {
+							Category editedCategory = minoristStore.searchCategory(label.getText());
+							minoristStore.deleteCategory(editedCategory);
+							manageCategories(event);
+						}
 						if(dialogButton == acceptButtonType) {
 							boolean wroteCategoryName = !txtEditProfileInfo.getText().isEmpty();
 							if(wroteCategoryName) {
@@ -1084,7 +1156,12 @@ public class MinoristStoreGUI {
 						boolean wroteCategoryName = !txtEditProfileInfo.getText().isEmpty();
 						if(wroteCategoryName) {
 							String categoryName = txtEditProfileInfo.getText();
-							minoristStore.addCategory(categoryName);
+							try {
+								minoristStore.addCategory(categoryName);
+							} catch (CantAddCategoryException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							manageCategories(event);
 						}
 					}
@@ -1145,17 +1222,26 @@ public class MinoristStoreGUI {
 				Order order = list.get(i);
 				changeStatus.setOnAction(altEvent ->{
 					order.setOrderState(OrderState.CANCELED);
-					status.setText(order.getOrderState().name());
+					//TODO. Re add stock and stuff.
+					manageOrders(event);
 				});
+				orderStatus.getChildren().addAll(status, changeStatus);
+				if(order.getOrderState().equals(OrderState.CANCELED)) {
+					Button deleteOrder = new Button("Delete");
+					deleteOrder.setOnAction(deleteEvent -> {
+						minoristStore.deleteOrder(order);
+						manageOrders(event);
+					});
+					orderStatus.getChildren().add(deleteOrder);
+				}
 			}else if(actualAccount instanceof Administrator) {
 				changeStatus.setText("Change status");
 				Order order = list.get(i);
 				changeStatus.setOnAction(altEvent ->{
 					changeToNextState(order);
-					status.setText(order.getOrderState().name());
+					manageOrders(event);
 				});
 			}
-			orderStatus.getChildren().addAll(status, changeStatus);
 			orderPane.add(clientInfo, 0, i);
 			orderPane.add(clientProducts, 1, i);
 			orderPane.add(orderStatus, 2, i);
@@ -1194,7 +1280,9 @@ public class MinoristStoreGUI {
 		Category actualCategory = minoristStore.getCategoryList();
 		ArrayList<String> categoryList = new ArrayList<String>();
 		while(actualCategory != null) {
-			categoryList.add(actualCategory.getName());
+			if(!actualCategory.isDisabled()) {
+				categoryList.add(actualCategory.getName());
+			}
 			actualCategory = actualCategory.getNext();
 		}
 		requestCategory.setItems(FXCollections.observableArrayList(categoryList));
@@ -1377,7 +1465,7 @@ public class MinoristStoreGUI {
 			if(dialogButton == acceptButtonType) {
 				if(request.getRequestType().equals(RequestType.ADD)) {
 					minoristStore.addProduct(request.getProduct());
-				}else {
+				}else if(request.getRequestType().equals(RequestType.EDIT)) {
 					Product product = minoristStore.searchProduct(request.getProduct().getID());
 					product.setName(request.getProduct().getName());
 					product.setCategory(request.getProduct().getCategory());
@@ -1385,6 +1473,16 @@ public class MinoristStoreGUI {
 					product.setPrice(request.getProduct().getPrice());
 					product.setDescription(request.getProduct().getDescription());
 					//TODO. Check photo.
+				}else if(request.getRequestType().equals(RequestType.DISABLE)) {
+					Product product = minoristStore.searchProduct(request.getProduct().getID());
+					product.setDisabled(true);
+				}else if(request.getRequestType().equals(RequestType.ENABLE)){
+					Product product = minoristStore.searchProduct(request.getProduct().getID());
+					product.setDisabled(false);
+				}else {
+					Product product = minoristStore.searchProduct(request.getProduct().getID());
+					minoristStore.deleteRequest(request);
+					minoristStore.deleteProduct(product);
 				}
 				minoristStore.deleteRequest(request);
 			}
