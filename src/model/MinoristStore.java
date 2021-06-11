@@ -23,7 +23,7 @@ public class MinoristStore {
 	private static final String CATEGORY_LIST_NAME = "data/categoryList.minsma";
 	private static final String PAYMENT_METHODS_NAME = "data/paymentMethods.minsma";
 	private static final String REQUEST_LIST_NAME = "data/requestList.minsma";
-	
+
 	private List<Product> generalProductList;
 	private Account accountList;
 	private List<Order> orderList;
@@ -558,46 +558,60 @@ public class MinoristStore {
 		return (long)(Math.random() * range) + min;
 	}
 
+	//Exporting methods.
+
+	public void generateSellerProductReport() {
+
+	}
+
+	public void generateAdministratorProductReport() {
+
+	}
+
+	public void generateOrderReport() {
+
+	}
+
 	//Saving methods.
-	
+
 	public void saveProducts() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(GENERAL_PRODUCT_LIST_NAME));
 		oos.writeObject(generalProductList);
 		oos.close();
 	}
-	
+
 	public void saveAccounts() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ACCOUNT_LIST_NAME));
 		oos.writeObject(accountList);
 		oos.close();
 	}
-	
+
 	public void saveOrders() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ORDER_LIST_NAME));
 		oos.writeObject(orderList);
 		oos.close();
 	}
-	
+
 	public void saveCategories() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CATEGORY_LIST_NAME));
 		oos.writeObject(categoryList);
 		oos.close();
 	}
-	
+
 	public void savePaymentMethods() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PAYMENT_METHODS_NAME));
 		oos.writeObject(paymentMethods);
 		oos.close();
 	}
-	
+
 	public void saveRequests() throws FileNotFoundException, IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(REQUEST_LIST_NAME));
 		oos.writeObject(requestList);
 		oos.close();
 	}
-	
+
 	//Loading methods.
-	
+
 	@SuppressWarnings("unchecked")
 	public boolean loadProducts() throws NullPointerException, IOException, ClassNotFoundException, FileNotFoundException {
 		File file = new File(GENERAL_PRODUCT_LIST_NAME);
@@ -610,7 +624,7 @@ public class MinoristStore {
 		}
 		return loaded;
 	}
-	
+
 	public boolean loadAccounts() throws NullPointerException, IOException, ClassNotFoundException, FileNotFoundException {
 		File file = new File(ACCOUNT_LIST_NAME);
 		boolean loaded = false;
@@ -622,7 +636,7 @@ public class MinoristStore {
 		}
 		return loaded;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public boolean loadOrders() throws NullPointerException, IOException, ClassNotFoundException, FileNotFoundException {
 		File file = new File(ORDER_LIST_NAME);
@@ -635,7 +649,7 @@ public class MinoristStore {
 		}
 		return loaded;
 	}
-	
+
 	public boolean loadCategories() throws NullPointerException, IOException, ClassNotFoundException, FileNotFoundException {
 		File file = new File(CATEGORY_LIST_NAME);
 		boolean loaded = false;
@@ -647,7 +661,7 @@ public class MinoristStore {
 		}
 		return loaded;
 	}
-	
+
 	public boolean loadPaymentMethods() throws NullPointerException, IOException, ClassNotFoundException, FileNotFoundException {
 		File file = new File(PAYMENT_METHODS_NAME);
 		boolean loaded = false;
@@ -659,7 +673,7 @@ public class MinoristStore {
 		}
 		return loaded;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public boolean loadRequests() throws NullPointerException, IOException, ClassNotFoundException, FileNotFoundException {
 		File file = new File(REQUEST_LIST_NAME);
@@ -672,5 +686,23 @@ public class MinoristStore {
 		}
 		return loaded;
 	}
-	
+
+	public void saveAll() throws FileNotFoundException, IOException {
+		saveProducts();
+		saveAccounts();
+		saveOrders();
+		saveCategories();
+		savePaymentMethods();
+		saveRequests();
+	}
+
+	public void loadAll() throws NullPointerException, ClassNotFoundException, FileNotFoundException, IOException {
+		loadProducts();
+		loadAccounts();
+		loadOrders();
+		loadCategories();
+		loadPaymentMethods();
+		loadRequests();
+	}
+
 }
