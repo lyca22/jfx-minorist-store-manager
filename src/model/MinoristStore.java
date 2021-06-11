@@ -1,9 +1,11 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -571,6 +573,35 @@ public class MinoristStore {
 	public void generateOrderReport() {
 
 	}
+
+
+	public void importProductData(String fileName, String separator, Seller seller) throws FileNotFoundException, IOException, CantAddCategoryException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+		String line = br.readLine();
+		while(line != null) {
+			String[] productsData = line.split(separator);
+			long ID = Integer.parseInt(productsData[0]);
+			String name = productsData[1];
+			addCategory(productsData[2]);
+			Category category = searchCategory(productsData[2]);
+			String brand = productsData[3];
+			int price = Integer.parseInt(productsData[4]);
+			int stock = Integer.parseInt(productsData[5]);
+			String description = productsData[6];
+			
+			Product product = new Product(ID, name, category, brand, price, stock, description);
+			addProduct(product);
+			
+			RequestType requestType = RequestType.ADD;
+			
+			addRequest(product, seller, requestType);
+			
+			line = br.readLine();
+		}
+		saveAll();
+		br.close();
+	}
+
 
 	//Saving methods.
 
