@@ -2,7 +2,9 @@ package ui;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -327,17 +330,38 @@ public class MinoristStoreGUI {
 	private TextField paymentZipCode;
 
 	@FXML
-    private VBox orderBox;
-	
-	@FXML
-    private TextField txtMainMenuSearch;
-	
-	@FXML
-    private ChoiceBox<String> mainMenuCategories;
+	private VBox orderBox;
 
-    @FXML
-    private ChoiceBox<String> mainMenuFilter;
-	
+	@FXML
+	private TextField txtMainMenuSearch;
+
+	@FXML
+	private ChoiceBox<String> mainMenuCategories;
+
+	@FXML
+	private ChoiceBox<String> mainMenuFilter;
+
+	@FXML
+	private Button exportOrdersButton;
+
+	@FXML
+	private TextField exportSeparator;
+
+	@FXML
+	private DatePicker exportInitialDate;
+
+	@FXML
+	private DatePicker exportFinalDate;
+
+	@FXML
+	private TextField exportInitialHour;
+
+	@FXML
+	private TextField exportFinalHour;
+
+	@FXML
+	private TextField exportFileName;
+
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
 		this.setMinoristStore(minoristStore);
@@ -448,7 +472,7 @@ public class MinoristStoreGUI {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void openEditWindow(String resource) {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
 		fxmlLoader.setController(this);
@@ -554,7 +578,7 @@ public class MinoristStoreGUI {
 				showAlert("Please fill all the fields.");
 			}
 		}catch(Exception e) {
-			
+
 		}
 	}
 
@@ -579,7 +603,7 @@ public class MinoristStoreGUI {
 				showAlert("Please fill all the fields.");
 			}
 		}catch(Exception e) {
-			
+
 		}
 	}
 
@@ -905,7 +929,7 @@ public class MinoristStoreGUI {
 			}
 		}
 	}
-	
+
 	public void buyCart(ActionEvent event) {
 		try {
 			boolean wroteZipCode = !paymentZipCode.getText().isEmpty();
@@ -984,7 +1008,7 @@ public class MinoristStoreGUI {
 			generalProduct.setSalesNumber(generalProduct.getSalesNumber() + cartQuantity.get(i));
 		}
 	}
-	
+
 	public void myAccount(ActionEvent event) {
 		if(actualAccount instanceof Administrator) {
 			loadMainMenuScreen("admin-profile.fxml");
@@ -1287,13 +1311,72 @@ public class MinoristStoreGUI {
 			break;
 		}
 	}
-	
+
 	public void exportData(ActionEvent event) {
 		loadMainMenuScreen("export.fxml");
+		if(actualAccount instanceof Administrator) {
+			exportOrdersButton.setVisible(true);
+			exportInitialDate.setVisible(true);
+			exportFinalDate.setVisible(true);
+			exportInitialHour.setVisible(true);
+			exportFinalHour.setVisible(true);
+		}else if(actualAccount instanceof Seller){
+			exportOrdersButton.setVisible(false);
+			exportInitialDate.setVisible(false);
+			exportFinalDate.setVisible(false);
+			exportInitialHour.setVisible(false);
+			exportFinalHour.setVisible(false);
+		}
+	}
+
+	public void exportProducts(ActionEvent event) {
+		String fileName = exportFileName.getText() + ".txt";
+		String separator = exportSeparator.getText();
+		if(actualAccount instanceof Administrator) {
+			try {
+				minoristStore.generateAdministratorProductReport(fileName, separator);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}else if(actualAccount instanceof Seller){
+			try {
+				minoristStore.generateSellerProductReport(fileName, separator, (Seller)actualAccount);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void exportOrders(ActionEvent event) {
+		String fileName = exportFileName.getText() + ".txt";
+		String separator = exportSeparator.getText();
+		String[] min = exportInitialDate.getValue().toString().split("-");
+		String[] max = exportFinalDate.getValue().toString().split("-"); 
+		String [] minHour = exportInitialHour.getText().split(":");
+		String [] maxHour = exportFinalHour.getText().split(":");
+		LocalDateTime minDate = LocalDateTime.of(Integer.parseInt(min[0]), Integer.parseInt(min[1]), Integer.parseInt(min[2]), Integer.parseInt(minHour[0]),Integer.parseInt(minHour[1]), Integer.parseInt(minHour[2]));
+		LocalDateTime maxDate = LocalDateTime.of(Integer.parseInt(max[0]), Integer.parseInt(max[1]), Integer.parseInt(max[2]), Integer.parseInt(maxHour[0]),Integer.parseInt(maxHour[1]), Integer.parseInt(maxHour[2]));
+		try {
+			minoristStore.generateOrderReport(fileName, separator, minDate, maxDate);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void importData(ActionEvent event) {
-		openWindow("import.fxml");
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select File");
+		File file = fileChooser.showOpenDialog(null);
+		String separator = ";";
+		if(file != null) {
+			try {
+				minoristStore.importProducts(file.getAbsolutePath(), separator, (Seller)actualAccount);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		dialog.showAndWait();
 	}
 

@@ -630,12 +630,12 @@ public class MinoristStore {
 		String line = br.readLine();
 		while(line != null) {
 			String[] productsData = line.split(separator);
-			String name = productsData[1];
-			Category category = searchCategory(productsData[2]);
-			String brand = productsData[3];
-			int price = Integer.valueOf(productsData[4]);
-			int stock = Integer.valueOf(productsData[5]);
-			String description = productsData[6];
+			String name = productsData[0];
+			Category category = searchCategory(productsData[1]);
+			String brand = productsData[2];
+			int price = Integer.valueOf(productsData[3]);
+			int stock = Integer.valueOf(productsData[4]);
+			String description = productsData[5];
 			RequestType requestType = RequestType.ADD;
 			if(category != null) {
 				addRequest(name, category, brand, price, stock, description, seller, requestType);
