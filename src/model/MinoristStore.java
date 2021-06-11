@@ -1,6 +1,7 @@
 package model;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -560,6 +562,7 @@ public class MinoristStore {
 		return (long)(Math.random() * range) + min;
 	}
 
+
 	//Exporting methods.
 
 	public void generateSellerProductReport() {
@@ -573,7 +576,6 @@ public class MinoristStore {
 	public void generateOrderReport() {
 
 	}
-
 
 	public void importProductData(String fileName, String separator, Seller seller) throws FileNotFoundException, IOException, CantAddCategoryException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -735,5 +737,6 @@ public class MinoristStore {
 		loadPaymentMethods();
 		loadRequests();
 	}
+
 
 }
