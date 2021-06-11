@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import exceptions.CantAddAccountException;
+import exceptions.CantAddCategoryException;
+import exceptions.CantAddPaymentMethodException;
+
 public class MinoristStore {
 
 	private List<Product> generalProductList;
@@ -129,7 +133,7 @@ public class MinoristStore {
 		return ID;
 	}
 
-	public boolean addAdministratorAccount(String username, String password, String names, String surnames) {
+	public boolean addAdministratorAccount(String username, String password, String names, String surnames) throws CantAddAccountException{
 		boolean added = false;
 		Account account = searchAccount(username);
 		if(account == null) {
@@ -140,11 +144,13 @@ public class MinoristStore {
 			}else {
 				addAccount(accountList, administrator);
 			}
+		}else {
+			throw new CantAddAccountException(username);
 		}
 		return added;
 	}
 
-	public boolean addConsumerAccount(String username, String password, String names, String surnames, long phoneNumber, String address) {
+	public boolean addConsumerAccount(String username, String password, String names, String surnames, long phoneNumber, String address) throws CantAddAccountException {
 		boolean added = false;
 		Account account = searchAccount(username);
 		if(account == null) {
@@ -155,11 +161,13 @@ public class MinoristStore {
 			}else {
 				addAccount(accountList, consumer);
 			}
+		}else {
+			throw new CantAddAccountException(username);
 		}
 		return added;
 	}
 
-	public boolean addSellerAccount(String username, String password, String tradeName) {
+	public boolean addSellerAccount(String username, String password, String tradeName) throws CantAddAccountException {
 		boolean added = false;
 		Account account = searchAccount(username);
 		if(account == null) {
@@ -170,6 +178,8 @@ public class MinoristStore {
 			}else {
 				addAccount(accountList, seller);
 			}
+		}else {
+			throw new CantAddAccountException(username);
 		}
 		return added;
 	}
@@ -182,7 +192,7 @@ public class MinoristStore {
 		}
 	}
 
-	public boolean addCategory(String name) {
+	public boolean addCategory(String name) throws CantAddCategoryException {
 		boolean added = false;
 		Category category = searchCategory(name);
 		if(category == null) {
@@ -193,6 +203,8 @@ public class MinoristStore {
 			}else {
 				addCategory(categoryList, newCategory);
 			}
+		}else {
+			throw new CantAddCategoryException(name);
 		}
 		return added;
 	}
@@ -205,7 +217,7 @@ public class MinoristStore {
 		}
 	}
 
-	public boolean addPaymentMethod(String name, PaymentType type) {
+	public boolean addPaymentMethod(String name, PaymentType type) throws CantAddPaymentMethodException {
 		boolean added = false;
 		PaymentMethod paymentMethod = searchPaymentMethod(name);
 		if(paymentMethod == null) {
@@ -216,6 +228,8 @@ public class MinoristStore {
 			}else {
 				addPaymentMethod(paymentMethods, paymentMethod);
 			}
+		}else {
+			throw new CantAddPaymentMethodException(name);
 		}
 		return added;
 	}

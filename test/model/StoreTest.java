@@ -397,6 +397,4 @@ class StoreTest {
 
 		assertTrue(edited);
 	}
-
-
 }
