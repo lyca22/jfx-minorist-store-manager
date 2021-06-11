@@ -332,6 +332,12 @@ public class MinoristStoreGUI {
 	@FXML
     private TextField txtMainMenuSearch;
 	
+	@FXML
+    private ChoiceBox<String> mainMenuCategories;
+
+    @FXML
+    private ChoiceBox<String> mainMenuFilter;
+	
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
 		this.setMinoristStore(minoristStore);
@@ -587,6 +593,16 @@ public class MinoristStoreGUI {
 			if(actualAccount != null) {
 				if(actualAccount.getPassword().equals(password)) {
 					loadScreen("main-menu.fxml");
+					Category actualCategory = minoristStore.getCategoryList();
+					ArrayList<String> categoryList = new ArrayList<String>();
+					while(actualCategory != null) {
+						if(!actualCategory.isDisabled()) {
+							categoryList.add(actualCategory.getName());
+						}
+						actualCategory = actualCategory.getNext();
+					}
+					ObservableList<String> observableList = FXCollections.observableArrayList(categoryList);
+					mainMenuCategories.setItems(observableList);
 					showProductsPane();
 					File file = new File(System.getProperty("user.dir") + PROFILE_PICTURE_DIRECTORY + username + ".png");
 					Image image = new Image(file.toURI().toString());
@@ -639,7 +655,7 @@ public class MinoristStoreGUI {
 				vbox.getChildren().add(labelID);
 				vbox.setOnMouseClicked(event ->{
 					Label label = (Label)vbox.getChildren().get(3);
-					Product product = minoristStore.searchProduct(Long.valueOf(label.getText()));
+					Product product = minoristStore.searchProductByBinarySearch(Long.valueOf(label.getText()));
 					actualProduct = product;
 					showProduct(image);
 				});
@@ -652,7 +668,7 @@ public class MinoristStoreGUI {
 
 	public void selectSeller(String sellerAsString) {
 		Seller seller = (Seller)minoristStore.searchAccount(sellerAsString);
-		Product product = minoristStore.searchProduct(actualProduct.getID(), seller);
+		Product product = minoristStore.searchProductByBinarySearch(actualProduct.getID(), seller);
 		productsPaneSellerStock.setText(String.valueOf(product.getStock()));
 	}
 
@@ -686,7 +702,7 @@ public class MinoristStoreGUI {
 			sellThisProductButton.setVisible(false);
 		}
 	}
-	//TODO. You have to check the photo as well.
+	//TODO. Check picture as well.
 	public void editProduct(ActionEvent event) {
 		openEditWindow("add-products.fxml");
 		Category actualCategory = minoristStore.getCategoryList();
@@ -775,7 +791,7 @@ public class MinoristStoreGUI {
 		try{
 			String sellerAsString = productsPaneSelectSeller.getSelectionModel().getSelectedItem();
 			Seller seller = (Seller)minoristStore.searchAccount(sellerAsString);
-			Product product = minoristStore.searchProduct(actualProduct.getID(), seller);
+			Product product = minoristStore.searchProductByBinarySearch(actualProduct.getID(), seller);
 			if(!cart.contains(product)) {
 				cart.add(product);
 			}
@@ -795,7 +811,7 @@ public class MinoristStoreGUI {
 					boolean wroteQuantity = !txtEditProfileInfo.getText().isEmpty();
 					if(wroteQuantity) {
 						actualProduct.setStock(actualProduct.getStock() + Integer.valueOf(txtEditProfileInfo.getText()));
-						Product sellerProduct = minoristStore.searchProduct(actualProduct.getID(), (Seller) actualAccount);
+						Product sellerProduct = minoristStore.searchProductByBinarySearch(actualProduct.getID(), (Seller) actualAccount);
 						if(sellerProduct != null) {
 							sellerProduct.setStock(sellerProduct.getStock() + Integer.valueOf(txtEditProfileInfo.getText()));
 						}else {
@@ -846,7 +862,7 @@ public class MinoristStoreGUI {
 				if(quantity > cart.get(i).getStock()) {
 					quantity = cart.get(i).getStock();
 				}
-				cartQuantity.add(quantity); //TODO. Maybe we can implement an exception here? Out of stock exception?
+				cartQuantity.add(quantity);
 			}
 			loadMainMenuScreen("payment-method.fxml");
 			paymentCardButton.setToggleGroup(GROUP);
@@ -962,7 +978,7 @@ public class MinoristStoreGUI {
 	public void decreaseInventory() {
 		for(int i = 0; i <= cart.size()-1; i++) {
 			cart.get(i).setStock((cart.get(i).getStock() - cartQuantity.get(i)));
-			Product generalProduct = minoristStore.searchProduct(cart.get(i).getID());
+			Product generalProduct = minoristStore.searchProductByBinarySearch(cart.get(i).getID());
 			generalProduct.setStock(generalProduct.getStock() - cartQuantity.get(i));
 		}
 	}
@@ -1016,7 +1032,6 @@ public class MinoristStoreGUI {
 							try {
 								minoristStore.addPaymentMethod(name, type);
 							} catch (CantAddPaymentMethodException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							managePaymentMethods(event);
@@ -1164,7 +1179,6 @@ public class MinoristStoreGUI {
 							try {
 								minoristStore.addCategory(categoryName);
 							} catch (CantAddCategoryException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							manageCategories(event);
@@ -1227,7 +1241,7 @@ public class MinoristStoreGUI {
 				Order order = list.get(i);
 				changeStatus.setOnAction(altEvent ->{
 					order.setOrderState(OrderState.CANCELED);
-					//TODO. Re add stock and stuff.
+					//TODO. Add stock again.
 					manageOrders(event);
 				});
 				orderStatus.getChildren().addAll(status, changeStatus);
@@ -1246,6 +1260,7 @@ public class MinoristStoreGUI {
 					changeToNextState(order);
 					manageOrders(event);
 				});
+				orderStatus.getChildren().addAll(status, changeStatus);
 			}
 			orderPane.add(clientInfo, 0, i);
 			orderPane.add(clientProducts, 1, i);
@@ -1471,21 +1486,21 @@ public class MinoristStoreGUI {
 				if(request.getRequestType().equals(RequestType.ADD)) {
 					minoristStore.addProduct(request.getProduct());
 				}else if(request.getRequestType().equals(RequestType.EDIT)) {
-					Product product = minoristStore.searchProduct(request.getProduct().getID());
+					Product product = minoristStore.searchProductByBinarySearch(request.getProduct().getID());
 					product.setName(request.getProduct().getName());
 					product.setCategory(request.getProduct().getCategory());
 					product.setBrand(request.getProduct().getBrand());
 					product.setPrice(request.getProduct().getPrice());
 					product.setDescription(request.getProduct().getDescription());
-					//TODO. Check photo.
+					//TODO. Check picture as well.
 				}else if(request.getRequestType().equals(RequestType.DISABLE)) {
-					Product product = minoristStore.searchProduct(request.getProduct().getID());
+					Product product = minoristStore.searchProductByBinarySearch(request.getProduct().getID());
 					product.setDisabled(true);
 				}else if(request.getRequestType().equals(RequestType.ENABLE)){
-					Product product = minoristStore.searchProduct(request.getProduct().getID());
+					Product product = minoristStore.searchProductByBinarySearch(request.getProduct().getID());
 					product.setDisabled(false);
 				}else {
-					Product product = minoristStore.searchProduct(request.getProduct().getID());
+					Product product = minoristStore.searchProductByBinarySearch(request.getProduct().getID());
 					minoristStore.deleteRequest(request);
 					minoristStore.deleteProduct(product);
 				}

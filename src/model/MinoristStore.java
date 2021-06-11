@@ -273,7 +273,7 @@ public class MinoristStore {
 		order.setPrice(order.calculatePrice());
 		orderList.add(order);
 		client.getPersonalOrderList().add(order);
-		//TODO. Sort orderList. Sort personalOrderList.
+		//TODO. Sort personalOrderList and orderList.
 	}
 
 	//Deleting methods. ¿Concurrence?
@@ -283,7 +283,7 @@ public class MinoristStore {
 		for(int i = 0; i <= orderList.size()-1; i++) {
 			List<Product> products = orderList.get(i).getProductList();
 			for(int j = 0; j <= products.size()-1; j++) {
-				if(products.get(i).getID() == product.getID()) {
+				if(products.get(j).getID() == product.getID()) {
 					canDelete = false;
 				}
 			}
@@ -295,7 +295,7 @@ public class MinoristStore {
 		}
 		if(canDelete) {
 			for(int i = 0; i <= product.getSellerList().size()-1; i++) {
-				Product sellerProduct = searchProduct(product.getID(), product.getSellerList().get(i));
+				Product sellerProduct = searchProductByBinarySearch(product.getID(), product.getSellerList().get(i));
 				product.getSellerList().get(i).getProductList().remove(sellerProduct);
 			}
 			generalProductList.remove(product);
@@ -419,8 +419,6 @@ public class MinoristStore {
 		}
 		return actualCategory;
 	}
-
-	//Needs to be implemented in the program. TODO.
 
 	public Product searchProductByBinarySearch(Long ID) {
 		Product product = null;
