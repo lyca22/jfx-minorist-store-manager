@@ -14,6 +14,7 @@ import exceptions.CantAddPaymentMethodException;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -328,6 +329,9 @@ public class MinoristStoreGUI {
 	@FXML
     private VBox orderBox;
 	
+	@FXML
+    private TextField txtMainMenuSearch;
+	
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
 		this.setMinoristStore(minoristStore);
@@ -601,26 +605,31 @@ public class MinoristStoreGUI {
 	public void showProductsPane() {
 		loadMainMenuScreen("show-products-pane.fxml");
 		List<Product> list = minoristStore.getGeneralProductList();
+		ObservableList<Product> observableList = FXCollections.observableArrayList(list);
+		FilteredList<Product> flProduct = new FilteredList<Product>(observableList, p -> true);
+		if(!txtMainMenuSearch.getText().isEmpty()) {
+			flProduct.setPredicate(p -> p.getName().toLowerCase().contains(txtMainMenuSearch.getText().toLowerCase().trim()));
+		}
 		GridPane showProductPane = new GridPane();
 		showProductPane.setPrefWidth(1280);
 		ColumnConstraints cc = new ColumnConstraints();
 		cc.setPercentWidth(33);
 		showProductPane.getColumnConstraints().addAll(cc, cc, cc);
-		for(int i = 0; i <= list.size()-1; i++) {
-			int count = 0;
-			if(!list.get(i).isDisabled() || !(actualAccount instanceof Consumer)) {
+		int count = 0;
+		for(int i = 0; i <= flProduct.size()-1; i++) {
+			if(!flProduct.get(i).isDisabled() || !(actualAccount instanceof Consumer)) {
 				int row = ((count-count%3)/3);
 				int column = count-(row*3);
-				File file = new File(System.getProperty("user.dir") + PRODUCT_PICTURE_DIRECTORY + list.get(i).getID() + ".png");
+				File file = new File(System.getProperty("user.dir") + PRODUCT_PICTURE_DIRECTORY + flProduct.get(i).getID() + ".png");
 				Image image = new Image(file.toURI().toString());
 				ImageView imageView = new ImageView(image);
 				imageView.setFitHeight(200);
 				imageView.setFitWidth(200);
-				Label labelName = new Label(list.get(i).getName());
+				Label labelName = new Label(flProduct.get(i).getName());
 				labelName.setPadding(new Insets(25, 0, 0, 0));
-				Label labelBrand = new Label(list.get(i).getBrand());
+				Label labelBrand = new Label(flProduct.get(i).getBrand());
 				labelBrand.setPadding(new Insets(25, 0, 0, 0));
-				Label labelID = new Label(Long.toString(list.get(i).getID()));
+				Label labelID = new Label(Long.toString(flProduct.get(i).getID()));
 				labelID.setPadding(new Insets(25, 0, 0, 0));
 				VBox vbox = new VBox();
 				vbox.setAlignment(Pos.CENTER);
@@ -639,10 +648,6 @@ public class MinoristStoreGUI {
 			}
 		}
 		productScrollPane.setContent(showProductPane);
-	}
-
-	public void searchProduct(ActionEvent event) {
-
 	}
 
 	public void selectSeller(String sellerAsString) {

@@ -16,12 +16,12 @@
    <children>
       <HBox alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#searchProduct" text="Search">
+            <Button mnemonicParsing="false" onAction="#showProductsPane" text="Search">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
             </Button>
-            <TextField prefWidth="500.0">
+            <TextField fx:id="txtMainMenuSearch" prefWidth="500.0">
                <HBox.margin>
                   <Insets right="100.0" />
                </HBox.margin>
