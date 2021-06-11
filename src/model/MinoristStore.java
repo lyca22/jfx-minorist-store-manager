@@ -10,7 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -565,45 +565,86 @@ public class MinoristStore {
 
 	//Exporting methods.
 
-	public void generateSellerProductReport() {
-
+	public void generateSellerProductReport(String fileName, String separator, Seller seller) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter(fileName);
+		for(int i = 0; i <= seller.getProductList().size()-1; i++) {
+			Product product = seller.getProductList().get(i);
+			long ID = product.getID();
+			String name = product.getName();
+			String category = product.getCategory().getName();
+			String brand = product.getBrand();
+			int price = product.getPrice();
+			int stock = product.getStock();
+			int salesNumber = product.getSalesNumber();
+			int earnings = product.getEarnings();
+			pw.println(ID + separator + name + separator + category + separator + brand + separator + price + separator + stock
+					+ separator + salesNumber + separator + earnings);
+		}
+		pw.close();
 	}
 
-	public void generateAdministratorProductReport() {
-
+	public void generateAdministratorProductReport(String fileName, String separator) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter(fileName);
+		for(int i = 0; i <= generalProductList.size()-1; i++) {
+			Product product = generalProductList.get(i);
+			long ID = product.getID();
+			String name = product.getName();
+			String category = product.getCategory().getName();
+			String brand = product.getBrand();
+			int price = product.getPrice();
+			int stock = product.getStock();
+			int salesNumber = product.getSalesNumber();
+			int earnings = product.getEarnings();
+			pw.println(ID + separator + name + separator + category + separator + brand + separator + price + separator + stock
+					+ separator + salesNumber + separator + earnings);
+		}
+		pw.close();
 	}
 
-	public void generateOrderReport() {
+	public void generateOrderReport(String fileName, String separator, LocalDateTime minDate, LocalDateTime maxDate) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter(fileName);
+		String text = "";
+		for(int i = 0; i <= orderList.size()-1; i++) {
+			for(int j = 0; j <= orderList.get(i).getProductList().size()-1; j++) {
+				Product product = orderList.get(i).getProductList().get(j);
+				int quantity = orderList.get(i).getProductQuantity().get(j);
+				text += product.getName() + " " + quantity + " " + product.getPrice() + separator;
+			}
+			if(orderList.get(i).getDate().isAfter(minDate) && orderList.get(i).getDate().isBefore(maxDate)) {
+				pw.println(orderList.get(i).getID() + separator + orderList.get(i).getDate().toString() + separator +
+						orderList.get(i).getClient().getNames() + " " + orderList.get(i).getClient().getSurnames() +
+						separator + orderList.get(i).getClient().getAddress() + orderList.get(i).getClient().getPhoneNumber() +
+						separator + text + orderList.get(i).getPrice() + separator + orderList.get(i).getOrderState().name() +
+						separator + orderList.get(i).getPaymentInformation().getPaymentMethod() + separator +
+						orderList.get(i).getPaymentInformation().getZipCode());
 
+			}
+		}
+		pw.close();
 	}
 
-	public void importProductData(String fileName, String separator, Seller seller) throws FileNotFoundException, IOException, CantAddCategoryException {
+	//Importing methods.
+
+	public void importProducts(String fileName, String separator, Seller seller) throws FileNotFoundException, IOException, CantAddCategoryException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
 		String line = br.readLine();
 		while(line != null) {
 			String[] productsData = line.split(separator);
-			long ID = Integer.parseInt(productsData[0]);
 			String name = productsData[1];
-			addCategory(productsData[2]);
 			Category category = searchCategory(productsData[2]);
 			String brand = productsData[3];
-			int price = Integer.parseInt(productsData[4]);
-			int stock = Integer.parseInt(productsData[5]);
+			int price = Integer.valueOf(productsData[4]);
+			int stock = Integer.valueOf(productsData[5]);
 			String description = productsData[6];
-			
-			Product product = new Product(ID, name, category, brand, price, stock, description);
-			addProduct(product);
-			
 			RequestType requestType = RequestType.ADD;
-			
-			addRequest(product, seller, requestType);
-			
+			if(category != null) {
+				addRequest(name, category, brand, price, stock, description, seller, requestType);
+			}
 			line = br.readLine();
 		}
 		saveAll();
 		br.close();
 	}
-
 
 	//Saving methods.
 

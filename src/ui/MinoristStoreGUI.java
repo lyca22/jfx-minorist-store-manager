@@ -978,8 +978,10 @@ public class MinoristStoreGUI {
 	public void decreaseInventory() {
 		for(int i = 0; i <= cart.size()-1; i++) {
 			cart.get(i).setStock((cart.get(i).getStock() - cartQuantity.get(i)));
+			cart.get(i).setSalesNumber(cart.get(i).getSalesNumber() + cartQuantity.get(i));
 			Product generalProduct = minoristStore.searchProductByBinarySearch(cart.get(i).getID());
 			generalProduct.setStock(generalProduct.getStock() - cartQuantity.get(i));
+			generalProduct.setSalesNumber(generalProduct.getSalesNumber() + cartQuantity.get(i));
 		}
 	}
 	

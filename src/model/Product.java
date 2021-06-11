@@ -13,6 +13,7 @@ public class Product implements Cloneable{
 	private String description;
 	private ArrayList<Seller> sellerList;
 	private boolean disabled;
+	private int salesNumber;
 	
 	public Product(long iD, String name, Category category, String brand, int price, int stock, String description) {
 		super();
@@ -97,6 +98,18 @@ public class Product implements Cloneable{
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+
+	public int getSalesNumber() {
+		return salesNumber;
+	}
+
+	public void setSalesNumber(int salesNumber) {
+		this.salesNumber = salesNumber;
+	}
+
+	public int getEarnings() {
+		return salesNumber*price;
 	}
 
 	@Override
