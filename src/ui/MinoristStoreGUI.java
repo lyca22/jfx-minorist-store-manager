@@ -1091,6 +1091,12 @@ public class MinoristStoreGUI {
 	public void manageOrders(ActionEvent event) {
 		loadMainMenuScreen("order-list.fxml");
 		GridPane orderPane = new GridPane();
+		orderPane.setGridLinesVisible(true);
+		orderPane.setAlignment(Pos.CENTER);
+		orderPane.setPrefWidth(1280);
+		ColumnConstraints cc = new ColumnConstraints();
+		cc.setPercentWidth(33);
+		orderPane.getColumnConstraints().addAll(cc, cc, cc);
 		orderBox.getChildren().add(orderPane);
 		ArrayList<Order> list = null;
 		if(actualAccount instanceof Consumer) {
@@ -1100,6 +1106,7 @@ public class MinoristStoreGUI {
 		}
 		for(int i = 0; i <= list.size()-1; i++) {
 			VBox clientInfo = new VBox();
+			clientInfo.setAlignment(Pos.CENTER);
 			Label ID = new Label(Long.toString(list.get(i).getID()));
 			Label client = new Label(list.get(i).getClient().getNames() + list.get(i).getClient().getSurnames());
 			Label phone = new Label(Long.toString(list.get(i).getClient().getPhoneNumber()));
@@ -1109,19 +1116,15 @@ public class MinoristStoreGUI {
 			Label date = new Label(list.get(i).getDate().toLocalDate().toString());
 			clientInfo.getChildren().addAll(ID, client, phone, address, zipCode, paymentMethod, date);
 			VBox clientProducts = new VBox();
-			
-			
-			
-			List<Product> productList = (ArrayList<Product>) list.get(i).getProductList();//TODO.
-			List<Integer> quantity = (ArrayList<Integer>) list.get(i).getProductQuantity();//TODO. Known problem. NullPointer.
+			clientProducts.setAlignment(Pos.CENTER);
+			List<Product> productList = list.get(i).getProductList();
+			List<Integer> quantity = list.get(i).getProductQuantity();
 			for(int j = 0; j <= productList.size()-1; j++) {
 				Label product = new Label(productList.get(j).getName() + " x " + quantity.get(j));
 				clientProducts.getChildren().add(product);
 			}
-			
-			
-			
 			VBox orderStatus = new VBox();
+			orderStatus.setAlignment(Pos.CENTER);
 			Label status = new Label(list.get(i).getOrderState().name());
 			Button changeStatus = new Button();
 			if(actualAccount instanceof Consumer) {

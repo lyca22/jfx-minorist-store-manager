@@ -240,8 +240,12 @@ public class MinoristStore {
 		long ID = randomNumberWithRange(1, Integer.MAX_VALUE);
 		LocalDateTime date = LocalDateTime.now();
 		Order order = new Order(ID, date, client, OrderState.REQUESTED, paymentInformation);
-		order.setProductList(productList);
-		order.setProductQuantity(quantity);
+		@SuppressWarnings("unchecked")
+		ArrayList<Product> orderProducts = (ArrayList<Product>) productList.clone();
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer> orderQuantity = (ArrayList<Integer>) quantity.clone();
+		order.setProductList(orderProducts);
+		order.setProductQuantity(orderQuantity);
 		orderList.add(order);
 		client.getPersonalOrderList().add(order);
 		//TODO. Sort orderList. Sort personalOrderList.
