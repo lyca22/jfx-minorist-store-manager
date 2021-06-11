@@ -625,7 +625,7 @@ public class MinoristStore {
 
 	//Importing methods.
 
-	public void importProducts(String fileName, String separator, Seller seller) throws FileNotFoundException, IOException, CantAddCategoryException {
+	public void importProducts(String fileName, String separator, Seller seller) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
 		String line = br.readLine();
 		while(line != null) {
