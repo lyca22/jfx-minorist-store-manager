@@ -625,8 +625,9 @@ public class MinoristStoreGUI {
 						}
 						actualCategory = actualCategory.getNext();
 					}
-					ObservableList<String> observableList = FXCollections.observableArrayList(categoryList);
-					mainMenuCategories.setItems(observableList);
+					ObservableList<String> observableCategory = FXCollections.observableArrayList(categoryList);
+					mainMenuCategories.setItems(observableCategory);
+					mainMenuFilter.getItems().addAll("Price", "Most sold");
 					showProductsPane();
 					File file = new File(System.getProperty("user.dir") + PROFILE_PICTURE_DIRECTORY + username + ".png");
 					Image image = new Image(file.toURI().toString());

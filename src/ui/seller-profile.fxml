@@ -108,7 +108,7 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Hyperlink>
-                              <Button mnemonicParsing="false" onAction="#seeProducts" text="See products" GridPane.rowIndex="3">
+                              <Button disable="true" mnemonicParsing="false" onAction="#seeProducts" text="See products" GridPane.rowIndex="3">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
