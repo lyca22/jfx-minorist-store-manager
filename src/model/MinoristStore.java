@@ -80,7 +80,7 @@ public class MinoristStore {
 			Product min = list.get(i);
 			for(int j = i+1; j <= list.size()-1; j++) {
 				Product current = list.get(j);
-				if(min.getName().compareTo(current.getName()) > 0) {
+				if(min.getID() > current.getID()) {
 					list.set(j, min);
 					list.set(i, current);
 				}
@@ -285,9 +285,49 @@ public class MinoristStore {
 		}
 		return actualCategory;
 	}
-
-	//TODO. Add search product with binary search. Or maybe we can change the sorting to the ID.
-
+	
+	public Product searchProductByBinarySearch(Long ID) {
+		Product product = null;
+		int pos = -1;
+		int i = 0;
+		int j = generalProductList.size()-1;
+		while(i <=j && pos < 0) {
+			int middle = (i+j)/2;
+			if(generalProductList.get(middle).getID() == ID) {
+				pos = middle;
+			}else if(generalProductList.get(middle).getID() > ID) {
+				j = middle-1;
+			}else {
+				i = middle+1;
+			}
+		}
+		if(pos >= 0) {
+			product = generalProductList.get(pos);
+		}
+		return product;
+	}
+	
+	public Product searchProductByBinarySearch(Long ID, Seller seller) {
+		Product product = null;
+		int pos = -1;
+		int i = 0;
+		int j = seller.getProductList().size()-1;
+		while(i <=j && pos < 0) {
+			int middle = (i+j)/2;
+			if(seller.getProductList().get(middle).getID() == ID) {
+				pos = middle;
+			}else if(seller.getProductList().get(middle).getID() > ID) {
+				j = middle-1;
+			}else {
+				i = middle+1;
+			}
+		}
+		if(pos >= 0) {
+			product = seller.getProductList().get(pos);
+		}
+		return product;
+	}
+	
 	public Product searchProduct(Long ID) {
 		Product product = null;
 		for(int i = 0; i <= generalProductList.size()-1; i++) {
