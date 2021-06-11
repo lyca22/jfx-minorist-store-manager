@@ -81,7 +81,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -103,7 +103,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -127,7 +127,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-		
+
 		}
 	}
 
@@ -149,7 +149,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -169,9 +169,9 @@ class StoreTest {
 			assertTrue(added);
 
 		} catch (CantAddAccountException caae) {
-		
+
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -190,7 +190,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -214,7 +214,7 @@ class StoreTest {
 			assertEquals("The account with username: "+ username +" can't be added.", caae.getMessage());
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -228,15 +228,15 @@ class StoreTest {
 			String tradeName = "LG11";
 
 			minoristStore.addSellerAccount(username, password, tradeName);
-			
+
 			fail("CantAddAccountException expected");
 
 		} catch (CantAddAccountException caae) {
 			String username = "official-LG";
 			assertEquals("The account with username: "+ username +" can't be added.", caae.getMessage());
-			
+
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -255,7 +255,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -270,9 +270,9 @@ class StoreTest {
 			assertTrue(added);
 
 		} catch (CantAddAccountException caae) {
-		
+
 		} catch (CantAddCategoryException cace) {
-		
+
 		}
 	}
 
@@ -294,7 +294,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -314,7 +314,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -345,7 +345,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -374,7 +374,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 
 	}
@@ -395,7 +395,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -413,7 +413,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -431,9 +431,9 @@ class StoreTest {
 			assertEquals(testCategory.getName(), found.getName());
 
 		} catch (CantAddAccountException caae) {
-			
+
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -451,7 +451,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -473,7 +473,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -493,7 +493,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -513,7 +513,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -531,7 +531,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-			
+
 		}
 	}
 
@@ -553,7 +553,7 @@ class StoreTest {
 		} catch (CantAddAccountException caae) {
 
 		} catch (CantAddCategoryException cace) {
-	
+
 		}
 	}
 }
