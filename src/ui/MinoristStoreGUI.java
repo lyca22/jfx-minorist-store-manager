@@ -52,6 +52,7 @@ import model.Consumer;
 import model.MinoristStore;
 import model.OnlineSystem;
 import model.Order;
+import model.OrderState;
 import model.PaymentMethod;
 import model.PaymentType;
 import model.Product;
@@ -798,19 +799,23 @@ public class MinoristStoreGUI {
 			for(int i = 0; i <= vboxCart.getChildren().size()-1; i++) {
 				TextField textField = (TextField) ((HBox)vboxCart.getChildren().get(i)).getChildren().get(1);
 				int quantity = Integer.valueOf(textField.getText());
-				cartQuantity.add(quantity);
+				if(quantity > cart.get(i).getStock()) {
+					quantity = cart.get(i).getStock();
+				}
+				cartQuantity.add(quantity); //TODO. Maybe we can implement an exception here? Out of stock exception?
 			}
+			loadMainMenuScreen("payment-method.fxml");
+			paymentCardButton.setToggleGroup(GROUP);
+			paymentOtherButton.setToggleGroup(GROUP);
+			PaymentMethod paymentMethod = minoristStore.getPaymentMethods();
+			addPayments(paymentMethod);
+			Integer[] expirationMonth = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+			Integer[] expirationYear = {2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035};
+			cardExpireMonth.getItems().setAll(expirationMonth);
+			cardExpireYear.getItems().setAll(expirationYear);
 		}catch(Exception e) {
+			openWindow("Please enter valid information.");
 		}
-		loadMainMenuScreen("payment-method.fxml");
-		paymentCardButton.setToggleGroup(GROUP);
-		paymentOtherButton.setToggleGroup(GROUP);
-		PaymentMethod paymentMethod = minoristStore.getPaymentMethods();
-		addPayments(paymentMethod);
-		Integer[] expirationMonth = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-		Integer[] expirationYear = {2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035};
-		cardExpireMonth.getItems().setAll(expirationMonth);
-		cardExpireYear.getItems().setAll(expirationYear);
 	}
 
 	public void addPayments(PaymentMethod paymentMethod) {
@@ -838,8 +843,6 @@ public class MinoristStoreGUI {
 			otherPlatform.getItems().add(paymentMethod.getName());
 		}
 	}
-
-	//TODO. Check if quantity is right. Modify seller and general quantities.
 	
 	public void buyCart(ActionEvent event) {
 		try {
@@ -872,6 +875,7 @@ public class MinoristStoreGUI {
 					long number = Long.valueOf(cardNumber.getText());
 					Card card = new Card(paymentMethod, zipCode, owner, expirationMonth, expirationYear, number);
 					minoristStore.addOrder((Consumer)actualAccount, card, cart, cartQuantity);
+					decreaseInventory();
 					showAlert("An order was created!");
 					cart.clear();
 					cartQuantity.clear();
@@ -893,6 +897,7 @@ public class MinoristStoreGUI {
 					String name = otherAccountName.getText();
 					OnlineSystem onlineSystem = new OnlineSystem(paymentMethod, zipCode, name);
 					minoristStore.addOrder((Consumer)actualAccount, onlineSystem, cart, cartQuantity);
+					decreaseInventory();
 					showAlert("An order was created!");
 					cart.clear();
 					cartQuantity.clear();
@@ -908,6 +913,14 @@ public class MinoristStoreGUI {
 		}
 	}
 
+	public void decreaseInventory() {
+		for(int i = 0; i <= cart.size()-1; i++) {
+			cart.get(i).setStock((cart.get(i).getStock() - cartQuantity.get(i)));
+			Product generalProduct = minoristStore.searchProduct(cart.get(i).getID());
+			generalProduct.setStock(generalProduct.getStock() - cartQuantity.get(i));
+		}
+	}
+	
 	public void myAccount(ActionEvent event) {
 		if(actualAccount instanceof Administrator) {
 			loadMainMenuScreen("admin-profile.fxml");
@@ -1129,10 +1142,18 @@ public class MinoristStoreGUI {
 			Button changeStatus = new Button();
 			if(actualAccount instanceof Consumer) {
 				changeStatus.setText("Cancel");
-				changeStatus.setOnAction(null);//TODO.
+				Order order = list.get(i);
+				changeStatus.setOnAction(altEvent ->{
+					order.setOrderState(OrderState.CANCELED);
+					status.setText(order.getOrderState().name());
+				});
 			}else if(actualAccount instanceof Administrator) {
 				changeStatus.setText("Change status");
-				changeStatus.setOnAction(null);//TODO.
+				Order order = list.get(i);
+				changeStatus.setOnAction(altEvent ->{
+					changeToNextState(order);
+					status.setText(order.getOrderState().name());
+				});
 			}
 			orderStatus.getChildren().addAll(status, changeStatus);
 			orderPane.add(clientInfo, 0, i);
@@ -1141,6 +1162,24 @@ public class MinoristStoreGUI {
 		}
 	}
 
+	public void changeToNextState(Order order) {
+		switch(order.getOrderState()) {
+		case REQUESTED:
+			order.setOrderState(OrderState.IN_PROCESS);
+			break;
+		case IN_PROCESS:
+			order.setOrderState(OrderState.SENT);
+			break;
+		case SENT:
+			order.setOrderState(OrderState.DELIVERED);
+			break;
+		case DELIVERED:
+			break;
+		case CANCELED:
+			break;
+		}
+	}
+	
 	public void exportData(ActionEvent event) {
 		loadMainMenuScreen("export.fxml");
 	}

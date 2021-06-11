@@ -90,4 +90,12 @@ public class Order {
 		this.paymentInformation = paymentInformation;
 	}
 	
+	public int calculatePrice() {
+		int price = 0;
+		for(int i = 0; i <= productList.size()-1; i++) {
+			price += productList.get(i).getPrice()*productQuantity.get(i);
+		}
+		return price;
+	}
+	
 }

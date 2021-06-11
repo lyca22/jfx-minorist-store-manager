@@ -246,6 +246,7 @@ public class MinoristStore {
 		ArrayList<Integer> orderQuantity = (ArrayList<Integer>) quantity.clone();
 		order.setProductList(orderProducts);
 		order.setProductQuantity(orderQuantity);
+		order.setPrice(order.calculatePrice());
 		orderList.add(order);
 		client.getPersonalOrderList().add(order);
 		//TODO. Sort orderList. Sort personalOrderList.
