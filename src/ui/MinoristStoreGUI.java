@@ -1377,7 +1377,6 @@ public class MinoristStoreGUI {
 				e.printStackTrace();
 			}
 		}
-		dialog.showAndWait();
 	}
 
 	public void addProducts(ActionEvent event) {

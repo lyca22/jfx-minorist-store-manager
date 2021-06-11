@@ -613,9 +613,9 @@ public class MinoristStore {
 			if(orderList.get(i).getDate().isAfter(minDate) && orderList.get(i).getDate().isBefore(maxDate)) {
 				pw.println(orderList.get(i).getID() + separator + orderList.get(i).getDate().toString() + separator +
 						orderList.get(i).getClient().getNames() + " " + orderList.get(i).getClient().getSurnames() +
-						separator + orderList.get(i).getClient().getAddress() + orderList.get(i).getClient().getPhoneNumber() +
+						separator + orderList.get(i).getClient().getAddress() + separator + orderList.get(i).getClient().getPhoneNumber() +
 						separator + text + orderList.get(i).getPrice() + separator + orderList.get(i).getOrderState().name() +
-						separator + orderList.get(i).getPaymentInformation().getPaymentMethod() + separator +
+						separator + orderList.get(i).getPaymentInformation().getPaymentMethod().getName() + separator +
 						orderList.get(i).getPaymentInformation().getZipCode());
 
 			}
@@ -642,7 +642,6 @@ public class MinoristStore {
 			}
 			line = br.readLine();
 		}
-		saveAll();
 		br.close();
 	}
 
