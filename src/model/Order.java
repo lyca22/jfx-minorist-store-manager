@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
@@ -14,15 +15,13 @@ public class Order {
 	private OrderState orderState;
 	private PaymentInformation paymentInformation;
 	
-	public Order(long iD, LocalDateTime date, Consumer client, List<Product> productList, List<Integer> productQuantity,
-			int price, OrderState orderState, PaymentInformation paymentInformation) {
+	public Order(long iD, LocalDateTime date, Consumer client, OrderState orderState, PaymentInformation paymentInformation) {
 		super();
 		ID = iD;
 		this.date = date;
 		this.client = client;
-		this.productList = productList;
-		this.productQuantity = productQuantity;
-		this.price = price;
+		productList = new ArrayList<Product>();
+		productQuantity = new ArrayList<Integer>();
 		this.orderState = orderState;
 		this.paymentInformation = paymentInformation;
 	}

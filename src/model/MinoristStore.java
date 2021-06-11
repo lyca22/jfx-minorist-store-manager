@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,17 +75,16 @@ public class MinoristStore {
 
 	//Sorting methods.
 
-	public void sortProductsBySelection(List<Product> list) {
-		for (int i = 0; i < list.size(); i++) {
-			String min = list.get(i).getName();
-			for(int j=i+1; j<list.size();j++) {
-				if(list.get(j).getName().compareTo(min)>0) {
-					String temp = list.get(j).getName();
-					list.get(j).setName(min);
-					min = temp;
+	public void sortProductBySelection(List<Product> list) {
+		for(int i = 0; i <= list.size()-1; i++) {
+			Product min = list.get(i);
+			for(int j = i+1; j <= list.size()-1; j++) {
+				Product current = list.get(j);
+				if(min.getName().compareTo(current.getName()) > 0) {
+					list.set(j, min);
+					list.set(i, current);
 				}
 			}
-			list.get(i).setName(min);
 		}
 	}
 
@@ -105,7 +105,8 @@ public class MinoristStore {
 			generalProductList.add(product);
 			Product copy = cloneProduct(product);
 			product.getSellerList().get(0).getProductList().add(copy);
-			sortProductsBySelection(generalProductList);
+			sortProductBySelection(generalProductList);
+			sortProductBySelection(product.getSellerList().get(0).getProductList());
 		} catch (CloneNotSupportedException e) {
 		}
 	}
@@ -235,6 +236,17 @@ public class MinoristStore {
 		}
 	}
 
+	public void addOrder(Consumer client, PaymentInformation paymentInformation, ArrayList<Product> productList, ArrayList<Integer> quantity) {
+		long ID = randomNumberWithRange(1, Integer.MAX_VALUE);
+		LocalDateTime date = LocalDateTime.now();
+		Order order = new Order(ID, date, client, OrderState.REQUESTED, paymentInformation);
+		order.setProductList(productList);
+		order.setProductQuantity(quantity);
+		orderList.add(order);
+		client.getPersonalOrderList().add(order);
+		//TODO. Sort orderList. Sort personalOrderList.
+	}
+
 	//Deleting methods.
 
 	public void deleteRequest(Request request) {
@@ -269,9 +281,10 @@ public class MinoristStore {
 		return actualCategory;
 	}
 
+	//TODO. Add search product with binary search. Or maybe we can change the sorting to the ID.
+
 	public Product searchProduct(Long ID) {
 		Product product = null;
-		//TODO. Modify this method to add binary search.
 		for(int i = 0; i <= generalProductList.size()-1; i++) {
 			if(generalProductList.get(i).getID() == ID) {
 				product = generalProductList.get(i);
@@ -282,7 +295,6 @@ public class MinoristStore {
 
 	public Product searchProduct(Long ID, Seller seller) {
 		Product product = null;
-		//TODO. Modify this method to add binary search.
 		for(int i = 0; i <= seller.getProductList().size()-1; i++) {
 			if(seller.getProductList().get(i).getID() == ID) {
 				product = seller.getProductList().get(i);
@@ -305,7 +317,7 @@ public class MinoristStore {
 
 	private PaymentMethod searchPaymentMethod(String name, PaymentMethod currentPayment) {
 		PaymentMethod payment = null;
-		if(currentPayment.getName().compareTo(name) <= 0) {
+		if(currentPayment.getName().compareTo(name) > 0) {
 			if(currentPayment.getLeft() != null) {
 				if(currentPayment.getLeft().getName().equalsIgnoreCase(name)) {
 					payment = currentPayment.getLeft();
@@ -313,7 +325,7 @@ public class MinoristStore {
 					payment = searchPaymentMethod(name, currentPayment.getLeft());
 				}
 			}
-		}else if(currentPayment.getName().compareTo(name) > 0) {
+		}else if(currentPayment.getName().compareTo(name) <= 0) {
 			if(currentPayment.getRight() != null) {
 				if(currentPayment.getRight().getName().equalsIgnoreCase(name)) {
 					payment = currentPayment.getRight();

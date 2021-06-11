@@ -25,11 +25,13 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,9 +46,12 @@ import javafx.scene.text.FontPosture;
 import javafx.stage.FileChooser;
 import model.Account;
 import model.Administrator;
+import model.Card;
 import model.Category;
 import model.Consumer;
 import model.MinoristStore;
+import model.OnlineSystem;
+import model.Order;
 import model.PaymentMethod;
 import model.PaymentType;
 import model.Product;
@@ -58,14 +63,20 @@ public class MinoristStoreGUI {
 
 	private final static String PROFILE_PICTURE_DIRECTORY = "/data/profile_pictures/";
 	private final static String PRODUCT_PICTURE_DIRECTORY = "/data/product_pictures/";
+	private final ToggleGroup GROUP = new ToggleGroup();
 
 	private MinoristStore minoristStore;
 	private Account actualAccount;
 	private Product actualProduct;
+	private ArrayList<Product> cart;
+	private ArrayList<Integer> cartQuantity;
 	private ButtonType acceptButtonType;
 	private ButtonType cancelButtonType;
+	@SuppressWarnings("unused")//TODO
 	private ButtonType deleteButtonType;
+	@SuppressWarnings("unused")//TODO
 	private ButtonType disableButtonType;
+	@SuppressWarnings("unused")//TODO
 	private ButtonType enableButtonType;
 	private ButtonType rejectButtonType;
 
@@ -281,6 +292,41 @@ public class MinoristStoreGUI {
 	@FXML
 	private Label labelCategories;
 
+	@FXML
+	private VBox vboxCart;
+
+	@FXML
+	private RadioButton paymentCardButton;
+
+	@FXML
+	private RadioButton paymentOtherButton;
+	@FXML
+	private ChoiceBox<String> cardType;
+
+	@FXML
+	private TextField cardNumber;
+
+	@FXML
+	private ChoiceBox<String> otherPlatform;
+
+	@FXML
+	private TextField otherAccountName;
+
+	@FXML
+	private TextField cardOwner;
+
+	@FXML
+	private ChoiceBox<Integer> cardExpireMonth;
+
+	@FXML
+	private ChoiceBox<Integer> cardExpireYear;
+
+	@FXML
+	private TextField paymentZipCode;
+
+	@FXML
+    private VBox orderBox;
+	
 	public MinoristStoreGUI(MinoristStore minoristStore) {
 		super();
 		this.setMinoristStore(minoristStore);
@@ -293,6 +339,8 @@ public class MinoristStoreGUI {
 		setDisableButtonType(new ButtonType("Disable", ButtonData.OTHER));
 		setEnableButtonType(new ButtonType("Enable", ButtonData.OK_DONE));
 		setRejectButtonType(new ButtonType("Reject", ButtonData.BACK_PREVIOUS));
+		setCart(new ArrayList<Product>());
+		setCartQuantity(new ArrayList<Integer>());
 	}
 
 	public MinoristStore getMinoristStore() {
@@ -303,76 +351,36 @@ public class MinoristStoreGUI {
 		this.minoristStore = minoristStore;
 	}
 
-	public Account getActualAccount() {
-		return actualAccount;
-	}
-
-	public void setActualAccount(Account actualAccount) {
-		this.actualAccount = actualAccount;
-	}
-
-	public Product getActualProduct() {
-		return actualProduct;
-	}
-
-	public void setActualProduct(Product actualProduct) {
-		this.actualProduct = actualProduct;
-	}
-
-	public ButtonType getAcceptButtonType() {
-		return acceptButtonType;
-	}
-
 	public void setAcceptButtonType(ButtonType acceptButtonType) {
 		this.acceptButtonType = acceptButtonType;
-	}
-
-	public ButtonType getCancelButtonType() {
-		return cancelButtonType;
 	}
 
 	public void setCancelButtonType(ButtonType cancelButtonType) {
 		this.cancelButtonType = cancelButtonType;
 	}
 
-	public ButtonType getDeleteButtonType() {
-		return deleteButtonType;
-	}
-
 	public void setDeleteButtonType(ButtonType deleteButtonType) {
 		this.deleteButtonType = deleteButtonType;
-	}
-
-	public ButtonType getDisableButtonType() {
-		return disableButtonType;
 	}
 
 	public void setDisableButtonType(ButtonType disableButtonType) {
 		this.disableButtonType = disableButtonType;
 	}
 
-	public ButtonType getEnableButtonType() {
-		return enableButtonType;
-	}
-
 	public void setEnableButtonType(ButtonType enableButtonType) {
 		this.enableButtonType = enableButtonType;
-	}
-
-	public ButtonType getRejectButtonType() {
-		return rejectButtonType;
 	}
 
 	public void setRejectButtonType(ButtonType rejectButtonType) {
 		this.rejectButtonType = rejectButtonType;
 	}
 
-	public int getCount() {
-		return count;
+	public void setCart(ArrayList<Product> cart) {
+		this.cart = cart;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setCartQuantity(ArrayList<Integer> cartQuantity) {
+		this.cartQuantity = cartQuantity;
 	}
 
 	private void initializeRequestTableView() {
@@ -451,6 +459,8 @@ public class MinoristStoreGUI {
 
 	public void loginScreen(ActionEvent event) {
 		loadScreen("login.fxml");
+		cart.clear();
+		cartQuantity.clear();
 	}
 
 	public void signUp(ActionEvent event) {
@@ -717,7 +727,17 @@ public class MinoristStoreGUI {
 	}
 
 	public void addToCart(ActionEvent event) {
-		showAlert("Added to the cart!");
+		try{
+			String sellerAsString = productsPaneSelectSeller.getSelectionModel().getSelectedItem();
+			Seller seller = (Seller)minoristStore.searchAccount(sellerAsString);
+			Product product = minoristStore.searchProduct(actualProduct.getID(), seller);
+			if(!cart.contains(product)) {
+				cart.add(product);
+			}
+			showAlert("Added to the cart!");
+		}catch(Exception e) {
+			showAlert("Select a seller.");
+		}
 	}
 
 	public void sellThisProduct(ActionEvent event) {
@@ -738,6 +758,7 @@ public class MinoristStoreGUI {
 							sellerProduct = minoristStore.cloneProduct(actualProduct);
 							sellerProduct.setStock(Integer.valueOf(txtEditProfileInfo.getText()));
 							((Seller) actualAccount).getProductList().add(sellerProduct);
+							minoristStore.sortProductBySelection(((Seller) actualAccount).getProductList());
 						}
 						showProduct(productsPaneImageView.getImage());
 					}
@@ -752,16 +773,139 @@ public class MinoristStoreGUI {
 
 	public void cart(ActionEvent event) {
 		loadMainMenuScreen("cart.fxml");
+		minoristStore.sortProductBySelection(cart);
+		for(int i = 0; i <= cart.size()-1; i++) {
+			Product product = cart.get(i);
+			Label label = new Label(product.getName());
+			TextField textField = new TextField();
+			Hyperlink hyperlink = new Hyperlink("Delete");
+			hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					cart.remove(product);
+					cart(event);
+				}
+			});
+			HBox hbox = new HBox();
+			hbox.getChildren().addAll(label, textField, hyperlink);
+			vboxCart.getChildren().add(hbox);
+		}
 	}
 
 	public void selectPayment(ActionEvent event) {
+		cartQuantity.clear();
+		try {
+			for(int i = 0; i <= vboxCart.getChildren().size()-1; i++) {
+				TextField textField = (TextField) ((HBox)vboxCart.getChildren().get(i)).getChildren().get(1);
+				int quantity = Integer.valueOf(textField.getText());
+				cartQuantity.add(quantity);
+			}
+		}catch(Exception e) {
+		}
 		loadMainMenuScreen("payment-method.fxml");
+		paymentCardButton.setToggleGroup(GROUP);
+		paymentOtherButton.setToggleGroup(GROUP);
+		PaymentMethod paymentMethod = minoristStore.getPaymentMethods();
+		addPayments(paymentMethod);
+		Integer[] expirationMonth = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		Integer[] expirationYear = {2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035};
+		cardExpireMonth.getItems().setAll(expirationMonth);
+		cardExpireYear.getItems().setAll(expirationYear);
 	}
 
+	public void addPayments(PaymentMethod paymentMethod) {
+		if(paymentMethod != null) {
+			if(paymentMethod.getLeft() == null && paymentMethod.getRight() == null) {
+				addToPaymentOptions(paymentMethod);
+			}else if(paymentMethod.getLeft() == null) {
+				addToPaymentOptions(paymentMethod);
+				addPayments(paymentMethod.getRight());
+			}else if(paymentMethod.getRight() == null) {
+				addPayments(paymentMethod.getLeft());
+				addToPaymentOptions(paymentMethod);
+			}else {
+				addPayments(paymentMethod.getLeft());
+				addToPaymentOptions(paymentMethod);
+				addPayments(paymentMethod.getRight());
+			}
+		}
+	}
+
+	public void addToPaymentOptions(PaymentMethod paymentMethod) {
+		if(paymentMethod.getType().equals(PaymentType.CARD)) {
+			cardType.getItems().add(paymentMethod.getName());
+		}else {
+			otherPlatform.getItems().add(paymentMethod.getName());
+		}
+	}
+
+	//TODO. Check if quantity is right. Modify seller and general quantities.
+	
 	public void buyCart(ActionEvent event) {
-		showAlert("An order was created!");
-		loadScreen("main-menu.fxml");
-		loadMainMenuScreen("show-products-pane.fxml");
+		try {
+			boolean wroteZipCode = !paymentZipCode.getText().isEmpty();
+			if(paymentCardButton.isSelected()) {
+				String string = cardType.getSelectionModel().getSelectedItem();
+				boolean selectedCardService = false;
+				if(string != null) {
+					selectedCardService = true;
+				}
+				boolean wroteCardOwner = !cardOwner.getText().isEmpty();
+				boolean wroteCardNumber = !cardNumber.getText().isEmpty();
+				Integer value = cardExpireMonth.getSelectionModel().getSelectedItem();
+				boolean selectedExpireMonth = false;
+				if(value != null) {
+					selectedExpireMonth = true;
+				}
+				value = cardExpireYear.getSelectionModel().getSelectedItem();
+				boolean selectedExpireYear = false;
+				if(value != null) {
+					selectedExpireYear = true;
+				}
+				if(wroteZipCode && selectedCardService && wroteCardOwner && wroteCardNumber && selectedExpireMonth && selectedExpireYear) {
+					int zipCode = Integer.valueOf(paymentZipCode.getText());
+					String payment = cardType.getSelectionModel().getSelectedItem();
+					PaymentMethod paymentMethod = minoristStore.searchPaymentMethod(payment);
+					String owner = cardOwner.getText();
+					int expirationMonth = cardExpireMonth.getSelectionModel().getSelectedItem();
+					int expirationYear = cardExpireYear.getSelectionModel().getSelectedItem();
+					long number = Long.valueOf(cardNumber.getText());
+					Card card = new Card(paymentMethod, zipCode, owner, expirationMonth, expirationYear, number);
+					minoristStore.addOrder((Consumer)actualAccount, card, cart, cartQuantity);
+					showAlert("An order was created!");
+					cart.clear();
+					cartQuantity.clear();
+					showProductsPane();
+				}else {
+					showAlert("Enter the required information.");
+				}
+			}else if(paymentOtherButton.isSelected()) {
+				String string = otherPlatform.getSelectionModel().getSelectedItem();
+				boolean selectedOtherService = false;
+				if(string != null) {
+					selectedOtherService = true;
+				}
+				boolean wroteAccountName = !otherAccountName.getText().isEmpty();
+				if(wroteZipCode && selectedOtherService && wroteAccountName) {
+					int zipCode = Integer.valueOf(paymentZipCode.getText());
+					String payment = otherPlatform.getSelectionModel().getSelectedItem();
+					PaymentMethod paymentMethod = minoristStore.searchPaymentMethod(payment);
+					String name = otherAccountName.getText();
+					OnlineSystem onlineSystem = new OnlineSystem(paymentMethod, zipCode, name);
+					minoristStore.addOrder((Consumer)actualAccount, onlineSystem, cart, cartQuantity);
+					showAlert("An order was created!");
+					cart.clear();
+					cartQuantity.clear();
+					showProductsPane();
+				}else {
+					showAlert("Enter the required information.");
+				}
+			}else {
+				showAlert("Select a payment option.");
+			}
+		}catch(Exception e) {
+			showAlert("Enter valid information.");
+		}
 	}
 
 	public void myAccount(ActionEvent event) {
@@ -946,6 +1090,52 @@ public class MinoristStoreGUI {
 
 	public void manageOrders(ActionEvent event) {
 		loadMainMenuScreen("order-list.fxml");
+		GridPane orderPane = new GridPane();
+		orderBox.getChildren().add(orderPane);
+		ArrayList<Order> list = null;
+		if(actualAccount instanceof Consumer) {
+			list = (ArrayList<Order>) ((Consumer) actualAccount).getPersonalOrderList();
+		}else if(actualAccount instanceof Administrator) {
+			list = (ArrayList<Order>) minoristStore.getOrderList();
+		}
+		for(int i = 0; i <= list.size()-1; i++) {
+			VBox clientInfo = new VBox();
+			Label ID = new Label(Long.toString(list.get(i).getID()));
+			Label client = new Label(list.get(i).getClient().getNames() + list.get(i).getClient().getSurnames());
+			Label phone = new Label(Long.toString(list.get(i).getClient().getPhoneNumber()));
+			Label address = new Label(list.get(i).getClient().getAddress());
+			Label zipCode = new Label(Integer.toString(list.get(i).getPaymentInformation().getZipCode()));
+			Label paymentMethod = new Label(list.get(i).getPaymentInformation().getPaymentMethod().getName());
+			Label date = new Label(list.get(i).getDate().toLocalDate().toString());
+			clientInfo.getChildren().addAll(ID, client, phone, address, zipCode, paymentMethod, date);
+			VBox clientProducts = new VBox();
+			
+			
+			
+			List<Product> productList = (ArrayList<Product>) list.get(i).getProductList();//TODO.
+			List<Integer> quantity = (ArrayList<Integer>) list.get(i).getProductQuantity();//TODO. Known problem. NullPointer.
+			for(int j = 0; j <= productList.size()-1; j++) {
+				Label product = new Label(productList.get(j).getName() + " x " + quantity.get(j));
+				clientProducts.getChildren().add(product);
+			}
+			
+			
+			
+			VBox orderStatus = new VBox();
+			Label status = new Label(list.get(i).getOrderState().name());
+			Button changeStatus = new Button();
+			if(actualAccount instanceof Consumer) {
+				changeStatus.setText("Cancel");
+				changeStatus.setOnAction(null);//TODO.
+			}else if(actualAccount instanceof Administrator) {
+				changeStatus.setText("Change status");
+				changeStatus.setOnAction(null);//TODO.
+			}
+			orderStatus.getChildren().addAll(status, changeStatus);
+			orderPane.add(clientInfo, 0, i);
+			orderPane.add(clientProducts, 1, i);
+			orderPane.add(orderStatus, 2, i);
+		}
 	}
 
 	public void exportData(ActionEvent event) {
@@ -979,7 +1169,7 @@ public class MinoristStoreGUI {
 					if(wroteProductName && wroteProductBrand && wroteProductPrice && wroteProductStock && wroteProductDescription && wroteProductPhoto && selectedProductCategory) {
 						String productName = txtRequestName.getText();
 						String stringProductCategory = requestCategory.getSelectionModel().getSelectedItem();
-						Category productCategory = minoristStore.searchCategory(stringProductCategory); //Check this out. Not efficient. TODO.
+						Category productCategory = minoristStore.searchCategory(stringProductCategory);
 						String productBrand = txtRequestBrand.getText();
 						int productPrice = Integer.valueOf(txtRequestPrice.getText());
 						int productStock = Integer.valueOf(txtRequestStock.getText());

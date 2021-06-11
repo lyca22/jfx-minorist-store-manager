@@ -57,9 +57,8 @@ class StoreTest {
 		PaymentMethod paymentMethod = new PaymentMethod("BBVA", PaymentType.CARD);
 		PaymentInformation paymentInfo = new PaymentInformation(paymentMethod, 123456);
 		LocalDateTime date = LocalDateTime.now();
-
-		/*Order testOrder = new Order(1234567, date, testClient, productList, quantity, 1890000, OrderState.REQUESTED, paymentInfo);
 		List<Order> orderList = new ArrayList<Order>();
+		Order testOrder = new Order(1234567, date, testClient, OrderState.REQUESTED, paymentInfo); //I changed the Order class constructor, check it out.
 		orderList.add(testOrder); //AGREGAR CUANDO ESTE EL METODO*/
 	}
 
@@ -119,7 +118,7 @@ class StoreTest {
 	}
 
 
-	//Can´t add an account
+	//Canï¿½t add an account
 	@Test
 	public void testCantAddAccount() {
 		setupScenary1();
@@ -241,8 +240,10 @@ class StoreTest {
 		List<Request> requestList = minoristStore.getRequestList();
 		assertEquals(1, requestList.size());
 	}
-
+	
 	//Add payment method
+	//Can't remove an account
+	
 	@Test
 	public void testAddPaymentmethod() {
 		setupScenary1();
@@ -263,9 +264,9 @@ class StoreTest {
 		boolean added = minoristStore.addPaymentMethod(name, type);
 		assertTrue(added);
 	}
-
-
 	//Edit a product
+	//Can't remove a category
+	
 	@Test
 	public void testEditProduct() {
 		setupScenary1();
