@@ -618,13 +618,16 @@ public class MinoristStore implements Utility {
 
 	public void generateSellerProductReport(String fileName, String separator, Seller seller) throws FileNotFoundException, InterruptedException {
 		PrintWriter pw = new PrintWriter(fileName);
-		int mid = (seller.getProductList().size()-1)/2;
+		int mid = (seller.getProductList().size()-1)/3;
 		ProductReportThread prt1 = new ProductReportThread(pw, seller.getProductList(), 0, mid, separator);
-		ProductReportThread prt2 = new ProductReportThread(pw, seller.getProductList(), mid+1, seller.getProductList().size()-1, separator);
+		ProductReportThread prt2 = new ProductReportThread(pw, seller.getProductList(), mid+1, (mid*2), separator);
+		ProductReportThread prt3 = new ProductReportThread(pw, seller.getProductList(), (mid*2)+1, seller.getProductList().size()-1, separator);
 		prt1.start();
 		prt2.start();
+		prt3.start();
 		prt1.join();
 		prt2.join();
+		prt3.join();
 		pw.close();
 	}
 
@@ -648,13 +651,16 @@ public class MinoristStore implements Utility {
 
 	public void generateAdministratorProductReport(String fileName, String separator) throws FileNotFoundException, InterruptedException {
 		PrintWriter pw = new PrintWriter(fileName);
-		int mid = (generalProductList.size()-1)/2;
+		int mid = (generalProductList.size()-1)/3;
 		ProductReportThread prt1 = new ProductReportThread(pw, generalProductList, 0, mid, separator);
-		ProductReportThread prt2 = new ProductReportThread(pw, generalProductList, mid+1, generalProductList.size()-1, separator);
+		ProductReportThread prt2 = new ProductReportThread(pw, generalProductList, mid+1, (mid*2), separator);
+		ProductReportThread prt3 = new ProductReportThread(pw, generalProductList, (mid*2)+1, generalProductList.size()-1, separator);
 		prt1.start();
 		prt2.start();
+		prt3.start();
 		prt1.join();
 		prt2.join();
+		prt3.join();
 		pw.close();
 	}
 
@@ -682,13 +688,16 @@ public class MinoristStore implements Utility {
 
 	public void generateOrderReport(String fileName, String separator, LocalDateTime minDate, LocalDateTime maxDate) throws FileNotFoundException, InterruptedException {
 		PrintWriter pw = new PrintWriter(fileName);
-		int mid = (orderList.size()-1)/2;
+		int mid = (orderList.size()-1)/3;
 		OrderReportThread ort1 = new OrderReportThread(pw, orderList, 0, mid, separator, minDate, maxDate);
-		OrderReportThread ort2 = new OrderReportThread(pw, orderList, mid+1, orderList.size()-1, separator, minDate, maxDate);
+		OrderReportThread ort2 = new OrderReportThread(pw, orderList, mid+1, (mid*2), separator, minDate, maxDate);
+		OrderReportThread ort3 = new OrderReportThread(pw, orderList, (mid*2)+1, orderList.size()-1, separator, minDate, maxDate);
 		ort1.start();
 		ort2.start();
+		ort3.start();
 		ort1.join();
 		ort2.join();
+		ort3.join();
 		pw.close();
 	}
 
