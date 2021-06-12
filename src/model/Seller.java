@@ -5,6 +5,10 @@ import java.util.List;
 
 public class Seller extends Account {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String tradeName;
 	private List<Product> productList;
 	

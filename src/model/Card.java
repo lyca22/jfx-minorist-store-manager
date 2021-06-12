@@ -2,6 +2,10 @@ package model;
 
 public class Card extends PaymentInformation {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String cardOwner;
 	private int expirationMonth;
 	private int expirationYear;

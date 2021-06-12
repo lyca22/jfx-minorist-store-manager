@@ -1,7 +1,13 @@
 package model;
 
-public class PaymentInformation {
+import java.io.Serializable;
 
+public class PaymentInformation implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private PaymentMethod paymentMethod;
 	private int zipCode;
 	

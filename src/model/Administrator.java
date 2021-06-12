@@ -2,6 +2,10 @@ package model;
 
 public class Administrator extends Account {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String names;
 	private String surnames;
 	

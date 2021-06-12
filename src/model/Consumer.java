@@ -5,6 +5,10 @@ import java.util.List;
 
 public class Consumer extends Account {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String names;
 	private String surnames;
 	private long phoneNumber;

@@ -1,7 +1,13 @@
 package model;
 
-public class PaymentMethod {
+import java.io.Serializable;
 
+public class PaymentMethod implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private PaymentType type;
 	private PaymentMethod left;

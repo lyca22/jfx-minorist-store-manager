@@ -2,6 +2,8 @@ package model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import exceptions.CantAddPaymentMethodException;
 class StoreTest {
 	private MinoristStore minoristStore;
 
-	public void setupScenary1() throws CantAddAccountException, CantAddCategoryException {
+	public void setupScenary1() throws CantAddAccountException, CantAddCategoryException, FileNotFoundException, IOException {
 		minoristStore = new MinoristStore();
 
 		Seller testSeller = new Seller("apple", "12345", "Apple Inc.");
@@ -28,7 +30,7 @@ class StoreTest {
 		minoristStore.addProduct(testProduct);
 	}
 
-	public void setupScenary2() throws CantAddAccountException, CantAddCategoryException {
+	public void setupScenary2() throws CantAddAccountException, CantAddCategoryException, FileNotFoundException, IOException {
 		minoristStore = new MinoristStore();
 
 		Seller testSeller = new Seller("apple", "12345", "Apple Inc.");
@@ -82,6 +84,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -104,6 +112,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -128,6 +142,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -150,6 +170,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -172,6 +198,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -191,6 +223,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -215,6 +253,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -237,6 +281,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -256,6 +306,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -273,6 +329,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -295,6 +357,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -315,6 +383,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -346,6 +420,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -375,6 +455,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
@@ -396,6 +482,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -414,6 +506,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -434,6 +532,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -452,6 +556,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -474,6 +584,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -494,6 +610,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -514,6 +636,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -532,6 +660,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -554,6 +688,12 @@ class StoreTest {
 
 		} catch (CantAddCategoryException cace) {
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

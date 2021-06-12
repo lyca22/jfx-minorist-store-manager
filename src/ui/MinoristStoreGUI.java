@@ -555,6 +555,10 @@ public class MinoristStoreGUI {
 				showAlert("Please fill the fields with the correct information.");
 			} catch (CantAddAccountException e) {
 				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}else {
 			showAlert("Please fill all the fields.");
@@ -745,13 +749,25 @@ public class MinoristStoreGUI {
 		txtRequestStock.setVisible(false);
 		dialog.setResultConverter(dialogButton ->{
 			if(dialogButton == disableButtonType) {
-				minoristStore.addRequest(actualProduct, (Seller) actualAccount, RequestType.DISABLE);
+				try {
+					minoristStore.addRequest(actualProduct, (Seller) actualAccount, RequestType.DISABLE);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			if(dialogButton == enableButtonType) {
-				minoristStore.addRequest(actualProduct, (Seller) actualAccount, RequestType.ENABLE);
+				try {
+					minoristStore.addRequest(actualProduct, (Seller) actualAccount, RequestType.ENABLE);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			if(dialogButton == deleteButtonType) {
-				minoristStore.addRequest(actualProduct, (Seller) actualAccount, RequestType.DELETE);
+				try {
+					minoristStore.addRequest(actualProduct, (Seller) actualAccount, RequestType.DELETE);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			if(dialogButton == acceptButtonType) {
 				try {
@@ -1062,6 +1078,10 @@ public class MinoristStoreGUI {
 								minoristStore.addPaymentMethod(name, type);
 							} catch (CantAddPaymentMethodException e) {
 								e.printStackTrace();
+							} catch (FileNotFoundException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
 							}
 							managePaymentMethods(event);
 						}
@@ -1123,7 +1143,11 @@ public class MinoristStoreGUI {
 					}
 					if(dialogButton == deleteButtonType) {
 						PaymentMethod payment = minoristStore.searchPaymentMethod(labelName.getText());
-						minoristStore.deletePaymentMethod(payment);
+						try {
+							minoristStore.deletePaymentMethod(payment);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 						managePaymentMethods(event);
 					}
 					if(dialogButton == acceptButtonType) {
@@ -1134,7 +1158,11 @@ public class MinoristStoreGUI {
 							if(payment != null) {
 								String name = txtEditPaymentMethod.getText();
 								PaymentType type = paymentMethodType.getValue();
-								minoristStore.editPaymentMethod(payment, name, type);
+								try {
+									minoristStore.editPaymentMethod(payment, name, type);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 								managePaymentMethods(event);
 							}
 						}
@@ -1172,7 +1200,11 @@ public class MinoristStoreGUI {
 						}
 						if(dialogButton == deleteButtonType) {
 							Category editedCategory = minoristStore.searchCategory(label.getText());
-							minoristStore.deleteCategory(editedCategory);
+							try {
+								minoristStore.deleteCategory(editedCategory);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
 							manageCategories(event);
 						}
 						if(dialogButton == acceptButtonType) {
@@ -1181,7 +1213,11 @@ public class MinoristStoreGUI {
 								Category editedCategory = minoristStore.searchCategory(label.getText());
 								if(editedCategory != null) {
 									String categoryName = txtEditProfileInfo.getText();
-									minoristStore.editCategory(editedCategory, categoryName);
+									try {
+										minoristStore.editCategory(editedCategory, categoryName);
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
 									manageCategories(event);
 								}
 							}
@@ -1208,6 +1244,10 @@ public class MinoristStoreGUI {
 							try {
 								minoristStore.addCategory(categoryName);
 							} catch (CantAddCategoryException e) {
+								e.printStackTrace();
+							} catch (FileNotFoundException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
 								e.printStackTrace();
 							}
 							manageCategories(event);
@@ -1277,7 +1317,11 @@ public class MinoristStoreGUI {
 				if(order.getOrderState().equals(OrderState.CANCELED)) {
 					Button deleteOrder = new Button("Delete");
 					deleteOrder.setOnAction(deleteEvent -> {
-						minoristStore.deleteOrder(order);
+						try {
+							minoristStore.deleteOrder(order);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 						manageOrders(event);
 					});
 					orderStatus.getChildren().add(deleteOrder);
@@ -1592,13 +1636,29 @@ public class MinoristStoreGUI {
 					product.setDisabled(false);
 				}else {
 					Product product = minoristStore.searchProductByBinarySearch(request.getProduct().getID());
-					minoristStore.deleteRequest(request);
-					minoristStore.deleteProduct(product);
+					try {
+						minoristStore.deleteRequest(request);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					try {
+						minoristStore.deleteProduct(product);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-				minoristStore.deleteRequest(request);
+				try {
+					minoristStore.deleteRequest(request);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			if(dialogButton == rejectButtonType) {
-				minoristStore.deleteRequest(request);
+				try {
+					minoristStore.deleteRequest(request);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			manageRequests();
 			return null;

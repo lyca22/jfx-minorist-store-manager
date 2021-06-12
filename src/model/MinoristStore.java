@@ -129,11 +129,28 @@ public class MinoristStore {
 			product.getSellerList().get(0).getProductList().add(copy);
 			sortProductBySelection(generalProductList);
 			sortProductBySelection(product.getSellerList().get(0).getProductList());
+			saveAll();
 		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
-	public long addRequest(String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {
+	public long addRequest(String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) throws FileNotFoundException, IOException {
+		long ID = randomNumberWithRange(1, Integer.MAX_VALUE);
+		Product product = new Product(ID, name, category, brand, price, stock, description);
+		product.getSellerList().add(seller);
+		Request request = new Request(product, requestType, seller);
+		requestList.add(request);
+		sortRequestsByInsertion(requestList);
+		saveAll();
+		return ID;
+	}
+	
+	public long addRequestWithoutSaving(String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) throws FileNotFoundException, IOException {
 		long ID = randomNumberWithRange(1, Integer.MAX_VALUE);
 		Product product = new Product(ID, name, category, brand, price, stock, description);
 		product.getSellerList().add(seller);
@@ -143,22 +160,24 @@ public class MinoristStore {
 		return ID;
 	}
 
-	public long addRequest(long ID, String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) {
+	public long addRequest(long ID, String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) throws FileNotFoundException, IOException {
 		Product product = new Product(ID, name, category, brand, price, stock, description);
 		Request request = new Request(product, requestType, seller);
 		requestList.add(request);
 		sortRequestsByInsertion(requestList);
+		saveAll();
 		return ID;
 	}
 
-	public long addRequest(Product product, Seller seller, RequestType requestType) {
+	public long addRequest(Product product, Seller seller, RequestType requestType) throws FileNotFoundException, IOException {
 		Request request = new Request(product, requestType, seller);
 		requestList.add(request);
 		sortRequestsByInsertion(requestList);
+		saveAll();
 		return product.getID();
 	}
 
-	public boolean addAdministratorAccount(String username, String password, String names, String surnames) throws CantAddAccountException{
+	public boolean addAdministratorAccount(String username, String password, String names, String surnames) throws CantAddAccountException, FileNotFoundException, IOException{
 		boolean added = false;
 		Account account = searchAccount(username);
 		if(account == null) {
@@ -172,10 +191,11 @@ public class MinoristStore {
 		}else {
 			throw new CantAddAccountException(username);
 		}
+		saveAll();
 		return added;
 	}
 
-	public boolean addConsumerAccount(String username, String password, String names, String surnames, long phoneNumber, String address) throws CantAddAccountException {
+	public boolean addConsumerAccount(String username, String password, String names, String surnames, long phoneNumber, String address) throws CantAddAccountException, FileNotFoundException, IOException {
 		boolean added = false;
 		Account account = searchAccount(username);
 		if(account == null) {
@@ -189,10 +209,11 @@ public class MinoristStore {
 		}else {
 			throw new CantAddAccountException(username);
 		}
+		saveAll();
 		return added;
 	}
 
-	public boolean addSellerAccount(String username, String password, String tradeName) throws CantAddAccountException {
+	public boolean addSellerAccount(String username, String password, String tradeName) throws CantAddAccountException, FileNotFoundException, IOException {
 		boolean added = false;
 		Account account = searchAccount(username);
 		if(account == null) {
@@ -206,6 +227,7 @@ public class MinoristStore {
 		}else {
 			throw new CantAddAccountException(username);
 		}
+		saveAll();
 		return added;
 	}
 
@@ -217,7 +239,7 @@ public class MinoristStore {
 		}
 	}
 
-	public boolean addCategory(String name) throws CantAddCategoryException {
+	public boolean addCategory(String name) throws CantAddCategoryException, FileNotFoundException, IOException {
 		boolean added = false;
 		Category category = searchCategory(name);
 		if(category == null) {
@@ -231,6 +253,7 @@ public class MinoristStore {
 		}else {
 			throw new CantAddCategoryException(name);
 		}
+		saveAll();
 		return added;
 	}
 
@@ -242,7 +265,7 @@ public class MinoristStore {
 		}
 	}
 
-	public boolean addPaymentMethod(String name, PaymentType type) throws CantAddPaymentMethodException {
+	public boolean addPaymentMethod(String name, PaymentType type) throws CantAddPaymentMethodException, FileNotFoundException, IOException {
 		boolean added = false;
 		PaymentMethod paymentMethod = searchPaymentMethod(name);
 		if(paymentMethod == null) {
@@ -257,6 +280,7 @@ public class MinoristStore {
 		}else {
 			throw new CantAddPaymentMethodException(name);
 		}
+		saveAll();
 		return added;
 	}
 
@@ -278,7 +302,7 @@ public class MinoristStore {
 		}
 	}
 
-	public void addOrder(Consumer client, PaymentInformation paymentInformation, ArrayList<Product> productList, ArrayList<Integer> quantity) {
+	public void addOrder(Consumer client, PaymentInformation paymentInformation, ArrayList<Product> productList, ArrayList<Integer> quantity) throws FileNotFoundException, IOException {
 		long ID = randomNumberWithRange(1, Integer.MAX_VALUE);
 		LocalDateTime date = LocalDateTime.now();
 		Order order = new Order(ID, date, client, OrderState.REQUESTED, paymentInformation);
@@ -291,12 +315,12 @@ public class MinoristStore {
 		order.setPrice(order.calculatePrice());
 		orderList.add(order);
 		client.getPersonalOrderList().add(order);
-		//TODO. Sort personalOrderList and orderList.
+		saveAll();
 	}
 
-	//Deleting methods. ¿Concurrence?
+	//Deleting methods.
 
-	public void deleteProduct(Product product) {
+	public void deleteProduct(Product product) throws FileNotFoundException, IOException {
 		boolean canDelete = true;
 		for(int i = 0; i <= orderList.size()-1; i++) {
 			List<Product> products = orderList.get(i).getProductList();
@@ -317,15 +341,17 @@ public class MinoristStore {
 				product.getSellerList().get(i).getProductList().remove(sellerProduct);
 			}
 			generalProductList.remove(product);
+			saveAll();
 		}
 	}
 
-	public void deleteOrder(Order order) {
+	public void deleteOrder(Order order) throws FileNotFoundException, IOException {
 		order.getClient().getPersonalOrderList().remove(order);
 		orderList.remove(order);
+		saveAll();
 	}
 
-	public void deleteCategory(Category category) {
+	public void deleteCategory(Category category) throws FileNotFoundException, IOException {
 		boolean canDelete = true;
 		for(int i = 0; i <= generalProductList.size()-1; i++) {
 			if(generalProductList.get(i).getCategory() == category) {
@@ -350,10 +376,11 @@ public class MinoristStore {
 					}
 				}
 			}
+			saveAll();
 		}
 	}
 
-	public void deletePaymentMethod(PaymentMethod paymentMethod) {
+	public void deletePaymentMethod(PaymentMethod paymentMethod) throws FileNotFoundException, IOException {
 		boolean canDelete = true;
 		for(int i = 0; i <= orderList.size()-1; i++) {
 			if(orderList.get(i).getPaymentInformation().getPaymentMethod().equals(paymentMethod)) {
@@ -362,10 +389,11 @@ public class MinoristStore {
 		}
 		if(canDelete) {
 			delete(paymentMethod);
+			saveAll();
 		}
 	}
 
-	public void delete(PaymentMethod paymentMethod) {
+	public void delete(PaymentMethod paymentMethod) throws FileNotFoundException, IOException {
 		if(paymentMethod.getLeft() == null && paymentMethod.getRight() == null) {
 			if(paymentMethod == paymentMethods) {
 				paymentMethods = null;
@@ -406,8 +434,9 @@ public class MinoristStore {
 		return current;
 	}
 
-	public void deleteRequest(Request request) {
+	public void deleteRequest(Request request) throws FileNotFoundException, IOException {
 		requestList.remove(request);
+		saveAll();
 	}
 
 	//Searching methods.
@@ -536,17 +565,18 @@ public class MinoristStore {
 
 	//Editing methods.
 
-	public boolean editCategory(Category category, String newName) {
+	public boolean editCategory(Category category, String newName) throws FileNotFoundException, IOException {
 		boolean edited = false;
 		Category current = searchCategory(newName);
 		if(current == null) {
 			edited = true;
 			category.setName(newName);
 		}
+		saveAll();
 		return edited;
 	}
 
-	public boolean editPaymentMethod(PaymentMethod paymentMethod, String newName, PaymentType newPaymentType) {
+	public boolean editPaymentMethod(PaymentMethod paymentMethod, String newName, PaymentType newPaymentType) throws FileNotFoundException, IOException {
 		boolean edited = false;
 		PaymentMethod current = searchPaymentMethod(newName);
 		if(current == null) {
@@ -554,6 +584,7 @@ public class MinoristStore {
 			paymentMethod.setName(newName);
 			paymentMethod.setType(newPaymentType);
 		}
+		saveAll();
 		return edited;
 	}
 
@@ -638,10 +669,11 @@ public class MinoristStore {
 			String description = productsData[5];
 			RequestType requestType = RequestType.ADD;
 			if(category != null) {
-				addRequest(name, category, brand, price, stock, description, seller, requestType);
+				addRequestWithoutSaving(name, category, brand, price, stock, description, seller, requestType);
 			}
 			line = br.readLine();
 		}
+		saveAll();
 		br.close();
 	}
 

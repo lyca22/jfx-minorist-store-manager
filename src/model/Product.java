@@ -1,9 +1,14 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Product implements Cloneable{
+public class Product implements Cloneable, Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long ID;
 	private String name;
 	private Category category;
