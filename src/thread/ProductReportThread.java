@@ -30,7 +30,7 @@ public class ProductReportThread extends Thread {
 			int price = product.getPrice();
 			int stock = product.getStock();
 			int salesNumber = product.getSalesNumber();
-			int earnings = product.getEarnings();
+			int earnings = product.calculatePrice();
 			pw.println(ID + separator + name + separator + category + separator + brand + separator + price + separator + stock
 					+ separator + salesNumber + separator + earnings);
 		}

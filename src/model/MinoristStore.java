@@ -21,7 +21,7 @@ import exceptions.CantAddPaymentMethodException;
 import thread.OrderReportThread;
 import thread.ProductReportThread;
 
-public class MinoristStore {
+public class MinoristStore implements Utility {
 
 	private static final String GENERAL_PRODUCT_LIST_NAME = "data/generalProductList.minsma";
 	private static final String ACCOUNT_LIST_NAME = "data/accountList.minsma";
@@ -151,7 +151,7 @@ public class MinoristStore {
 		saveAll();
 		return ID;
 	}
-	
+
 	public long addRequestWithoutSaving(String name, Category category, String brand, int price, int stock, String description, Seller seller, RequestType requestType) throws FileNotFoundException, IOException {
 		long ID = randomNumberWithRange(1, Integer.MAX_VALUE);
 		Product product = new Product(ID, name, category, brand, price, stock, description);
@@ -590,11 +590,11 @@ public class MinoristStore {
 		return edited;
 	}
 
-	private long randomNumberWithRange(long min, long max) {
+	@Override
+	public long randomNumberWithRange(long min, long max) {
 		long range = (max - min) + 1;
 		return (long)(Math.random() * range) + min;
 	}
-
 
 	//Exporting methods.
 
@@ -615,7 +615,7 @@ public class MinoristStore {
 		}
 		pw.close();
 	}*/
-	
+
 	public void generateSellerProductReport(String fileName, String separator, Seller seller) throws FileNotFoundException, InterruptedException {
 		PrintWriter pw = new PrintWriter(fileName);
 		int mid = (seller.getProductList().size()-1)/2;
@@ -645,7 +645,7 @@ public class MinoristStore {
 		}
 		pw.close();
 	}*/
-	
+
 	public void generateAdministratorProductReport(String fileName, String separator) throws FileNotFoundException, InterruptedException {
 		PrintWriter pw = new PrintWriter(fileName);
 		int mid = (generalProductList.size()-1)/2;
@@ -679,7 +679,7 @@ public class MinoristStore {
 		}
 		pw.close();
 	}*/
-	
+
 	public void generateOrderReport(String fileName, String separator, LocalDateTime minDate, LocalDateTime maxDate) throws FileNotFoundException, InterruptedException {
 		PrintWriter pw = new PrintWriter(fileName);
 		int mid = (orderList.size()-1)/2;
@@ -830,6 +830,7 @@ public class MinoristStore {
 		return loaded;
 	}
 
+	@Override
 	public void saveAll() throws FileNotFoundException, IOException {
 		saveProducts();
 		saveAccounts();
@@ -839,6 +840,7 @@ public class MinoristStore {
 		saveRequests();
 	}
 
+	@Override
 	public void loadAll() throws NullPointerException, ClassNotFoundException, FileNotFoundException, IOException {
 		loadProducts();
 		loadAccounts();

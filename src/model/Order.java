@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Order implements Serializable {
+public class Order implements Serializable, Cost {
 
 	/**
 	 * 
@@ -95,6 +95,7 @@ public class Order implements Serializable {
 		this.paymentInformation = paymentInformation;
 	}
 	
+	@Override
 	public int calculatePrice() {
 		int price = 0;
 		for(int i = 0; i <= productList.size()-1; i++) {

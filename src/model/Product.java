@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Product implements Cloneable, Serializable{
+public class Product implements Cloneable, Serializable, Cost{
 
 	/**
 	 * 
@@ -113,7 +113,8 @@ public class Product implements Cloneable, Serializable{
 		this.salesNumber = salesNumber;
 	}
 
-	public int getEarnings() {
+	@Override
+	public int calculatePrice() {
 		return salesNumber*price;
 	}
 

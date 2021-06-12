@@ -666,7 +666,14 @@ public class MinoristStoreGUI {
 				int row = ((count-count%3)/3);
 				int column = count-(row*3);
 				File file = new File(System.getProperty("user.dir") + PRODUCT_PICTURE_DIRECTORY + flProduct.get(i).getID() + ".png");
-				Image image = new Image(file.toURI().toString());
+				String directory;
+				if(file.exists()) {
+					directory = file.toURI().toString();
+				}else {
+					File alt = new File(System.getProperty("user.dir") + PRODUCT_PICTURE_DIRECTORY + "default.png");
+					directory = alt.toURI().toString();
+				}
+				Image image = new Image(directory);
 				ImageView imageView = new ImageView(image);
 				imageView.setFitHeight(200);
 				imageView.setFitWidth(200);
