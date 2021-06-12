@@ -11,7 +11,7 @@ You can access the project's documentation from [this link](https://drive.google
 
 You can access the project's analysis and design documentation from [this link](https://drive.google.com/file/d/1Cttg26ic4QfsONDFy9v7y3EXdnBNkydz/view?usp=sharing)
 
-Video of the final version [here] (https://youtu.be/tWuVXBzFbjw)
+Video of the final version: https://youtu.be/tWuVXBzFbjw
 
 What is this software?
 ------------
