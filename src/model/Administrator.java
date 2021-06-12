@@ -15,9 +15,10 @@ public class Administrator extends Account {
 	 *<b>Post: </b> Creates an account for an administrator. <br>
 	 *@param username It is the username used in the account. <br>
 	 *@param password It is the password of the account. <br>
-	 *@param names It is the name(s) of the user. <br>
-	 *@param surnames It is the surname(s) of the user. <br>
+	 *@param names It is the name(s) of the administrator. <br>
+	 *@param surnames It is the surname(s) of the administrator. <br>
 	 */
+	
 	public Administrator(String username, String password, String names, String surnames) {
 		super(username, password);
 		this.names = names;

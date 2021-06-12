@@ -15,6 +15,14 @@ public class PaymentMethod implements Serializable {
 	private PaymentMethod parent;
 	private boolean disabled;
 	
+	/**
+	 *Constructor method for PaymentMethod. <br>
+	 *<b>Pre: </b>  <br>
+	 *<b>Post: </b> Creates a payment method. <br>
+	 *@param name It is the name of the payment method. <br>
+	 *@param type It is the payment type. It could be CARD or ONLINE_SYSTEM <br>
+	 */
+	
 	public PaymentMethod(String name, PaymentType type) {
 		super();
 		this.name = name;

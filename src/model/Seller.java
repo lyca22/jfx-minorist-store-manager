@@ -12,6 +12,15 @@ public class Seller extends Account {
 	private String tradeName;
 	private List<Product> productList;
 	
+	/**
+	 *Constructor method for Seller. <br>
+	 *<b>Pre: </b>  <br>
+	 *<b>Post: </b> Creates an account for a seller. <br>
+	 *@param username It is the username used in the account. <br>
+	 *@param password It is the password of the account. <br>
+	 *@param tradeName It is the trade name of the seller. <br>
+	 */
+	
 	public Seller(String username, String password, String tradeName) {
 		super(username, password);
 		this.tradeName = tradeName;

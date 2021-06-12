@@ -12,6 +12,15 @@ public class Request implements Serializable {
 	private RequestType requestType;
 	private Seller seller;
 	
+	/**
+	 *Constructor method for Request. <br>
+	 *<b>Pre: </b>  <br>
+	 *<b>Post: </b> Creates a request. <br>
+	 *@param product It is the product of the request. <br>
+	 *@param requestType It is the type of request that the seller could do. It could be ADD, EDIT, DISABLE, ENABLE, DELETE a product. <br>
+	 *@param seller It is the seller that did the request. <br>
+	 */
+	
 	public Request(Product product, RequestType requestType, Seller seller) {
 		super();
 		this.product = product;

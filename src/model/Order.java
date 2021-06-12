@@ -20,6 +20,17 @@ public class Order implements Serializable, Cost {
 	private OrderState orderState;
 	private PaymentInformation paymentInformation;
 	
+	/**
+	 *Constructor method for Order. <br>
+	 *<b>Pre: </b>  <br>
+	 *<b>Post: </b> Creates an order. <br>
+	 *@param iD It is the iD of the order. <br>
+	 *@param date It is the date of the order. <br>
+	 *@param client It is the client of the order. <br>
+	 *@param orderState It is the state of the order. <br>
+	 *@param paymentInformation It is the payment information of the order. <br>
+	 */
+	
 	public Order(long iD, LocalDateTime date, Consumer client, OrderState orderState, PaymentInformation paymentInformation) {
 		super();
 		ID = iD;
@@ -95,7 +106,14 @@ public class Order implements Serializable, Cost {
 		this.paymentInformation = paymentInformation;
 	}
 	
+
 	@Override
+	/**
+	 * Calculate the price of the order <br>
+	 * Pre: A product list and a product quantity have been created. <br>
+	 * Post: The total price of the order. <br>
+	 */
+
 	public int calculatePrice() {
 		int price = 0;
 		for(int i = 0; i <= productList.size()-1; i++) {

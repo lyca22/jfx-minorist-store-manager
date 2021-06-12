@@ -20,6 +20,19 @@ public class Product implements Cloneable, Serializable, Cost{
 	private boolean disabled;
 	private int salesNumber;
 	
+	/**
+	 *Constructor method for Product. <br>
+	 *<b>Pre: </b>  <br>
+	 *<b>Post: </b> Creates a product. <br>
+	 *@param iD It is the iD of the product. <br>
+	 *@param name It is the name of the product. <br>
+	 *@param category It is the category of the product. <br>
+	 *@param brand It is the brand of the product. <br>
+	 *@param price It is the price of the product. <br>
+	 *@param stock It is the number of products available. <br>
+	 *@param description It is the description of the product. <br>
+	 */
+	
 	public Product(long iD, String name, Category category, String brand, int price, int stock, String description) {
 		super();
 		ID = iD;

@@ -14,6 +14,18 @@ public class Consumer extends Account {
 	private long phoneNumber;
 	private String address;
 	private List<Order> personalOrderList;
+
+	/**
+	 *Constructor method for Consumer. <br>
+	 *<b>Pre: </b>  <br>
+	 *<b>Post: </b> Creates an account for a consumer. <br>
+	 *@param username It is the username used in the account. <br>
+	 *@param password It is the password of the account. <br>
+	 *@param names It is the name(s) of the consumer. <br>
+	 *@param surnames It is the surname(s) of the consumer. <br>
+	 *@param phoneNumber It is the phone number of the consumer. <br>
+	 *@param address It is the address of the consumer. <br>
+	 */
 	
 	public Consumer(String username, String password, String names, String surnames, long phoneNumber, String address) {
 		super(username, password);
@@ -63,5 +75,5 @@ public class Consumer extends Account {
 	public void setPersonalOrderList(List<Order> personalOrderList) {
 		this.personalOrderList = personalOrderList;
 	}
-	
+
 }
