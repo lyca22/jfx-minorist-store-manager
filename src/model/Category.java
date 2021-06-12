@@ -6,6 +6,13 @@ public class Category {
 	private Category next;
 	private boolean disabled;
 	
+	/**
+	 *Constructor method for Category. <br>
+	 *<b>Pre: </b>  <br>
+	 *<b>Post: </b> Creates a category. <br>
+	 *@param name It is the name of the category. <br>
+	 */
+	
 	public Category(String name) {
 		super();
 		this.name = name;

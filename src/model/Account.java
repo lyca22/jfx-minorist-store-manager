@@ -5,7 +5,15 @@ public class Account {
 	private String username;
 	private String password;
 	private Account next;
-	
+
+	/**
+	 *Constructor method for Account. <br>
+	 *<b>Pre: </b>  <br>
+	 *<b>Post: </b> Creates an account. <br>
+	 *@param username It is the username used in the account. <br>
+	 *@param password It is the password of the account. <br>
+	 */
+
 	public Account(String username, String password) {
 		super();
 		this.username = username;
@@ -35,5 +43,5 @@ public class Account {
 	public void setNext(Account next) {
 		this.next = next;
 	}
-	
+
 }

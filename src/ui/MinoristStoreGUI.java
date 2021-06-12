@@ -66,6 +66,8 @@ import model.Product;
 import model.Request;
 import model.RequestType;
 import model.Seller;
+import thread.ImportThread;
+import thread.SellerReportThread;
 
 public class MinoristStoreGUI {
 
@@ -1346,6 +1348,8 @@ public class MinoristStoreGUI {
 				e.printStackTrace();
 			}
 		}
+
+		new SellerReportThread(minoristStore).start();
 	}
 
 	public void exportOrders(ActionEvent event) {
@@ -1378,6 +1382,8 @@ public class MinoristStoreGUI {
 				e.printStackTrace();
 			}
 		}
+
+		new ImportThread(minoristStore).start();
 	}
 
 	public void addProducts(ActionEvent event) {

@@ -6,6 +6,18 @@ public class Card extends PaymentInformation {
 	private int expirationMonth;
 	private int expirationYear;
 	private long cardNumber;
+
+	/**
+	 *Constructor method for Card <br>
+	 *<b>Pre: </b>  <br>
+	 *<b>Post: </b> Creates a card. <br>
+	 *@param paymentMethod 
+	 *@param zipCode 
+	 *@param cardOwner 
+	 *@param expirationMonth 
+	 *@param expirationYear 
+	 *@param cardNumber 
+	 */
 	
 	public Card(PaymentMethod paymentMethod, int zipCode, String cardOwner, int expirationMonth, int expirationYear,
 			long cardNumber) {
@@ -39,5 +51,5 @@ public class Card extends PaymentInformation {
 	public void setCardNumber(long cardNumber) {
 		this.cardNumber = cardNumber;
 	}
-	
+
 }
