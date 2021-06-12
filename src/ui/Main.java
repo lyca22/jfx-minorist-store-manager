@@ -28,6 +28,7 @@ public class Main extends Application {
 		primaryStage.setTitle("MinSMa");
 		primaryStage.show();
 		minoristStoreGUI.loginScreen(null);
+		minoristStore.loadAll();
 	}
 
 	public static void main(String[] args) {

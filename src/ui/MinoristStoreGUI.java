@@ -66,8 +66,6 @@ import model.Product;
 import model.Request;
 import model.RequestType;
 import model.Seller;
-import thread.ImportThread;
-import thread.SellerReportThread;
 
 public class MinoristStoreGUI {
 
@@ -1384,16 +1382,20 @@ public class MinoristStoreGUI {
 				minoristStore.generateAdministratorProductReport(fileName, separator);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}else if(actualAccount instanceof Seller){
 			try {
 				minoristStore.generateSellerProductReport(fileName, separator, (Seller)actualAccount);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-
-		new SellerReportThread(minoristStore).start();
 	}
 
 	public void exportOrders(ActionEvent event) {
@@ -1408,6 +1410,8 @@ public class MinoristStoreGUI {
 		try {
 			minoristStore.generateOrderReport(fileName, separator, minDate, maxDate);
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -1426,8 +1430,6 @@ public class MinoristStoreGUI {
 				e.printStackTrace();
 			}
 		}
-
-		new ImportThread(minoristStore).start();
 	}
 
 	public void addProducts(ActionEvent event) {
